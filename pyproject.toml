@@ -8,8 +8,12 @@ license = "MIT"
 authors = [{ name = "reiteristvan", email = "reiteristvan@gmail.com" }]
 dependencies = [
     "azure-identity>=1.19",
+    "fastapi>=0.141.1",
+    "httpx2>=2.13.0",
+    "psycopg[binary,pool]>=3.3.5",
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
+    "uvicorn[standard]>=0.53.0",
 ]
 
 [project.scripts]
