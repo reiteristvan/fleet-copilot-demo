@@ -43,5 +43,21 @@ run *args:
 eval:
     uv run python -m fleet_copilot.evals.runner
 
+# Start the local stack (postgres + langfuse + the API) and wait for health.
+up:
+    docker compose up -d --build --wait
+
+# Stop the local stack, keeping volumes.
+down:
+    docker compose down
+
+# Stop the local stack and delete its data.
+reset:
+    docker compose down --volumes
+
+# Tail logs for one service: `just logs api`.
+logs service="":
+    docker compose logs -f {{service}}
+
 # Everything the pull-request gate runs, in the same order.
 check: lint typecheck test

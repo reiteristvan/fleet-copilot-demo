@@ -37,6 +37,35 @@ docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 ```
 
+## Local stack
+
+```console
+$ cp .env.example .env     # then set the three LANGFUSE_* values
+$ just up                  # postgres + langfuse + the API
+$ curl localhost:8000/healthz
+```
+
+```json
+{
+  "status": "ok",
+  "checks": {
+    "database": { "status": "ok", "detail": "pgvector 0.8.6" },
+    "azure_openai": { "status": "skipped", "detail": "healthz_check_azure_openai is false" }
+  }
+}
+```
+
+| Service | Port | Notes |
+| --- | --- | --- |
+| api | 8000 | Built from the multi-stage `Dockerfile`, runs as uid 10001 |
+| postgres | 5432 | `pgvector/pgvector:pg16`; hosts both the app and langfuse databases |
+| langfuse-web | 3000 | Self-hosted Langfuse v4, for epic 6 |
+| minio | 9090/9091 | S3 backing for langfuse |
+| clickhouse, redis, langfuse-worker | — | Internal to the stack |
+
+Everything except the LLM runs locally. `just down` stops the stack; `just reset`
+also deletes its volumes.
+
 ## Infrastructure
 
 ```console

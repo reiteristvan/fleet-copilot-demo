@@ -3,6 +3,46 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-15 — Local container stack
+
+`compose.yaml` brings up pgvector on postgres 16, self-hosted Langfuse, and the
+API built from a multi-stage uv Dockerfile. `curl localhost:8000/healthz`
+returns 200 with a per-dependency report.
+
+Checking versions before writing anything was the right call three times over:
+
+- **Langfuse self-hosted is not one container.** v4 (4.36.1, released today)
+  needs postgres, clickhouse, redis and S3-compatible storage — six containers,
+  not the single service the task implied. Read the contract out of langfuse's
+  own compose rather than reconstructing it; the subtlety that would have cost
+  an afternoon is that `LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT` differs between web
+  and worker, because the browser resolves the web one.
+- **`minio/minio:latest` does not exist.** The official compose uses
+  `cgr.dev/chainguard/minio`.
+- **`GET /openai/deployments/{name}` is not a data-plane route.** Probing it
+  returned 404 for every api-version including a deliberately bogus one, which
+  is the tell. `GET /openai/models?api-version=2024-10-21` returns 401 for an
+  unauthorised principal and 404 for a bad api-version, so it both works as a
+  health probe and proves the version is real.
+
+Langfuse ran its 75 migrations happily against postgres 16, so the two
+databases share one server rather than running a second postgres for langfuse.
+
+Two bugs found by running it rather than reading it:
+
+- **psycopg's async mode cannot run on Windows' default ProactorEventLoop.**
+  The container is Linux and never sees it, so the API worked in compose and
+  failed on the machine it is developed on. `runtime.configure_event_loop_policy`
+  fixes it; mypy narrows the `sys.platform` guard correctly on both platforms,
+  so CI does not trip over a Windows-only branch.
+- **Missing configuration aborted with a traceback**, which in a container is
+  indistinguishable from a crash — the thing `load_settings` exists to prevent.
+  Settings are now resolved in the CLI before uvicorn takes over: one line on
+  stderr, exit 2.
+
+Also moved off `httpx` to `httpx2`, which starlette 1.6 now expects; the old
+path emitted a deprecation warning on every test run.
+
 ## 2026-09-15 — Azure infrastructure, keyless
 
 Subscription budget first: 40/month, alerting at 50% and 80% actual and 100%
