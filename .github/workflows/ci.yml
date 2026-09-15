@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in step with the uv-pre-commit rev in .pre-commit-config.yaml.
+  UV_VERSION: "0.11.2"
+
+jobs:
+  check:
+    name: lint, typecheck, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v9
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+
+      - name: Install just
+        run: |
+          uv tool install rust-just
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Install the project
+        run: uv sync --locked
+
+      # The same recipes a developer runs locally. If CI needs a step that is
+      # not a recipe, add the recipe instead of inlining it here.
+      - run: just lint
+      - run: just typecheck
+      - run: just test
+
+  hooks:
+    name: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v9
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+
+      - name: Install the project
+        run: uv sync --locked
+
+      - name: Run every hook against every file
+        run: uv run pre-commit run --all-files --show-diff-on-failure
