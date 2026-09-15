@@ -80,6 +80,30 @@ Check quota on a fresh subscription before deploying:
 $ az cognitiveservices usage list -l swedencentral -o table
 ```
 
+## Deployment time
+
+Measured on an empty subscription in Sweden Central:
+
+| Run | Wall clock |
+| --- | --- |
+| First deploy, cold subscription | **16m 52s** |
+| Second deploy, no changes | **80s** |
+
+Azure AI Search is the entire difference: it took 16m 34s on its own, while
+every other module finished inside 2m 08s. Provisioning the first Search
+service in a region is slow and there is nothing the template can do about it —
+it is already created in parallel with everything else.
+
+If a sub-ten-minute cold deploy matters, the options are to keep one long-lived
+Search service outside the per-environment resource group, or to accept that
+the first deploy of the weekend is a coffee break and every later one is a
+minute.
+
+Note that Application Insights auto-creates a "Failure Anomalies" alert rule in
+a nested deployment, which fails unless `Microsoft.AlertsManagement` is
+registered. `deploy.sh` registers it; a portal-created deployment will show a
+harmless failed nested deployment without it.
+
 ## Teardown
 
 Run this at the end of the weekend:

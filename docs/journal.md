@@ -33,12 +33,31 @@ Preflight validation earned its keep twice, before anything was deployed:
 West Europe was the obvious first choice and is wrong: it offers no plain
 `Standard` SKU for the mini models at all.
 
-Everything is validated but **not deployed** — `az deployment sub validate`
-passes for both `dev` and `ci`, and what-if reports 14 resources to create.
+Then deployed `dev` for real, which found what validation could not.
 
-Open: teardown is documented but not run. `az group delete -n
+**The under-ten-minutes criterion failed: 16m 52s cold.** Azure AI Search
+accounts for 16m 34s of it; every other module finished within 2m 08s, and
+Search is already provisioned in parallel with the rest. A second deploy took
+**80s** and changed nothing — storage `creationTime` unmoved, still exactly four
+role assignments rather than eight — so idempotency holds.
+
+Two bugs that only a real run could surface:
+
+- **`print_app_env` never worked.** The outputs were formatted by a Python
+  one-liner inside `python -c '...'`, and `outputs[key]['value']` closed the
+  shell's single quote. The deployment succeeded and the script still exited 1.
+  Rewritten without an embedded parser. Second lesson in the same area: `az -o
+  tsv` prints one array element per line rather than tab-separating them, and
+  adds CR on Windows.
+- **Application Insights auto-creates a Failure Anomalies alert rule** in a
+  nested deployment that fails with `MissingSubscriptionRegistration` unless
+  `Microsoft.AlertsManagement` is registered. It does not fail the parent
+  deployment, so it is easy to miss. Added to the provider list.
+
+Open: `dev` is deployed and costing roughly €2.50/day, almost all of it the
+Search service. Teardown is documented but not run — `az group delete -n
 rg-fleet-copilot-dev --yes`, plus purging the soft-deleted Key Vault and OpenAI
-account if redeploying within the 7-day retention window.
+account if redeploying inside the 7-day retention window.
 
 ## 2026-09-15 — Repository skeleton and Python toolchain
 

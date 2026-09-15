@@ -17,6 +17,7 @@ readonly WORKLOAD="fleet-copilot"
 # that needs one. Registering up front in parallel keeps a cold subscription
 # inside the ten-minute target.
 readonly PROVIDERS=(
+  Microsoft.AlertsManagement
   Microsoft.App
   Microsoft.Authorization
   Microsoft.CognitiveServices
@@ -140,27 +141,48 @@ register_providers() {
 # leave it unset locally and the same class falls through to the az login.
 print_app_env() {
   local deployment_name="$1"
-  printf '\n# deployment outputs -- source these for a local run\n'
-  az deployment sub show --name "$deployment_name" --query properties.outputs -o json |
-    python -c '
-import json, sys
 
-mapping = {
-    "managedIdentityClientId": "AZURE_CLIENT_ID",
-    "openAiEndpoint": "AZURE_OPENAI_ENDPOINT",
-    "openAiChatDeployment": "AZURE_OPENAI_CHAT_DEPLOYMENT",
-    "openAiEmbeddingDeployment": "AZURE_OPENAI_EMBEDDING_DEPLOYMENT",
-    "searchEndpoint": "AZURE_SEARCH_ENDPOINT",
-    "storageBlobEndpoint": "AZURE_STORAGE_BLOB_ENDPOINT",
-    "storageContainerName": "AZURE_STORAGE_CONTAINER",
-    "keyVaultUri": "AZURE_KEY_VAULT_URI",
-    "appInsightsConnectionString": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-}
-outputs = json.load(sys.stdin)
-for key, env in mapping.items():
-    if key in outputs:
-        print(f"export {env}={outputs[key]['value']!r}".replace("'", '"'))
+  # Environment variable per deployment output, in the query's order.
+  local -a env_names=(
+    AZURE_CLIENT_ID
+    AZURE_OPENAI_ENDPOINT
+    AZURE_OPENAI_CHAT_DEPLOYMENT
+    AZURE_OPENAI_EMBEDDING_DEPLOYMENT
+    AZURE_SEARCH_ENDPOINT
+    AZURE_STORAGE_BLOB_ENDPOINT
+    AZURE_STORAGE_CONTAINER
+    AZURE_KEY_VAULT_URI
+    APPLICATIONINSIGHTS_CONNECTION_STRING
+  )
+
+  # `az -o tsv` prints one array element per line, and adds CR on Windows.
+  local -a values
+  mapfile -t values < <(
+    az deployment sub show --name "$deployment_name" --output tsv --query "[
+      properties.outputs.managedIdentityClientId.value,
+      properties.outputs.openAiEndpoint.value,
+      properties.outputs.openAiChatDeployment.value,
+      properties.outputs.openAiEmbeddingDeployment.value,
+      properties.outputs.searchEndpoint.value,
+      properties.outputs.storageBlobEndpoint.value,
+      properties.outputs.storageContainerName.value,
+      properties.outputs.keyVaultUri.value,
+      properties.outputs.appInsightsConnectionString.value
+    ]" | tr -d ''
+  )
+
+  if [[ ${#values[@]} -ne ${#env_names[@]} ]]; then
+    die "expected ${#env_names[@]} deployment outputs, got ${#values[@]}"
+  fi
+
+  printf '
+# deployment outputs -- source these for a local run
 '
+  local index
+  for index in "${!env_names[@]}"; do
+    printf 'export %s="%s"
+' "${env_names[index]}" "${values[index]}"
+  done
 }
 
 main "$@"
