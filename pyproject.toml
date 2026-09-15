@@ -6,7 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 authors = [{ name = "reiteristvan", email = "reiteristvan@gmail.com" }]
-dependencies = ["pydantic>=2.9"]
+dependencies = [
+    "azure-identity>=1.19",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+]
 
 [project.scripts]
 fleet-copilot = "fleet_copilot.api.cli:main"
