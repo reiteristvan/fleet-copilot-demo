@@ -35,6 +35,21 @@ staging a file with an unused import gets the commit rejected by the ruff hook
 (`Found 1 error (1 fixed, 0 remaining)` → `files were modified by this hook`),
 with `HEAD` unmoved.
 
+**Follow-up, same day: CI failed on the first run.** `astral-sh/setup-uv@v9`
+does not resolve. The action publishes floating major aliases only up to `v7`;
+`v9.0.0` and `v10.1.0` exist as exact release tags, but `v8`/`v9`/`v10` do not
+exist as refs. Pinned to `v10.1.0` with a comment, because the obvious
+"tidy-up" here is to shorten it to `@v10` and break the pipeline again.
+
+The same pass removed a second assumption that had not failed yet: the job
+added `$HOME/.local/bin` to `GITHUB_PATH` so `just` would be callable. That is
+uv's default tool bin directory, not a guarantee. The job now sets setup-uv's
+`tool-bin-dir` explicitly and puts *that* on the PATH.
+
+Lesson: a version in a documentation snippet is not evidence the ref exists.
+Both of these were checkable against the GitHub API in seconds, and neither was
+checked before pushing.
+
 Open: `retrieval`, `agents` and `evals` are empty. `just eval` runs a harness
 that discovers zero suites — wired up so the first eval has somewhere to land
 rather than arriving with its own bespoke runner.
