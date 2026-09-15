@@ -1,0 +1,35 @@
+# Install with `just hooks`. These hooks are the fast subset of `just check`;
+# CI still runs the full gate, because hooks can be skipped and CI cannot.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.2  # keep in step with the uv used locally and in CI
+    hooks:
+      - id: uv-lock
+
+  # mypy runs from the project environment so it sees the pydantic plugin and
+  # the real dependency versions, which a mirrored hook environment would not.
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy --strict
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
