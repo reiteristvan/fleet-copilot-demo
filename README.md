@@ -32,10 +32,23 @@ src/fleet_copilot/
   evals/       score the retrieval and agent layers offline
   api/         entry points: a CLI today, an HTTP service later
 tests/         mirrors the source layout
-infra/         infrastructure-as-code (nothing provisioned yet)
+infra/         Bicep templates, per-environment parameters and deploy.sh
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 ```
+
+## Infrastructure
+
+```console
+$ az login
+$ ./infra/deploy.sh dev --what-if
+$ ./infra/deploy.sh dev
+```
+
+Azure OpenAI, AI Search, Blob Storage and Application Insights all have
+key-based authentication disabled; the app authenticates with
+`DefaultAzureCredential` and a user-assigned managed identity holds the roles.
+Details, region and quota caveats, and teardown: [infra/README.md](infra/README.md).
 
 ## Toolchain
 
@@ -46,4 +59,6 @@ with `pytest-asyncio`, and [pre-commit](https://pre-commit.com/) hooks.
 
 Why this particular set, and which trade-offs it accepts:
 [ADR 0001](docs/adr/0001-python-toolchain-and-quality-gates.md).
+Why there are no keys anywhere:
+[ADR 0002](docs/adr/0002-keyless-azure-access.md).
 Conventions for contributors and agents: [CLAUDE.md](CLAUDE.md).

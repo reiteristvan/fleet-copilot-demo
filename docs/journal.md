@@ -3,6 +3,43 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-15 — Azure infrastructure, keyless
+
+Subscription budget first: 40/month, alerting at 50% and 80% actual and 100%
+forecasted. It is subscription-scoped on purpose, so tearing the resource group
+down does not remove the spend guard. The amount is in the subscription billing
+currency — worth confirming that is EUR before trusting it as €40.
+
+Then `infra/main.bicep`: resource group, Log Analytics + Application Insights,
+storage with a `raw-docs` container, Azure OpenAI with two deployments, AI
+Search on Basic with the semantic ranker, Key Vault, a Container Apps
+environment, and a user-assigned identity holding every data-plane role.
+Rationale in [ADR 0002](adr/0002-keyless-azure-access.md).
+
+Preflight validation earned its keep twice, before anything was deployed:
+
+- **`gpt-4o-mini` cannot be deployed any more.** `ServiceModelDeprecated`, new
+  deployments blocked since 2026-03-31. Confusingly the model catalogue still
+  reports an *inference* deprecation date of 2027-04-14 — that is when existing
+  deployments stop serving, not when you can still create one. Switched to
+  `gpt-4.1-mini`.
+- **The two models need different SKUs.** On a fresh subscription in Sweden
+  Central, `gpt-4.1-mini` has GlobalStandard quota 200 and no Standard quota;
+  `text-embedding-3-large` is the exact mirror image — Standard 350,
+  GlobalStandard 0. A single `deploymentSku` parameter could not have worked.
+  The quota bucket is also spelled `gpt4.1-mini`, not `gpt-4.1-mini`, which is
+  why the first quota query came back empty and looked like "no quota".
+
+West Europe was the obvious first choice and is wrong: it offers no plain
+`Standard` SKU for the mini models at all.
+
+Everything is validated but **not deployed** — `az deployment sub validate`
+passes for both `dev` and `ci`, and what-if reports 14 resources to create.
+
+Open: teardown is documented but not run. `az group delete -n
+rg-fleet-copilot-dev --yes`, plus purging the soft-deleted Key Vault and OpenAI
+account if redeploying within the 7-day retention window.
+
 ## 2026-09-15 — Repository skeleton and Python toolchain
 
 Stood the repository up: `uv init --package` with a `src/` layout, the five

@@ -74,6 +74,13 @@ These are the same recipes CI runs.
   that would otherwise have to be rediscovered (an API version that does not
   resolve, a quota, a pinned tag that must not be shortened). A comment that
   restates the line below it is noise and will be removed in review.
+- **Never introduce key-based auth to an Azure data plane.** The Bicep disables
+  it at the resource level, so key-based code fails at runtime rather than in
+  review. Use `get_credential()` from `fleet_copilot.credentials`.
+- **Pin Azure API versions and model versions to values you have checked.**
+  `az provider show`, `az cognitiveservices model list` and
+  `./infra/deploy.sh <env> --validate` are cheap; a version that resolves in a
+  documentation snippet is not evidence it resolves here.
 - **Commits are atomic and semantic** (`feat(ingest): …`, `build: …`, `ci: …`).
   One concern per commit. The body says *why*, since the diff already says what.
 

@@ -14,3 +14,4 @@ Format: context, decision, consequences. Keep it to a page.
 | ADR | Title | Status |
 | --- | --- | --- |
 | [0001](0001-python-toolchain-and-quality-gates.md) | Python toolchain and quality gates | Accepted |
+| [0002](0002-keyless-azure-access.md) | Keyless access to every Azure data plane | Accepted |
