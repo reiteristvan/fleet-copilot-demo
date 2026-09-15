@@ -1,0 +1,16 @@
+# Architecture decision records
+
+One file per decision that is expensive to reverse. Numbered, immutable once
+merged: a decision that turns out wrong gets a *new* ADR that supersedes the old
+one, and the old one stays in place with its status updated. The record of what
+we believed at the time is the point.
+
+Not every decision needs one. The test is: would someone joining in six months
+waste a day re-deriving this, or re-litigate it without new information? If yes,
+write it down.
+
+Format: context, decision, consequences. Keep it to a page.
+
+| ADR | Title | Status |
+| --- | --- | --- |
+| [0001](0001-python-toolchain-and-quality-gates.md) | Python toolchain and quality gates | Accepted |
