@@ -68,6 +68,12 @@ These are the same recipes CI runs.
   New behaviour ships with its tests in the same commit.
 - **Test invalid input through `model_validate`,** not by lying to the type
   checker with a cast or an ignore on the constructor.
+- **Comment only what the code cannot say itself.** Names and structure carry
+  the *what*; a comment earns its place when it records *why* — a constraint, a
+  rejected alternative, a non-obvious failure it prevents, or an external fact
+  that would otherwise have to be rediscovered (an API version that does not
+  resolve, a quota, a pinned tag that must not be shortened). A comment that
+  restates the line below it is noise and will be removed in review.
 - **Commits are atomic and semantic** (`feat(ingest): …`, `build: …`, `ci: …`).
   One concern per commit. The body says *why*, since the diff already says what.
 
