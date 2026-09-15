@@ -1,0 +1,6 @@
+# Normalise line endings so Windows and CI agree on file contents.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary
