@@ -55,6 +55,27 @@ corpus-check:
 corpus-upload *args:
     uv run python scripts/upload_corpus.py {{args}}
 
+# Apply every database migration. Needs the stack up (`just up`).
+db-migrate:
+    uv run alembic upgrade head
+
+# Roll the schema all the way back, then forward. Proves it applies from scratch.
+db-reset:
+    uv run alembic downgrade base
+    uv run alembic upgrade head
+
+# Generate the fleet and load it, replacing whatever is there. Takes ~2 minutes.
+db-seed:
+    uv run python scripts/gen_fleet.py
+
+# Show the fleet the seed would build, without touching the database.
+fleet-preview:
+    uv run python scripts/gen_fleet.py --dry-run
+
+# Run the six reference queries as copilot_ro and report how long each takes.
+db-queries:
+    uv run python -m fleet_copilot.fleet.report
+
 # Start the local stack (postgres + langfuse + the API) and wait for health.
 up:
     docker compose up -d --build --wait
