@@ -30,6 +30,14 @@ dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "ruff>=0.8",
+    # Corpus generation (src/fleet_copilot/corpus). Dev-only on purpose: the API
+    # image installs with --no-dev, and nothing in the request path reads these.
+    "azure-storage-blob>=12.24",
+    "fpdf2>=2.8",
+    "pillow>=11.0",
+    "python-docx>=1.1",
+    "pyyaml>=6.0",
+    "types-pyyaml>=6.0",
 ]
 
 # --------------------------------------------------------------------------- #
