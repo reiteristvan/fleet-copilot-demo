@@ -1,0 +1,51 @@
+# The error-code reference's framing text.
+#
+# The codes themselves come from data/catalogue.yaml, so this document and the
+# fault reports that cite a code are reading the same table rather than two
+# tables that happen to agree.
+
+type: error_code_reference
+
+en:
+  banks:
+    openings:
+      - >-
+        Every code the machines in this fleet display, with the machine types it
+        can appear on. A code that recurs after clearing is a fault report even
+        if the machine keeps running.
+      - >-
+        Display codes and their meanings. The code identifies what the machine
+        detected, not what caused it; the cause is established by the service
+        procedure for that code.
+
+    guidance:
+      - >-
+        Record the code before clearing it. Clearing the fault history discards
+        the only evidence of how often it has occurred.
+      - >-
+        A code that clears itself on restart has not been resolved. It has been
+        forgotten, which is a different thing, and the underlying condition is
+        usually still present.
+      - >-
+        Codes are per machine type. The same number on a different machine type
+        may mean something else, so check the type before acting on it.
+
+hu:
+  banks:
+    openings:
+      - >-
+        A flotta gépein megjelenő összes kód, a hozzájuk tartozó géptípusokkal.
+        A törlés után visszatérő kód hibabejelentés tárgya, akkor is, ha a gép
+        tovább üzemel.
+      - >-
+        Kijelzőkódok és jelentésük. A kód azt azonosítja, amit a gép érzékelt,
+        nem az okot; az okot az adott kódhoz tartozó szervizeljárás állapítja
+        meg.
+
+    guidance:
+      - >-
+        A kód törlése előtt jegyezze fel. A hibanapló törlése megsemmisíti az
+        egyetlen bizonyítékot arra, hogy a hiba milyen gyakran fordult elő.
+      - >-
+        Az újraindításkor magától törlődő kód nem megoldódott, hanem
+        elfelejtődött, és a mögöttes állapot rendszerint továbbra is fennáll.

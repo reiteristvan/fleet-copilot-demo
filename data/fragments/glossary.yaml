@@ -1,0 +1,29 @@
+# The glossary document's framing text.
+#
+# The terms themselves are not here -- they live in data/catalogue.yaml, because
+# they are the vocabulary every other document is written in rather than this
+# document's private content.
+
+type: glossary
+
+en:
+  banks:
+    openings:
+      - >-
+        The terms below are used throughout the fleet documentation with the
+        meanings given here. Where a manual and a shift note use the same word
+        differently, this definition is the one that was intended.
+      - >-
+        A short glossary of the terms that appear across the operator manuals,
+        service documentation and maintenance procedures in this set.
+
+hu:
+  banks:
+    openings:
+      - >-
+        Az alábbi kifejezéseket a flotta dokumentációja végig az itt megadott
+        jelentésben használja. Ha egy kézikönyv és egy műszakátadási jegyzet
+        eltérően használja ugyanazt a szót, ez a meghatározás az irányadó.
+      - >-
+        Rövid szójegyzék a kezelési kézikönyvekben, a szervizdokumentációban és
+        a karbantartási eljárásokban előforduló kifejezésekhez.

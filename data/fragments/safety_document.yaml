@@ -1,0 +1,124 @@
+# Safety documents: battery charging, detergent data sheets, ride-on operation,
+# PPE, lockout and spill response.
+#
+# These overlap heavily with the maintenance procedures on vocabulary and
+# partially on content, which is deliberate. A question about charging
+# temperature should have to choose between a safety document and a maintenance
+# procedure that both legitimately answer it.
+#
+# Placeholders: {machine} {code} {max_charge_temp}.
+
+type: safety_document
+
+en:
+  banks:
+    hazards:
+      - >-
+        Charging a battery produces hydrogen. In an enclosed space the gas
+        collects at high level, where it is both invisible and above the
+        detector most sites have fitted at working height.
+      - >-
+        A battery pack that has been worked hard is hot at the end of a shift.
+        Putting it straight on charge is the most common cause of an
+        over-temperature lockout, and the pack is damaged before the lockout
+        trips.
+      - >-
+        Concentrated detergent is an irritant to skin and a hazard to eyes.
+        Diluted solution in the tank is not the same material as the
+        concentrate in the drum, and the drum is what the data sheet describes.
+      - >-
+        A ride-on machine has a blind area behind and to the offside. On a site
+        with pedestrian traffic this is the hazard that actually causes
+        injuries, not the cleaning chemicals.
+      - >-
+        A wet floor behind a machine with a worn squeegee is a slip hazard. It
+        is created by the cleaning operation itself, which is why it is so often
+        missed in a risk assessment.
+      - >-
+        The emergency stop cuts drive and brush rotation. It does not isolate
+        the battery, and it is not a substitute for isolation before work.
+
+    controls:
+      - Charge only in the designated bay, with the ventilation running.
+      - Let the pack cool to below the charging temperature limit before connecting the charger.
+      - Keep the charging area clear of ignition sources, including battery-powered tools.
+      - Decant concentrate over a bund or a drip tray, never over an open floor.
+      - Sound the horn at every blind corner and at every door.
+      - Set the machine speed down in any area where pedestrians are present.
+      - Barrier or sign the wet area behind the machine until it is dry.
+      - Isolate the battery before any work beyond the daily operator checks.
+
+    ppe:
+      - Nitrile gloves when handling concentrate or working on a battery.
+      - Eye protection when decanting concentrate or working near a charging pack.
+      - High-visibility clothing in any shared traffic area.
+      - Safety footwear with a slip-resistant sole, since the operator walks the wet area.
+      - A face shield rather than glasses when breaking into a pressurised solution line.
+
+    emergency:
+      - >-
+        Skin contact with concentrate: remove contaminated clothing and rinse
+        with running water for at least fifteen minutes. Do not neutralise.
+      - >-
+        Eye contact: irrigate with running water for at least fifteen minutes,
+        holding the eyelids open, and seek medical attention regardless of how
+        the eye feels afterwards.
+      - >-
+        Battery over-temperature: do not disconnect the charger if the pack is
+        venting. Evacuate the area, isolate the charging circuit at the wall,
+        and let the pack cool without intervention.
+      - >-
+        Spill of concentrate: contain with the spill kit, do not flush to drain,
+        and report the volume. Diluted solution may be flushed; concentrate may
+        not.
+      - >-
+        Machine strike or near miss: stop the machine, isolate it, and report
+        before continuing. A near miss on a ride-on machine is reportable.
+
+hu:
+  banks:
+    hazards:
+      - >-
+        Az akkumulátor töltése hidrogént termel. Zárt térben a gáz a magasban
+        gyűlik össze, ahol egyszerre láthatatlan és a legtöbb helyen munkamagasságba
+        szerelt érzékelő fölött van.
+      - >-
+        A megterhelt akkumulátorcsomag a műszak végén forró. A közvetlen
+        töltőre helyezés a túlmelegedési zárolás leggyakoribb oka, és a csomag
+        már a zárolás bekövetkezte előtt károsodik.
+      - >-
+        A tömény tisztítószer bőrizgató és szemre veszélyes. A tartályban lévő
+        hígított oldat nem ugyanaz az anyag, mint a hordóban lévő koncentrátum,
+        és a biztonsági adatlap a hordóra vonatkozik.
+      - >-
+        A vezetőüléses gépnek hátrafelé és a jobb oldalon holttere van.
+        Gyalogosforgalmú területen ez okoz sérülést, nem a vegyszer.
+
+    controls:
+      - Kizárólag a kijelölt töltőhelyen töltsön, működő szellőzés mellett.
+      - >-
+        A töltő csatlakoztatása előtt hagyja a csomagot a töltési
+        hőmérséklethatár alá hűlni.
+      - Tartsa távol a gyújtóforrásokat a töltőhelytől, az akkumulátoros kéziszerszámokat is.
+      - A koncentrátumot kármentő tálca fölött töltse át, soha nyitott padló fölött.
+      - Minden beláthatatlan saroknál és ajtónál használja a kürtöt.
+      - Kerítse el vagy jelölje meg a gép mögötti nedves területet, amíg fel nem szárad.
+
+    ppe:
+      - Nitril kesztyű koncentrátum kezelésekor és akkumulátoron végzett munkánál.
+      - Védőszemüveg átfejtéskor és töltés alatt álló csomag közelében.
+      - Láthatósági ruházat minden közös közlekedési területen.
+      - Csúszásmentes talpú munkavédelmi lábbeli, mivel a kezelő a nedves területen jár.
+
+    emergency:
+      - >-
+        Bőrre kerülés esetén: vegye le a szennyezett ruházatot, és öblítse
+        folyó vízzel legalább tizenöt percig. Ne semlegesítse.
+      - >-
+        Szembe kerülés esetén: öblítse folyó vízzel legalább tizenöt percig,
+        a szemhéjat nyitva tartva, és forduljon orvoshoz attól függetlenül,
+        hogy utána milyen érzés.
+      - >-
+        Akkumulátor túlmelegedés esetén: ne húzza ki a töltőt, ha a csomag
+        gázt enged ki. Ürítse ki a területet, feszültségmentesítse a töltőkört
+        a falnál, és hagyja a csomagot beavatkozás nélkül lehűlni.

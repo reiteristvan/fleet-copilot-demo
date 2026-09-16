@@ -1,0 +1,126 @@
+# Shift handover notes: the noisiest part of the corpus and the largest.
+#
+# These are written at the end of a shift by someone who wants to go home. They
+# are terse, inconsistent about units and capitalisation, and occasionally
+# wrong -- which is the point. A corpus where every document is authoritative
+# cannot test whether the pipeline prefers a manual over a shift note.
+#
+# Placeholders are filled by the planner: {machine} {code} {item_number} {site}
+# {serial} {error_code} {error_title} {hours} {operator} {brush_limit}
+# {blade_limit}.
+
+type: handover_note
+
+en:
+  banks:
+    openings:
+      - Late shift, {site}. {code} ({serial}) out on the main aisles.
+      - Handover from days. {machine} was in service most of the shift.
+      - Nights at {site}. Took {serial} over from the previous crew at shift start.
+      - "{site}, early shift. Hour meter on {serial} read {hours} h at start."
+      - Quick one - {code} was down for part of the shift, see below.
+      - Handover notes, {site}. Nothing dramatic but a couple of things to watch.
+      - Covering for the regular operator today. {machine} at {site}.
+      - Weekend shift. Only {serial} in use, the others stayed on charge.
+      - "{site}. Ran {serial} for about six hours, mostly warehouse floor."
+      - Day shift handover. {code} performing normally apart from the note below.
+      - Second half of the shift only - picked {serial} up after the changeover.
+      - "{site}, night shift. Floors were heavier than usual after the delivery."
+
+    observations:
+      - Recovery tank smelled bad at the end of the run, probably not rinsed properly yesterday.
+      - Squeegee leaving a thin streak on the left side. Not bad enough to stop but worth a look.
+      - Machine pulled slightly to the right all shift. Might be a deck adjustment.
+      - Battery dropped faster than usual, down to about a quarter by hour four.
+      - "{error_code} came up twice ({error_title}) and cleared on its own both times."
+      - Brushes look close to worn out to me. Someone should measure them properly.
+      - Solution flow seemed weak on the right hand side, might be a blocked jet.
+      - Hopper filled much quicker than normal, lots of packaging debris in aisle 4.
+      - Noticed a rattle from the deck when reversing. Goes away at low speed.
+      - Charger took longer than usual to finish, no error shown though.
+      - Vacuum sounded higher pitched than normal towards the end of the run.
+      - Water on the floor behind the machine in the last hour, squeegee not picking up cleanly.
+      - Display flickered once at startup, came back fine.
+      - Left hand side broom seems to be missing bristles.
+
+    actions_taken:
+      - Rinsed the recovery tank and left the lid propped open to dry.
+      - Swapped the squeegee blade over to the spare set from the cabinet.
+      - Emptied and rinsed the hopper, ran the filter shaker first.
+      - Put it on charge at end of shift, charger showed green before I left.
+      - Cleared the debris from the brush deck, there was a lot of shrink wrap wound round.
+      - Topped up the solution tank and checked the detergent dosing was set right.
+      - Cleaned the float shut-off in the recovery tank, it was coated.
+      - Logged it with the service desk, reference on the whiteboard.
+      - Left it on charge and tagged it so nobody takes it out before it is looked at.
+      - Wiped the squeegee blades down and checked the deflection.
+      - Reset the fault from the display and carried on, ran fine after that.
+      - Nothing done, ran out of shift. Leaving it as found.
+
+    outstanding:
+      - Needs the brushes measured against the wear limit before next use.
+      - Service desk has not come back yet, do not take it on the polished floor until they do.
+      - Spare squeegee blades are down to the last set, someone needs to order more.
+      - Still needs a proper look at the solution jets, I only cleared the obvious one.
+      - Battery wants a full charge cycle, do not take it out on a short top-up.
+      - Deck alignment needs checking, I have not touched it.
+      - Left the fault log on screen for the engineer, please do not clear it.
+      - Wants a filter check before the next long run.
+      - Nothing outstanding.
+      - Please confirm the wear limit before changing anything, I am going from memory.
+
+    signoffs:
+      - Handed over to the incoming operator. {operator}
+      - "{operator}, end of shift."
+      - Signed off, {operator}. Any questions the number is on the board.
+      - "{operator} - on days again tomorrow if anything comes up."
+      - Left as noted above. {operator}
+      - "{operator}. Back Thursday."
+
+hu:
+  banks:
+    openings:
+      - Délutános műszak, {site}. A {code} ({serial}) a fő közlekedőkön dolgozott.
+      - Átadás a nappalos műszaktól. A {machine} a műszak nagy részében üzemelt.
+      - Éjszakás, {site}. A {serial} gépet műszakkezdéskor vettem át.
+      - "{site}, reggeles műszak. A {serial} üzemóraszámlálója induláskor {hours} h volt."
+      - Röviden - a {code} a műszak egy részében állt, lásd lent.
+      - Átadási jegyzet, {site}. Semmi komoly, de néhány dolgot érdemes figyelni.
+      - Hétvégi műszak. Csak a {serial} üzemelt, a többi töltőn maradt.
+      - "{site}. Nagyjából hat órát ment a {serial}, főleg a raktári padlón."
+
+    observations:
+      - A szennyvíztartálynak kellemetlen szaga volt a műszak végén, valószínűleg tegnap nem öblítették ki.
+      - A lehúzógumi vékony csíkot hagy a bal oldalon. Nem vészes, de meg kell nézni.
+      - A gép egész műszakban enyhén jobbra húzott. Lehet, hogy a kefetárcsa beállítása.
+      - Az akkumulátor a szokásosnál gyorsabban merült, a negyedik órára negyedére esett.
+      - "A {error_code} kétszer is kijött ({error_title}), mindkétszer magától törlődött."
+      - A kefék szerintem közel vannak a kopáshatárhoz. Valakinek rendesen meg kellene mérnie.
+      - Az oldatáramlás gyengének tűnt a jobb oldalon, talán eltömődött fúvóka.
+      - A szeméttartály a szokásosnál jóval gyorsabban telt meg, sok csomagolóanyag volt a 4-es sorban.
+      - Tolatásnál zörgés hallatszik a kefetárcsa felől. Lassú haladásnál megszűnik.
+      - A töltés a szokásosnál tovább tartott, hibajelzés nem volt.
+
+    actions_taken:
+      - Kiöblítettem a szennyvíztartályt, a fedelet kitámasztva hagytam száradni.
+      - Kicseréltem a lehúzógumit a szekrényben lévő tartalék készletre.
+      - Kiürítettem és kiöblítettem a szeméttartályt, előtte működtettem a szűrőrázót.
+      - Műszak végén töltőre tettem, indulás előtt már zöldet mutatott a töltő.
+      - Kitisztítottam a kefetárcsát, sok zsugorfólia tekeredett rá.
+      - Feltöltöttem az oldattartályt és ellenőriztem a tisztítószer adagolását.
+      - Jeleztem a szervizpultnak, a hivatkozási szám a táblán van.
+      - Töltőn hagytam és megjelöltem, hogy senki ne vigye el, amíg meg nem nézik.
+
+    outstanding:
+      - A kefék hosszát a kopáshatárhoz kell mérni a következő használat előtt.
+      - A szerviz még nem jelzett vissza, addig ne vigyétek a polírozott padlóra.
+      - A tartalék lehúzógumikból ez az utolsó készlet, rendelni kellene.
+      - Az oldatfúvókákat még rendesen át kell nézni, én csak a szemmel láthatót tisztítottam.
+      - Az akkumulátornak teljes töltési ciklus kell, ne vigyétek ki rövid rátöltés után.
+      - Nincs elmaradt feladat.
+
+    signoffs:
+      - Átadva a következő műszaknak. {operator}
+      - "{operator}, műszak vége."
+      - Aláírva, {operator}. Kérdés esetén a szám a táblán.
+      - "{operator} - holnap megint nappalos vagyok."

@@ -1,0 +1,140 @@
+# Operator manuals: one per machine type, plus Hungarian versions of two.
+#
+# Written for the person driving the machine, not the person repairing it. The
+# capacities and limits quoted here are substituted from the catalogue, so a
+# manual and a maintenance procedure citing the same figure cite the same
+# source rather than two numbers that happen to agree.
+#
+# Placeholders: {machine} {code} {item_number} {solution_tank} {recovery_tank}
+# {hopper} {deck} {battery} {blade_limit} {brush_limit}.
+
+type: operator_manual
+
+en:
+  banks:
+    intended_use:
+      - >-
+        The {machine} is intended for cleaning sealed hard floors indoors. It is
+        not approved for outdoor use, for floors with a gradient above the value
+        on the machine plate, or for picking up burning, explosive or toxic
+        material.
+      - >-
+        This manual covers the {machine}, item number {item_number}. The machine
+        is designed for commercial indoor use on sealed floors. Any other use is
+        outside its approval and voids the warranty.
+      - >-
+        The {machine} is a battery machine for indoor hard-floor cleaning. Do
+        not use it to pick up liquids other than cleaning solution, and never
+        use it to recover flammable liquids.
+
+    controls:
+      - The key switch isolates the whole machine. Remove the key whenever the machine is unattended.
+      - The deck lever raises and lowers the {deck} deck. Raise it before reversing.
+      - The solution tap sets the flow to the deck. Closing it stops flow but does not stop the brushes.
+      - The battery indicator shows the state of charge of the {battery} pack.
+      - The emergency stop cuts traction and brush drive but does not isolate the battery.
+      - The hour meter records running time and is the basis for every service interval.
+      - The horn is a legal requirement on the ride-on machines and must be tested daily.
+
+    operation_steps:
+      - Walk the area and remove loose debris and obstacles before starting.
+      - Check the battery indicator shows enough charge for the whole run.
+      - Lower the deck and open the solution tap.
+      - Select a speed that keeps the squeegee picking up cleanly; faster is not cleaner.
+      - Overlap each pass by about one tenth of the deck width.
+      - Raise the deck and close the tap before stopping or reversing.
+      - "Watch behind the machine: water on the floor means the squeegee is not picking up."
+
+    filling_steps:
+      - >-
+        Fill the solution tank to {solution_tank} litres with clean water below
+        50 C. Hotter water shortens tank and seal life without cleaning better.
+      - Add detergent at the dilution on the product label, into water, never the other way round.
+      - >-
+        Do not exceed the {solution_tank} litre mark. The recovery tank holds
+        {recovery_tank} litres and must be able to take back everything put
+        down.
+      - Empty the recovery tank before it reaches full, not after the shut-off has tripped.
+      - Rinse the recovery tank at the end of every shift and leave the lid open to dry.
+      - Empty the {hopper} litre hopper at the end of every shift, running the filter shaker first.
+
+    after_use_steps:
+      - Drain and rinse both tanks.
+      - Raise the squeegee off the floor so the blades do not take a set overnight.
+      - Wipe the squeegee blades and check them for damage.
+      - Remove the brush or pad driver and rinse it.
+      - Put the machine on charge and confirm the charger has started.
+      - Record the hour meter reading and anything unusual in the machine log.
+
+    cautions:
+      - >-
+        Replace the squeegee blade once the wiping edge is worn back more than
+        {blade_limit} mm. A worn blade leaves a wet floor, which is a slip
+        hazard rather than a cosmetic problem.
+      - >-
+        Replace brushes at or below {brush_limit} mm bristle length. Past that
+        point the deck carries load the bristles should take.
+      - Never open the battery compartment while the charger is connected.
+      - Do not hose the machine down. Water entering the electrical compartment is not covered.
+      - Report any fault code that recurs, even if it clears itself.
+
+hu:
+  banks:
+    intended_use:
+      - >-
+        A {machine} zárt terű, bevonatos kemény padlók tisztítására szolgál.
+        Nem alkalmas kültéri használatra, a géptáblán megadott értéknél
+        meredekebb lejtőn való használatra, sem égő, robbanásveszélyes vagy
+        mérgező anyag felszedésére.
+      - >-
+        Ez a kézikönyv a {machine} típusra vonatkozik, {item_number}
+        cikkszámmal. A gép ipari, beltéri használatra készült bevonatos
+        padlókon. Minden más használat a jóváhagyáson kívül esik.
+
+    controls:
+      - A kulcsos kapcsoló a teljes gépet leválasztja. Őrizetlenül hagyott gépből vegye ki a kulcsot.
+      - A kefetárcsa karja emeli és süllyeszti a tárcsát. Tolatás előtt emelje fel.
+      - Az oldatcsap állítja az áramlást. Elzárása leállítja az áramlást, de a keféket nem.
+      - Az akkumulátor kijelző a {battery} csomag töltöttségi szintjét mutatja.
+      - A vészleállító megszakítja a hajtást és a kefemeghajtást, de nem választja le az akkumulátort.
+      - Az üzemóraszámláló rögzíti a működési időt, és minden szervizciklus alapja.
+
+    operation_steps:
+      - Indulás előtt járja be a területet, és távolítsa el a laza törmeléket és az akadályokat.
+      - Ellenőrizze, hogy az akkumulátor töltöttsége elegendő a teljes menethez.
+      - Süllyessze le a kefetárcsát és nyissa ki az oldatcsapot.
+      - Olyan sebességet válasszon, amelynél a lehúzógumi tisztán felszed; a gyorsabb nem tisztább.
+      - Minden sávot körülbelül a tárcsaszélesség tizedével fedjen át.
+      - Megállás vagy tolatás előtt emelje fel a tárcsát és zárja el a csapot.
+
+    filling_steps:
+      - >-
+        Töltse fel az oldattartályt {solution_tank} literig 50 C alatti tiszta
+        vízzel. A forróbb víz nem tisztít jobban, viszont rövidíti a tartály és
+        a tömítések élettartamát.
+      - A tisztítószert a címkén megadott hígításban, mindig vízbe adagolja, soha fordítva.
+      - >-
+        Ne lépje túl a {solution_tank} literes jelzést. A szennyvíztartály
+        {recovery_tank} litert fogad be, és mindent vissza kell tudnia venni,
+        amit a gép kijuttat.
+      - A szennyvíztartályt a megtelés előtt ürítse, ne a lezáró szelep működése után.
+      - Minden műszak végén öblítse ki a szennyvíztartályt, és a fedelet hagyja nyitva száradni.
+
+    after_use_steps:
+      - Ürítse le és öblítse ki mindkét tartályt.
+      - Emelje el a lehúzógumit a padlótól, hogy a gumik ne deformálódjanak éjszakára.
+      - Törölje le a lehúzógumikat és ellenőrizze sérülésmentességüket.
+      - Vegye ki a kefét vagy a pádtartót és öblítse le.
+      - Tegye a gépet töltőre, és győződjön meg róla, hogy a töltés elindult.
+      - Jegyezze fel az üzemóraszámláló állását és minden szokatlan jelenséget a gépnaplóba.
+
+    cautions:
+      - >-
+        Cserélje a lehúzógumit, ha a lehúzóél {blade_limit} mm-nél jobban
+        elkopott. Az elkopott gumi nedves padlót hagy, ami csúszásveszély, nem
+        szépséghiba.
+      - >-
+        A keféket {brush_limit} mm sörtehossznál vagy az alatt cserélje. Ezen
+        túl a kefetárcsa viseli azt a terhelést, amit a sörtének kellene.
+      - Soha ne nyissa ki az akkumulátortartót csatlakoztatott töltő mellett.
+      - Ne mossa le a gépet vízsugárral. Az elektromos térbe jutó víz okozta kár nem térül meg.

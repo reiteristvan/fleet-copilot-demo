@@ -1,0 +1,158 @@
+# Maintenance procedures: four per machine type, plus one superseded revision.
+#
+# Step banks are named after the procedure they belong to, so the planner asks
+# for `steps_battery_care` rather than indexing into a list by position. A typo
+# in a bank name then fails with the available names listed rather than reaching
+# into the wrong procedure.
+#
+# The charging temperature in steps_battery_care is deliberately absent from the
+# fragments: the planner substitutes {max_charge_temp}, which is what the two
+# conflicting revisions of that procedure disagree about.
+#
+# Placeholders: {machine} {code} {item_number} {blade_limit} {brush_limit}
+# {max_charge_temp} {interval_hours}.
+
+type: maintenance_procedure
+
+en:
+  banks:
+    purpose:
+      - >-
+        This procedure covers the {machine} and applies to item number
+        {item_number}. Carry it out at the interval in the table below, or
+        sooner if the daily check finds a fault.
+      - >-
+        Applies to the {machine}. The interval assumes single-shift use on a
+        sealed floor; halve it for two-shift operation or for abrasive soil.
+      - >-
+        For the {machine}, item number {item_number}. Read the whole procedure
+        before starting: two of the steps cannot be undone once begun.
+
+    tools:
+      - 13 mm combination spanner
+      - Torque wrench, 5-25 Nm
+      - Vernier caliper or the wear gauge supplied with the machine
+      - Nitrile gloves
+      - Clean lint-free cloth
+      - Drain hose
+      - Insulated screwdriver set
+
+    notes:
+      - >-
+        Record the hour meter reading in the machine log when the procedure is
+        complete. The next interval is counted from that reading, not from the
+        calendar date.
+      - >-
+        If a part is at or past its wear limit, replace it now rather than at
+        the next interval. The limit is set where the consumable stops
+        protecting the component behind it, and that component is the expensive
+        one.
+      - >-
+        Dispose of used consumables according to the site waste procedure.
+        Detergent-soaked material is not general waste.
+      - >-
+        Any measurement taken outside the limits in the table is a reason to
+        stop and raise a service request, not a reason to adjust the limit.
+
+    steps_squeegee_blade_change:
+      - Park the machine on a level surface and switch it off at the key.
+      - Raise the squeegee to its transport position and disconnect the suction hose.
+      - Release the two wing nuts holding the squeegee body to the mounting bracket.
+      - Withdraw the blade retaining strip and slide the blade clear of the body.
+      - >-
+        Inspect the wiping edge. Replace the blade if the edge is rounded, torn,
+        or worn back more than {blade_limit} mm from its original profile.
+      - Rotate the blade to an unused edge if three edges remain unworn, otherwise fit a new one.
+      - Refit the retaining strip and tighten the wing nuts by hand only.
+      - Reconnect the suction hose and lower the squeegee.
+      - >-
+        Run the machine over a wet patch and check the whole width lifts clean.
+        A streak at one end means the deflection is uneven, not that the blade
+        is worn.
+
+    steps_brush_wear_limits:
+      - Switch the machine off and raise the brush deck.
+      - Release the brush from the drive plate by turning it against the direction of travel.
+      - Clean the bristles of wound debris before measuring; wrapped film reads as bristle length.
+      - >-
+        Measure the bristle length with the caliper at four points around the
+        brush. Use the shortest reading.
+      - >-
+        Replace the brush if the shortest reading is at or below {brush_limit}
+        mm. A brush at the limit still cleans, but the deck begins to carry load
+        the bristles should be taking.
+      - Check the drive plate for wear at the same time and record its condition.
+      - Refit the brush and confirm it locks positively onto the drive plate.
+      - Lower the deck and run for thirty seconds, listening for uneven contact.
+
+    steps_battery_care:
+      - Park the machine in a ventilated area away from ignition sources.
+      - Switch off at the key and wait two minutes for the traction circuit to discharge.
+      - Check the pack surface temperature before connecting the charger.
+      - >-
+        Do not begin charging if the pack surface temperature is above
+        {max_charge_temp} C. Allow it to cool first; charging a hot pack is what
+        produces the over-temperature lockout, not the other way round.
+      - Connect the charger and confirm the display shows a charge current within the first minute.
+      - >-
+        Leave the pack on charge until the charger signals complete. Interrupting
+        a cycle and resuming later is not equivalent to one full cycle.
+      - Check that no cell is more than 0.2 V from the pack average once charging finishes.
+      - Record the end-of-charge voltage in the machine log.
+      - >-
+        Never leave a pack below its minimum state of charge overnight. A deep
+        discharge is not visible until the pack is next load-tested.
+
+    steps_filter_cleaning:
+      - Switch the machine off and wait for the vacuum to stop completely.
+      - Operate the filter shaker before opening the hopper, never after.
+      - Release the hopper catches and withdraw the hopper far enough to reach the filter frame.
+      - Lift the panel filter clear of its frame without knocking it against the housing.
+      - >-
+        Inspect the pleats against the light. A filter that passes no light
+        through more than a quarter of its area is blinded and cleaning will not
+        recover it.
+      - Clean from the clean side outwards with low-pressure air, not from the dirty side.
+      - Check the filter seal for compression set and replace it if it no longer springs back.
+      - Refit the filter, making sure it seats squarely on the seal all the way round.
+      - Close the hopper and confirm the seated indicator clears before returning to service.
+
+hu:
+  banks:
+    purpose:
+      - >-
+        Ez az eljárás a {machine} típusra vonatkozik, {item_number}
+        cikkszámmal. Az alábbi táblázatban megadott gyakorisággal kell
+        elvégezni, illetve hamarabb, ha a napi ellenőrzés hibát talál.
+
+    tools:
+      - 13 mm-es csillag-villáskulcs
+      - Nyomatékkulcs, 5-25 Nm
+      - Tolómérő vagy a géphez adott kopásmérő idomszer
+      - Nitril kesztyű
+      - Tiszta, szöszmentes kendő
+
+    notes:
+      - >-
+        Az eljárás befejezése után jegyezze fel az üzemóraszámláló állását a
+        gépnaplóba. A következő ciklus ettől az értéktől számít, nem a naptári
+        dátumtól.
+      - >-
+        A táblázatban megadott határértéken kívül eső mérés a munka
+        felfüggesztésének és szervizigény jelzésének oka, nem a határérték
+        módosításának oka.
+
+    steps_battery_care:
+      - Állítsa a gépet jól szellőző helyre, gyújtóforrástól távol.
+      - Kapcsolja ki a kulccsal, és várjon két percet a hajtáskör kisüléséig.
+      - A töltő csatlakoztatása előtt ellenőrizze az akkumulátorcsomag felületi hőmérsékletét.
+      - >-
+        Ne kezdje meg a töltést, ha az akkumulátorcsomag felületi hőmérséklete
+        {max_charge_temp} C fölött van. Előbb hagyja lehűlni; a túlmelegedési
+        zárolást éppen a forró csomag töltése okozza.
+      - Csatlakoztassa a töltőt, és az első percben ellenőrizze a töltőáram megjelenését.
+      - >-
+        Hagyja a csomagot töltőn, amíg a töltő be nem fejezi a ciklust. A
+        megszakított és később folytatott töltés nem egyenértékű egy teljes
+        ciklussal.
+      - Jegyezze fel a töltés végi feszültséget a gépnaplóba.

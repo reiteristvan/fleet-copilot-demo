@@ -9,8 +9,8 @@ it promises.
 
 from __future__ import annotations
 
-from fleet_copilot.corpus.models import Language, MachineFamily
-from fleet_copilot.corpus.seed import load_catalogue, load_corpus_spec
+from fleet_copilot.corpus.models import DocumentType, Language, MachineFamily
+from fleet_copilot.corpus.seed import load_catalogue, load_corpus_spec, load_fragments
 
 
 class TestShippedCatalogue:
@@ -106,3 +106,45 @@ class TestShippedGlossary:
         for term in load_catalogue().glossary_terms:
             assert term.term_en != term.term_hu, term.term_en
             assert term.definition_en != term.definition_hu, term.term_en
+
+
+class TestShippedFragments:
+    def test_every_type_the_spec_asks_for_has_a_fragment_file(self) -> None:
+        """A quota with no fragment file is a document type that cannot be built.
+
+        The spec and the fragment directory are edited separately, so this is
+        the pairing most likely to drift -- and it would otherwise surface as a
+        CorpusDataError part-way through generating 120 documents.
+        """
+        fragments = load_fragments()
+        for quota in load_corpus_spec().quotas:
+            assert quota.type in fragments.files, quota.type.value
+
+    def test_every_type_with_a_hungarian_quota_has_hungarian_fragments(self) -> None:
+        """Asking for Hungarian documents from a type with only English banks is
+        refused at generation time; this catches it at the gate instead."""
+        fragments = load_fragments()
+        for quota in load_corpus_spec().quotas:
+            if quota.hu:
+                fragments.of(quota.type, Language.HU)
+
+    def test_english_only_types_do_not_claim_hungarian_quotas(self) -> None:
+        spec = load_corpus_spec()
+        for document_type, file in load_fragments().files.items():
+            if file.hu is None:
+                assert spec.quota(document_type).hu == 0, document_type.value
+
+    def test_the_banks_are_wide_enough_to_vary(self) -> None:
+        """Handover notes are the largest type by far, so their banks carry the
+        combinatorial load: 47 documents drawn from five banks of one phrase
+        each would be 47 copies of one note."""
+        banks = load_fragments().of(DocumentType.HANDOVER_NOTE, Language.EN).banks
+        assert len(banks) >= 4
+        assert all(len(phrases) >= 6 for phrases in banks.values())
+
+    def test_the_battery_procedure_does_not_hardcode_a_charging_temperature(self) -> None:
+        """The conflicting revisions differ on exactly this number, so it has to
+        be substituted rather than written into the fragment."""
+        steps = load_fragments().of(DocumentType.MAINTENANCE_PROCEDURE, Language.EN)
+        joined = " ".join(steps.bank("steps_battery_care"))
+        assert "{max_charge_temp}" in joined

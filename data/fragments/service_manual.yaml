@@ -1,0 +1,60 @@
+# Service manuals: one per machine type, for the engineer rather than the operator.
+#
+# Deliberately overlapping with the operator manual in vocabulary and differing
+# in depth. That overlap is the point: a query about a squeegee should have to
+# choose between two documents that both legitimately discuss squeegees.
+#
+# Placeholders: {machine} {code} {item_number} {deck}.
+
+type: service_manual
+
+en:
+  banks:
+    scope:
+      - >-
+        This manual covers corrective and preventive service on the {machine}.
+        It assumes the technician is qualified to work on battery systems and
+        has the machine isolated before starting.
+      - >-
+        Service documentation for the {machine}, item number {item_number}.
+        Procedures here supersede the operator manual wherever the two describe
+        the same task at different depth.
+      - >-
+        For service technicians working on the {machine}. Every torque figure in
+        this document is for clean, dry threads unless stated otherwise.
+
+    diagnostic_steps:
+      - Read and record the fault history before clearing anything; clearing it discards the evidence.
+      - Confirm the reported symptom yourself rather than working from the handover note.
+      - Check the battery state of charge before diagnosing any intermittent electrical fault.
+      - Measure at the connector, not at the component, when isolating a wiring fault.
+      - Check for wound debris on the brush drive before condemning the motor.
+      - Verify the float shut-off operates freely before investigating a vacuum complaint.
+      - Compare the hour meter against the service history to see whether an interval was missed.
+      - Reproduce the fault with the machine on the floor, not on stands; load changes the symptom.
+
+    parts_notes:
+      - >-
+        Squeegee blades are supplied as a set of four edges. Fitting a single
+        replacement edge against three worn ones produces uneven deflection, and
+        the complaint returns within the week.
+      - >-
+        Brush and pad driver part numbers differ between the {deck} deck
+        variants. Check the item number on the machine plate, not the machine
+        type.
+      - >-
+        Battery packs are matched sets. Replacing one cell block in an aged pack
+        loads the new block against the old ones and shortens the life of both.
+      - >-
+        Filter seals are consumables, not hardware. Replace the seal whenever
+        the filter is replaced.
+      - Order consumables against the item number, since two variants of one machine type differ.
+
+    safety_notes:
+      - Isolate the battery before any work on the traction or brush circuits.
+      - >-
+        The emergency stop is not an isolator. It cuts drive but leaves the
+        battery connected, and treating it as an isolator is how technicians are
+        injured on these machines.
+      - Support a raised deck mechanically. The lift mechanism is not a hold device.
+      - Wear eye protection when working near a charging battery.

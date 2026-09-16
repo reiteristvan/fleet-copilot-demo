@@ -1,0 +1,53 @@
+# Fault reports: raised by the site, before an engineer has attended.
+#
+# Written from outside the machine looking in, so they describe symptoms and
+# guesses rather than causes. Paired with service reports on the same serials,
+# they give retrieval two documents about one event that disagree about what the
+# problem was -- which is the normal state of a real service archive.
+#
+# Placeholders: {machine} {code} {serial} {site} {error_code} {error_title}
+# {hours} {operator}.
+
+type: fault_report
+
+en:
+  banks:
+    symptoms:
+      - >-
+        Machine {serial} at {site} is showing {error_code} ({error_title})
+        repeatedly. It clears if the machine is switched off and on, but comes
+        back within the hour.
+      - >-
+        Water is being left on the floor behind {serial}. The operators say it
+        started after the last blade change.
+      - >-
+        Machine {serial} will not complete a charge cycle. The charger runs for
+        several hours and then stops without signalling complete.
+      - >-
+        Loss of suction on {serial}. The vacuum sounds like it is running at a
+        higher pitch than the other machines on site.
+      - >-
+        The brush deck on {serial} is cutting out under load. It runs fine
+        unloaded and trips within a minute of the deck being lowered.
+      - >-
+        Machine {serial} is pulling to one side, and the operators are
+        compensating on the steering for the whole shift.
+      - >-
+        Reported by {operator} at {hours} h: {error_title} on {serial}, twice in
+        one shift.
+
+    diagnosis:
+      - Site believes it is the battery, as the machine is nearly three years old.
+      - The operators think the blade fitted last week is the wrong part.
+      - No diagnosis offered. Raising this so it is logged before the weekend.
+      - Possibly related to the hopper being overfilled on the previous shift.
+      - The site has checked the obvious items and found nothing.
+      - Suspected filter blockage, but nobody on site is trained to remove it.
+
+    resolution:
+      - Machine taken out of service and tagged. Awaiting engineer attendance.
+      - Still in use on the warehouse floor only, kept off the polished areas.
+      - Awaiting parts. The site has been asked not to run it in the meantime.
+      - Open. Escalated after the second occurrence in a week.
+      - Closed by the site after the next shift reported no recurrence.
+      - Open, with a temporary machine supplied to cover the round.

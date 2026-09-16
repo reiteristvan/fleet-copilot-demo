@@ -1,0 +1,73 @@
+# Service reports: what an engineer wrote after attending a machine.
+#
+# Keyed by serial number and error code, which is what makes them findable by a
+# question phrased the way a depot manager would phrase it.
+#
+# Placeholders: {machine} {code} {serial} {site} {error_code} {error_title}
+# {hours} {operator} {item_number}.
+
+type: service_report
+
+en:
+  banks:
+    findings:
+      - >-
+        Attended {site} for {serial}. Fault history showed {error_code}
+        ({error_title}) logged four times in the preceding week, each time
+        clearing on restart.
+      - >-
+        Machine {serial} presented with {error_title} at {hours} h. Confirmed
+        the fault on the floor; it did not reproduce with the deck raised.
+      - >-
+        Called to {site}. Reported symptom was poor water pickup on {serial}.
+        Found the squeegee deflection uneven across the width and the left hand
+        blade worn well past its limit.
+      - >-
+        Inspection of {serial} found the recovery tank float shut-off coated
+        with detergent residue and sticking, which accounts for the intermittent
+        {error_code}.
+      - >-
+        Machine {serial} attended for repeated {error_title}. Battery pack
+        surface temperature was still above ambient two hours after the shift
+        ended, which points at the charging regime rather than at the pack.
+      - >-
+        Found shrink wrap wound tightly around the brush drive shaft on
+        {serial}. Bristle length measured within limits once the film was
+        removed, so the overload was mechanical rather than wear.
+      - >-
+        Attended {site} for {serial} at {hours} h. The panel filter was blinded
+        across most of its area, which explains the loss of suction reported by
+        {operator}.
+
+    actions:
+      - Replaced the squeegee blade set and reset the deflection across the full width.
+      - Cleaned the float shut-off and the recovery tank breather, then flushed the suction path.
+      - Replaced the panel filter and its seal; the old seal had taken a compression set.
+      - Cleared the debris from the brush drive and checked the shaft seal for damage.
+      - Recalibrated the deck height and confirmed even contact across the width.
+      - Updated the charger profile to the setting for the fitted pack chemistry.
+      - Cleared the fault history after recording it, then ran the machine for twenty minutes.
+      - Advised the site on the charging temperature limit and left a copy of the procedure.
+
+    parts_used:
+      - Squeegee blade set, item number {item_number}
+      - Panel filter and seal
+      - Brush set, both sides
+      - Float shut-off assembly
+      - No parts used; adjustment only
+      - Drive plate
+
+    outcomes:
+      - Machine returned to service. No recurrence during the twenty-minute test run.
+      - >-
+        Returned to service with a note on the machine log to re-measure the
+        brushes at the next interval.
+      - >-
+        Left out of service pending a replacement pack. The site has been told
+        not to return it to the floor.
+      - >-
+        Returned to service. The underlying cause is operational rather than
+        mechanical: the machine is being put on charge hot at the end of a
+        double shift.
+      - Fault not reproduced after the adjustment. Asked the site to log it again if it returns.
+      - Returned to service. Recommended the site order a second set of blades to hold as spares.
