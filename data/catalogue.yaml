@@ -174,3 +174,98 @@ sites:
   - slug: gyor-logisztika
     name: Győri Logisztikai Központ
     language: hu
+
+# The vocabulary the corpus is written in, and the content of the glossary
+# documents. Kept here rather than in a fragment bank so the glossary describes
+# the corpus instead of drifting away from it.
+glossary_terms:
+  - term_en: Squeegee
+    term_hu: Lehúzógumi
+    definition_en: >-
+      The rubber blade assembly trailing the brush deck. It wipes the film of
+      dirty solution into the suction path so the floor is left dry enough to
+      walk on immediately behind the machine.
+    definition_hu: >-
+      A kefetárcsa mögött futó gumipengés egység. A szennyezett oldat filmjét
+      a szívócsatornába tereli, így a padló közvetlenül a gép mögött már
+      járható marad.
+  - term_en: Solution tank
+    term_hu: Oldattartály
+    definition_en: >-
+      The clean-water tank. Holds water and metered detergent before it reaches
+      the brush deck.
+    definition_hu: >-
+      A tisztavizes tartály. A vizet és az adagolt tisztítószert tárolja,
+      mielőtt az a kefetárcsához jutna.
+  - term_en: Recovery tank
+    term_hu: Szennyvíztartály
+    definition_en: >-
+      The dirty-water tank. Takes back everything the solution tank puts down
+      plus the soil lifted with it, and is therefore never smaller than the
+      solution tank.
+    definition_hu: >-
+      A szennyvizes tartály. Visszafogadja mindazt, amit az oldattartály
+      kijuttat, a felszedett szennyeződéssel együtt, ezért soha nem kisebb az
+      oldattartálynál.
+  - term_en: Brush deck
+    term_hu: Kefetárcsa
+    definition_en: >-
+      The housing carrying the scrubbing brushes or pad drivers, together with
+      the mechanism that raises and lowers them.
+    definition_hu: >-
+      A súrolókeféket vagy a pádtartót hordozó egység, az emelő- és
+      süllyesztőmechanizmussal együtt.
+  - term_en: C-rate
+    term_hu: C-érték
+    definition_en: >-
+      Charge or discharge current expressed as a multiple of the battery's
+      rated capacity. A 100 Ah pack charged at 0.5C draws 50 A.
+    definition_hu: >-
+      A töltő- vagy kisütőáram az akkumulátor névleges kapacitásának
+      többszöröseként megadva. Egy 100 Ah-s csomag 0,5C-vel töltve 50 A-t vesz
+      fel.
+  - term_en: Deep discharge
+    term_hu: Mélykisütés
+    definition_en: >-
+      Discharging a battery below its permitted minimum state of charge.
+      Permanently reduces capacity, and on lithium packs the damage is not
+      visible until the pack is next load-tested.
+    definition_hu: >-
+      Az akkumulátor a megengedett legalacsonyabb töltöttségi szint alá
+      merítése. Tartósan csökkenti a kapacitást, lítium csomagoknál pedig a
+      kár csak a következő terheléses vizsgálatkor válik láthatóvá.
+  - term_en: Hopper
+    term_hu: Szeméttartály
+    definition_en: >-
+      The debris container on a sweeper. Sweeping performance falls off well
+      before the hopper is visibly full, because the filter blinds first.
+    definition_hu: >-
+      A seprőgép hulladékgyűjtő tartálya. A seprési teljesítmény már jóval a
+      tartály szemmel látható megtelése előtt visszaesik, mert a szűrő
+      korábban eltömődik.
+  - term_en: Filter shaker
+    term_hu: Szűrőrázó
+    definition_en: >-
+      The mechanism that knocks dust off the panel filter. Run it before
+      emptying the hopper, never after.
+    definition_hu: >-
+      A panelszűrőről a port leverő mechanizmus. A szeméttartály ürítése előtt
+      kell működtetni, utána soha.
+  - term_en: Pad driver
+    term_hu: Pádtartó
+    definition_en: >-
+      The disc that holds a cleaning pad in place of a brush, used where the
+      floor finish would be damaged by bristles.
+    definition_hu: >-
+      A kefe helyett tisztítópádot tartó tárcsa, ott használatos, ahol a
+      sörte megsértené a padlóbevonatot.
+  - term_en: Wear limit
+    term_hu: Kopáshatár
+    definition_en: >-
+      The dimension at which a consumable must be replaced. Running past it
+      damages the part the consumable protects, which is always the expensive
+      one.
+    definition_hu: >-
+      Az a méret, amelynél a kopóalkatrészt cserélni kell. A határ átlépése
+      azt az alkatrészt károsítja, amelyet a kopóalkatrész véd, és az mindig a
+      drágább.

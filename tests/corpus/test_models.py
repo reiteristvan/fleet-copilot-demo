@@ -61,6 +61,14 @@ def catalogue_data(**overrides: Any) -> dict[str, Any]:
             }
         ],
         "sites": [{"slug": "depot-north", "name": "Depot North", "language": "en"}],
+        "glossary_terms": [
+            {
+                "term_en": "Squeegee",
+                "term_hu": "Lehuzogumi",
+                "definition_en": "The rubber blade that wipes solution into the suction path.",
+                "definition_hu": "A gumipenge, amely az oldatot a szivocsatornaba tereli.",
+            }
+        ],
     }
     return data | overrides
 

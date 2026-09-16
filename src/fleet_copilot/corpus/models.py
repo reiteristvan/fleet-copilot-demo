@@ -215,6 +215,31 @@ class ErrorCode(BaseModel):
         return self.title_en if language is Language.EN else self.title_hu
 
 
+class GlossaryTerm(BaseModel):
+    """One entry in the domain vocabulary.
+
+    These are not only the glossary document's content: they are the words the
+    rest of the corpus is written in. Keeping them in the catalogue rather than
+    in a fragment bank is what makes the glossary a description of the corpus
+    instead of a separate document that can drift away from it.
+    """
+
+    model_config = ConfigDict(frozen=True, extra="forbid", str_strip_whitespace=True)
+
+    term_en: NonEmptyStr
+    term_hu: NonEmptyStr
+    definition_en: NonEmptyStr
+    definition_hu: NonEmptyStr
+
+    def term(self, language: Language) -> str:
+        """Return the term in ``language``."""
+        return self.term_en if language is Language.EN else self.term_hu
+
+    def definition(self, language: Language) -> str:
+        """Return the definition in ``language``."""
+        return self.definition_en if language is Language.EN else self.definition_hu
+
+
 class Site(BaseModel):
     """A customer site machines are deployed to and handover notes written at."""
 
@@ -233,6 +258,7 @@ class Catalogue(BaseModel):
     machine_types: Annotated[tuple[MachineType, ...], Field(min_length=1)]
     error_codes: Annotated[tuple[ErrorCode, ...], Field(min_length=1)]
     sites: Annotated[tuple[Site, ...], Field(min_length=1)]
+    glossary_terms: Annotated[tuple[GlossaryTerm, ...], Field(min_length=1)]
 
     @model_validator(mode="after")
     def _cross_references_resolve(self) -> Self:

@@ -88,3 +88,21 @@ class TestShippedCorpusSpec:
         """A type with no quota is a type the corpus silently does not contain."""
         spec = load_corpus_spec()
         assert all(quota.total > 0 for quota in spec.quotas)
+
+
+class TestShippedGlossary:
+    def test_defines_the_vocabulary_the_corpus_is_written_in(self) -> None:
+        terms = {term.term_en for term in load_catalogue().glossary_terms}
+        for expected in ("Squeegee", "Solution tank", "Recovery tank", "Brush deck"):
+            assert expected in terms
+
+    def test_covers_the_battery_vocabulary_the_planted_conflict_turns_on(self) -> None:
+        """The planted conflict is about charging temperature, so a reader
+        resolving it needs these two terms defined somewhere in the corpus."""
+        terms = {term.term_en for term in load_catalogue().glossary_terms}
+        assert {"C-rate", "Deep discharge"} <= terms
+
+    def test_every_term_is_defined_in_both_languages(self) -> None:
+        for term in load_catalogue().glossary_terms:
+            assert term.term_en != term.term_hu, term.term_en
+            assert term.definition_en != term.definition_hu, term.term_en
