@@ -16,3 +16,4 @@ Format: context, decision, consequences. Keep it to a page.
 | [0001](0001-python-toolchain-and-quality-gates.md) | Python toolchain and quality gates | Accepted |
 | [0002](0002-keyless-azure-access.md) | Keyless access to every Azure data plane | Accepted |
 | [0003](0003-synthetic-corpus-contract.md) | A deterministic synthetic corpus, and the contract it publishes | Accepted |
+| [0004](0004-telemetry-storage-and-partitioning.md) | Native range partitioning for telemetry, not TimescaleDB | Accepted |
