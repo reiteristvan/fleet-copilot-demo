@@ -50,7 +50,9 @@ class TestManifestEntry:
         assert entry.is_converted is False
 
     def test_a_converted_entry_knows_it(self) -> None:
-        entry = ManifestEntry.model_validate(entry_data(format="scanned_pdf", path="dist/x.pdf"))
+        entry = ManifestEntry.model_validate(
+            entry_data(format="scanned_pdf", path="published/x.pdf")
+        )
         assert entry.is_converted is True
         assert entry.format is OutputFormat.SCANNED_PDF
 
@@ -96,7 +98,7 @@ class TestManifest:
 
     def test_rejects_a_repeated_doc_id(self) -> None:
         payload = manifest_data(
-            total=2, documents=[entry_data(), entry_data(path="dist/other.pdf")]
+            total=2, documents=[entry_data(), entry_data(path="published/other.pdf")]
         )
         with pytest.raises(ValidationError, match="doc_id more than once"):
             Manifest.model_validate(payload)

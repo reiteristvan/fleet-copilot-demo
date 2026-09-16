@@ -28,7 +28,7 @@
       "type": "fault_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/fault-report-sd50b-2026-10279-12.pdf",
+      "path": "published/fault-report-sd50b-2026-10279-12.pdf",
       "sha256": "a38893e5812f5fa825da2eb6f2b471a86e5bfc4c4196650ff741a2dac092e580",
       "bytes": 1734,
       "planted": false
@@ -58,7 +58,7 @@
       "type": "fault_report",
       "language": "en",
       "format": "docx",
-      "path": "dist/fault-report-sdm43-2026-10142-11.docx",
+      "path": "published/fault-report-sdm43-2026-10142-11.docx",
       "sha256": "d0f585e69a59e3a13f04c4cd2524b1b6f8c408a6828d3a84274bfdf279d4fe33",
       "bytes": 36939,
       "planted": false
@@ -78,7 +78,7 @@
       "type": "fault_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/fault-report-sdm43-2026-10416-00.pdf",
+      "path": "published/fault-report-sdm43-2026-10416-00.pdf",
       "sha256": "5aa47e1714c39581b49a30043b55ad43f5757f4288473f5d4faead8ac0ae796e",
       "bytes": 1682,
       "planted": false
@@ -118,7 +118,7 @@
       "type": "fault_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/fault-report-swr120-2026-10006-06.pdf",
+      "path": "published/fault-report-swr120-2026-10006-06.pdf",
       "sha256": "e2ad8ec14da73b3ceb65ae991d2c4c67b28ae9d7090d9d9462a1c27076528103",
       "bytes": 1713,
       "planted": false
@@ -198,7 +198,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-city-hospital-2026-01-09-31.pdf",
+      "path": "published/handover-city-hospital-2026-01-09-31.pdf",
       "sha256": "ae68eee015662a96f09a0c082a4319b05e7feb0d588ef6135aae5e5d5ed73568",
       "bytes": 1931,
       "planted": false
@@ -238,7 +238,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-depot-north-2026-02-28-19.pdf",
+      "path": "published/handover-depot-north-2026-02-28-19.pdf",
       "sha256": "987f12354fe0e3287364f4bc743fad574423233fe3407827663f1566b1173fa3",
       "bytes": 2011,
       "planted": true,
@@ -251,7 +251,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-depot-north-2026-03-02-05.pdf",
+      "path": "published/handover-depot-north-2026-03-02-05.pdf",
       "sha256": "f759022333d61a7a13bacec8c803078a1ad1287202d28a924d151b37e5345f43",
       "bytes": 1906,
       "planted": false
@@ -271,7 +271,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "scanned_pdf",
-      "path": "dist/handover-depot-north-2026-05-18-37.pdf",
+      "path": "published/handover-depot-north-2026-05-18-37.pdf",
       "sha256": "df5fc27676c15893ccb25b46875d728e8c560c83bf1f2ba42d371f06b51f5838",
       "bytes": 110399,
       "planted": false
@@ -371,7 +371,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-hangar-seven-2026-05-06-30.pdf",
+      "path": "published/handover-hangar-seven-2026-05-06-30.pdf",
       "sha256": "3411ca08917e9207ece16a3806140670b5a604ba06462d85a154ba0f1434cec2",
       "bytes": 1908,
       "planted": false
@@ -381,7 +381,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-hangar-seven-2026-06-11-09.pdf",
+      "path": "published/handover-hangar-seven-2026-06-11-09.pdf",
       "sha256": "078fc228a968c10363e53fa1025145b5e82aacf8746405f4a69200e88655b065",
       "bytes": 1892,
       "planted": false
@@ -391,7 +391,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "pdf",
-      "path": "dist/handover-hangar-seven-2026-06-29-35.pdf",
+      "path": "published/handover-hangar-seven-2026-06-29-35.pdf",
       "sha256": "e1ff9d337842809efaaa156db685923c2bce6dcb0ab75c12327f6bdbda46e1ad",
       "bytes": 1917,
       "planted": false
@@ -614,7 +614,7 @@
       "type": "handover_note",
       "language": "en",
       "format": "docx",
-      "path": "dist/handover-riverside-mall-2026-08-03-03.docx",
+      "path": "published/handover-riverside-mall-2026-08-03-03.docx",
       "sha256": "cd62ea359f93a7d55176663aeff40aceec9a38da26bacc371459c8e0b650540a",
       "bytes": 37165,
       "planted": false
@@ -654,7 +654,7 @@
       "type": "safety_document",
       "language": "en",
       "format": "pdf",
-      "path": "dist/safety-detergent-sds-acidic.pdf",
+      "path": "published/safety-detergent-sds-acidic.pdf",
       "sha256": "e8fcee3914e73f51ffc90917d8ea06b287e9b4f3214d4d678f8e0e7ba289880c",
       "bytes": 2207,
       "planted": false
@@ -780,7 +780,7 @@
       "type": "maintenance_procedure",
       "language": "en",
       "format": "scanned_pdf",
-      "path": "dist/sd-50b-maint-squeegee-blade-change.pdf",
+      "path": "published/sd-50b-maint-squeegee-blade-change.pdf",
       "sha256": "7ffb3173baba0a5714f02846865c529854d04210fe7010db41904154cf3254c4",
       "bytes": 163499,
       "planted": false
@@ -850,7 +850,7 @@
       "type": "service_manual",
       "language": "en",
       "format": "pdf",
-      "path": "dist/sdm-43-service-manual.pdf",
+      "path": "published/sdm-43-service-manual.pdf",
       "sha256": "ea739ae85dc8201ae46cd51aa07a9bfe7279553db510da27800eb3eae0b76574",
       "bytes": 2639,
       "planted": false
@@ -890,7 +890,7 @@
       "type": "operator_manual",
       "language": "en",
       "format": "pdf",
-      "path": "dist/sdr-90-operator-manual.pdf",
+      "path": "published/sdr-90-operator-manual.pdf",
       "sha256": "18feb014b2e018c7ded096aa800cd434c100f7b43286c11cb0e0145d8fb35667",
       "bytes": 2790,
       "planted": false
@@ -900,7 +900,7 @@
       "type": "operator_manual",
       "language": "hu",
       "format": "docx",
-      "path": "dist/sdr-90-operator-manual-hu.docx",
+      "path": "published/sdr-90-operator-manual-hu.docx",
       "sha256": "809c25b1670cc4165fdb6146c5456b6e018f8e4f1570fc4045b8f99ccf32a57e",
       "bytes": 38163,
       "planted": false
@@ -930,7 +930,7 @@
       "type": "service_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/service-report-sd50b-2026-10005-06.pdf",
+      "path": "published/service-report-sd50b-2026-10005-06.pdf",
       "sha256": "5ac960f9cf8a0bd078820e92c8f84b28eb3aee1fe16713baa5cac57c5917c593",
       "bytes": 1921,
       "planted": false
@@ -940,7 +940,7 @@
       "type": "service_report",
       "language": "en",
       "format": "docx",
-      "path": "dist/service-report-sd50b-2026-10005-10.docx",
+      "path": "published/service-report-sd50b-2026-10005-10.docx",
       "sha256": "9713cfc42633ee88358e227be824c7c9b09756b26a9a6d6fc389d8f5cf7a34fc",
       "bytes": 37165,
       "planted": false
@@ -960,7 +960,7 @@
       "type": "service_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/service-report-sd50b-2026-10142-13.pdf",
+      "path": "published/service-report-sd50b-2026-10142-13.pdf",
       "sha256": "78140f8abb2a8c928b71dfac2b73be7800a76998c97cd3059e691e3bb43c8efd",
       "bytes": 1970,
       "planted": false
@@ -970,7 +970,7 @@
       "type": "service_report",
       "language": "en",
       "format": "scanned_pdf",
-      "path": "dist/service-report-sd50b-2026-10142-17.pdf",
+      "path": "published/service-report-sd50b-2026-10142-17.pdf",
       "sha256": "b09c98a8e9efa48f27f67030e72dd99a8afe54639bce8dc768695cf969e6fd69",
       "bytes": 121049,
       "planted": true,
@@ -1003,7 +1003,7 @@
       "type": "service_report",
       "language": "en",
       "format": "docx",
-      "path": "dist/service-report-sd50b-2026-10416-09.docx",
+      "path": "published/service-report-sd50b-2026-10416-09.docx",
       "sha256": "489f71b9d0af4dadf04e28b6cd992d091b9dd49753799456df19fa3cee1d89c5",
       "bytes": 37158,
       "planted": false
@@ -1053,7 +1053,7 @@
       "type": "service_report",
       "language": "en",
       "format": "pdf",
-      "path": "dist/service-report-sdm43-2026-10279-15.pdf",
+      "path": "published/service-report-sdm43-2026-10279-15.pdf",
       "sha256": "0129f83d47afd4babad4175a39ec40cb0c29f75bb2c51367c6e92fe6a823507a",
       "bytes": 2024,
       "planted": true,
@@ -1066,7 +1066,7 @@
       "type": "service_report",
       "language": "en",
       "format": "scanned_pdf",
-      "path": "dist/service-report-sdm43-2026-10416-03.pdf",
+      "path": "published/service-report-sdm43-2026-10416-03.pdf",
       "sha256": "60c296949946af5206cbd76449369b1d7adb931a98420c983801a7d02518d2f3",
       "bytes": 102058,
       "planted": false
@@ -1116,7 +1116,7 @@
       "type": "service_report",
       "language": "en",
       "format": "scanned_pdf",
-      "path": "dist/service-report-vs75-2026-10141-04.pdf",
+      "path": "published/service-report-vs75-2026-10141-04.pdf",
       "sha256": "ace18f42ccf9d7420d6ba0fad45f907f4a60e0e740e4ca80f94b417a795b9a1c",
       "bytes": 109562,
       "planted": false

@@ -3,7 +3,7 @@
 Layout under ``data/corpus/``::
 
     markdown/<doc_id>.md    every document, the reviewable source of truth
-    dist/<doc_id>.<ext>     the converted subset, and what actually gets uploaded
+    published/<doc_id>.<ext>  the converted subset, and what actually gets uploaded
 
 Manifest paths are relative to the corpus root, so the manifest is readable from
 a checkout, a temporary directory in a test, or anywhere else it is unpacked.
@@ -12,7 +12,7 @@ Every document is written as Markdown even when it is uploaded as something
 else, because a diff of the Markdown is the only way to review what a change to
 a fragment bank did to the corpus -- a PDF diff says nothing. The manifest
 points at the file that gets uploaded, which for a converted document is the
-one in ``dist/``: ADR 0003 has a converted document replace its Markdown rather
+one in ``published/``: ADR 0003 has a converted document replace its Markdown rather
 than accompany it, so that uploading both does not plant an exact-duplicate
 pair nobody intended.
 """
@@ -28,7 +28,7 @@ from fleet_copilot.corpus.models import OutputFormat
 from fleet_copilot.corpus.planner import PlannedDocument
 
 MARKDOWN_DIR = "markdown"
-DIST_DIR = "dist"
+PUBLISHED_DIR = "published"
 
 _EXTENSIONS = {
     OutputFormat.MARKDOWN: ".md",
@@ -79,7 +79,7 @@ def write_corpus(documents: Sequence[PlannedDocument], corpus_root: Path, *, see
         else:
             published = _render_converted(document)
             extension = _EXTENSIONS[document.output_format]
-            published_path = corpus_root / DIST_DIR / f"{document.doc_id}{extension}"
+            published_path = corpus_root / PUBLISHED_DIR / f"{document.doc_id}{extension}"
             _write(published_path, published)
 
         planted = document.planted

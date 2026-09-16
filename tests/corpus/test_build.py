@@ -9,12 +9,15 @@ reason.
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
+
+import pytest
 
 from fleet_copilot.corpus.build import check, corpus_root, manifest_path, plan
 from fleet_copilot.corpus.manifest import Manifest, load_manifest
 from fleet_copilot.corpus.models import Language, OutputFormat
-from fleet_copilot.corpus.writer import DIST_DIR, MARKDOWN_DIR, write_corpus
+from fleet_copilot.corpus.writer import MARKDOWN_DIR, PUBLISHED_DIR, write_corpus
 
 EXPECTED_PLANTED = {
     "conflict-battery-charging-temp",
@@ -54,7 +57,7 @@ class TestCommittedCorpus:
         """ADR 0003: uploading the Markdown and the PDF of one manual would
         plant an exact-duplicate pair nobody intended."""
         for entry in committed().documents:
-            expected_dir = DIST_DIR if entry.is_converted else MARKDOWN_DIR
+            expected_dir = PUBLISHED_DIR if entry.is_converted else MARKDOWN_DIR
             assert entry.path.startswith(f"{expected_dir}/"), entry.path
 
     def test_the_published_set_spans_three_formats(self) -> None:
@@ -107,7 +110,7 @@ class TestWriteCorpus:
         assert manifest.total == len(documents)
         assert len(list((tmp_path / MARKDOWN_DIR).glob("*.md"))) == len(documents)
         converted = [doc for doc in documents if doc.output_format is not OutputFormat.MARKDOWN]
-        assert len(list((tmp_path / DIST_DIR).iterdir())) == len(converted)
+        assert len(list((tmp_path / PUBLISHED_DIR).iterdir())) == len(converted)
 
     def test_markdown_files_keep_line_feeds_on_every_platform(self, tmp_path: Path) -> None:
         """write_text would translate these to CRLF on Windows and give the same
@@ -120,3 +123,61 @@ class TestWriteCorpus:
         first = write_corpus(plan(), tmp_path / "a", seed=1)
         second = write_corpus(plan(), tmp_path / "b", seed=1)
         assert first.documents == second.documents
+
+
+class TestCloneCompleteness:
+    """What a fresh clone gets, as opposed to what is on this working tree.
+
+    The two differ whenever a path is ignored, and an ignored path fails
+    silently: the working tree is complete, every test passes against it, and
+    the manifest is correct. Only somebody cloning the repository finds out.
+    This happened once already, to the whole converted subset, because the
+    repository's stock Python .gitignore ignores ``dist/``.
+    """
+
+    def _tracked(self) -> set[str] | None:
+        """Paths git tracks under the corpus, or None outside a git checkout."""
+        try:
+            result = subprocess.run(
+                ["git", "ls-files", "--", "data/corpus"],
+                capture_output=True,
+                text=True,
+                check=True,
+                cwd=Path(__file__).resolve().parents[2],
+            )
+        except (OSError, subprocess.CalledProcessError):
+            return None
+        return {line for line in result.stdout.splitlines() if line}
+
+    def test_every_published_document_is_tracked_by_git(self) -> None:
+        tracked = self._tracked()
+        if tracked is None:
+            pytest.skip("not a git checkout")
+        missing = [
+            entry.path
+            for entry in committed().documents
+            if f"data/corpus/{entry.path}" not in tracked
+        ]
+        assert not missing, f"{len(missing)} published documents are not in git: {missing[:5]}"
+
+    def test_the_manifest_itself_is_tracked(self) -> None:
+        tracked = self._tracked()
+        if tracked is None:
+            pytest.skip("not a git checkout")
+        root = Path(__file__).resolve().parents[2]
+        result = subprocess.run(
+            ["git", "ls-files", "--", "data/manifest.json"],
+            capture_output=True,
+            text=True,
+            cwd=root,
+        )
+        assert result.stdout.strip() == "data/manifest.json"
+
+    def test_all_three_formats_survive_into_the_clone(self) -> None:
+        """The failure mode was losing two formats entirely while the corpus
+        still looked complete locally."""
+        tracked = self._tracked()
+        if tracked is None:
+            pytest.skip("not a git checkout")
+        suffixes = {Path(path).suffix for path in tracked}
+        assert {".md", ".pdf", ".docx"} <= suffixes
