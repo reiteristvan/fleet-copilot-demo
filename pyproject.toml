@@ -23,6 +23,11 @@ fleet-copilot = "fleet_copilot.api.cli:main"
 requires = ["uv_build>=0.11.2,<0.12.0"]
 build-backend = "uv_build"
 
+# The reference queries are data the package needs at runtime, not build
+# artefacts: fleet.queries reads them from beside the module.
+[tool.uv.build-backend]
+source-include = ["src/fleet_copilot/fleet/queries/*.sql"]
+
 [dependency-groups]
 dev = [
     "mypy>=1.13",
