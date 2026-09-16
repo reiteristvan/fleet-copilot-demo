@@ -30,6 +30,9 @@ dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "ruff>=0.8",
+    # Schema migrations. Alembic pulls SQLAlchemy in transitively; only its
+    # versioning and op.execute() are used, not its DDL layer (ADR 0004).
+    "alembic>=1.14",
     # Corpus generation (src/fleet_copilot/corpus). Dev-only on purpose: the API
     # image installs with --no-dev, and nothing in the request path reads these.
     "azure-storage-blob>=12.24",
