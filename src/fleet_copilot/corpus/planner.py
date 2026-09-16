@@ -174,8 +174,14 @@ def _slug(text: str) -> str:
     return text.lower().replace("_", "-")
 
 
-def _serial_for(machine: MachineType, index: int) -> str:
-    """Return the ``index``-th serial for ``machine``, e.g. ``SD50B-2026-01042``."""
+def serial_for(machine: MachineType, index: int) -> str:
+    """Return the ``index``-th serial for ``machine``, e.g. ``SD50B-2026-10142``.
+
+    Public because the fleet registry builds its machines from the same formula.
+    The corpus cites the first four serials of each type; the registry carries
+    more. Two implementations of this would drift, and the symptom would be a
+    service report quoting a serial the database has never heard of.
+    """
     stem = machine.code.replace("-", "")
     return f"{stem}-{CORPUS_YEAR}-{10_000 + index * 137 + len(stem):05d}"
 
@@ -188,7 +194,7 @@ def _serial_pool(catalogue: Catalogue) -> dict[str, tuple[str, ...]]:
     string, which is the join the retrieval evals depend on.
     """
     return {
-        machine.code: tuple(_serial_for(machine, index) for index in range(4))
+        machine.code: tuple(serial_for(machine, index) for index in range(4))
         for machine in catalogue.machine_types
     }
 
