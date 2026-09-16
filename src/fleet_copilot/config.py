@@ -52,6 +52,13 @@ class Settings(BaseSettings):
     healthz_check_azure_openai: bool = False
     healthz_timeout_seconds: float = 5.0
 
+    # The read-only role the copilot connects as. A local development credential
+    # in the same class as the container passwords, not a secret: this database
+    # runs in a container. A deployed PostgreSQL authenticates this role through
+    # Entra ID instead (ADR 0002).
+    copilot_ro_password: str = "copilot_ro"
+    copilot_ro_user: str = "copilot_ro"
+
 
 def load_settings() -> Settings:
     """Build :class:`Settings`, converting a validation failure into a clear stop.
