@@ -26,16 +26,60 @@ local run and a green pipeline mean the same thing.
 
 ```
 src/fleet_copilot/
+  corpus/      generate the synthetic document corpus from data/
   ingest/      load source documents and split them into retrievable chunks
   retrieval/   index chunks and fetch the ones relevant to a question
   agents/      plan over and answer from retrieved context
   evals/       score the retrieval and agent layers offline
   api/         entry points: a CLI today, an HTTP service later
+data/          corpus seed data, the generated corpus and its manifest
+scripts/       thin CLI shims over src/ (corpus generation, corpus upload)
 tests/         mirrors the source layout
 infra/         Bicep templates, per-environment parameters and deploy.sh
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 ```
+
+## The document corpus
+
+120 synthetic fleet documents — operator and service manuals, maintenance
+procedures, safety documents, shift handover notes, service and fault reports,
+an error-code reference and a glossary — across three formats and two languages.
+
+```console
+$ just corpus          # regenerate into data/corpus/ and data/manifest.json
+$ just corpus-check    # report drift without writing
+$ just corpus-upload   # dry-run the upload to Blob Storage
+```
+
+| | Count |
+| --- | --- |
+| Markdown | 95 |
+| PDF (15 with a text layer, 5 scanned image-only) | 20 |
+| DOCX | 5 |
+| English / Hungarian | 107 / 13 |
+
+Generation is **offline and deterministic**: a seed in `data/corpus_spec.yaml`
+drives the whole corpus, and regenerating reproduces every byte. That is what
+makes the committed `data/manifest.json` — one content hash per document —
+worth having, and `just test` re-derives the corpus and compares.
+
+Six documents are **deliberately wrong**, and the manifest is the only place
+that says so. Putting a `planted` flag in a document's own front matter would
+index it along with the text and make every one of these solvable by a metadata
+filter instead of by the pipeline under test.
+
+| Planted case | What it is |
+| --- | --- |
+| `conflict-battery-charging-temp` | Two revisions of one procedure giving different maximum charging temperatures, both live |
+| `contradiction-brush-wear-limit` | A shift note confidently disputing the wear limit every manual gives |
+| `injection-handover`, `injection-service-report`, `injection-scanned-pdf` | Indirect prompt injections buried mid-document; the last is reachable only through OCR |
+
+```console
+$ python -c "import json;m=json.load(open('data/manifest.json'));  print([d['planted_id'] for d in m['documents'] if d.get('planted')])"
+```
+
+Details and the reasoning: [ADR 0003](docs/adr/0003-synthetic-corpus-contract.md).
 
 ## Local stack
 

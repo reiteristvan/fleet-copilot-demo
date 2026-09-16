@@ -43,6 +43,18 @@ run *args:
 eval:
     uv run python -m fleet_copilot.evals.runner
 
+# Regenerate the synthetic document corpus into data/. Output is deterministic.
+corpus:
+    uv run python scripts/gen_corpus.py
+
+# Report drift between the committed corpus and the seed data, writing nothing.
+corpus-check:
+    uv run python scripts/gen_corpus.py --check
+
+# Dry-run the corpus upload to Blob Storage: `just corpus-upload --apply` writes.
+corpus-upload *args:
+    uv run python scripts/upload_corpus.py {{args}}
+
 # Start the local stack (postgres + langfuse + the API) and wait for health.
 up:
     docker compose up -d --build --wait

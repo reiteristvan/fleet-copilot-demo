@@ -3,6 +3,71 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-16 — A synthetic corpus with known defects in it
+
+120 fleet documents generated offline from `data/`: a catalogue of five machine
+families and their configuration variants, a spec declaring how many documents
+of each type and language, and nine files of prose fragments the documents are
+assembled from. 95 Markdown, 20 PDF, 5 DOCX; 107 English, 13 Hungarian.
+
+The decision worth recording is **not** using the deployed chat model. It writes
+better prose, and its incidental vocabulary reuse is exactly what makes
+retrieval non-trivial. But it makes the corpus unreproducible, and an
+unreproducible corpus means a metric that moves between runs cannot be
+attributed to a pipeline change rather than to the documents shifting
+underneath it. Offline generation costs prose variety and buys a committed
+manifest of content hashes that is a fact rather than a claim.
+[ADR 0003](adr/0003-synthetic-corpus-contract.md).
+
+Determinism took one fix per format, and every one was found by rendering twice
+across a real time gap rather than by reading the docs:
+
+- **fpdf2** stamps the current time into `CreationDate` unless it is pinned.
+- **python-docx** writes the current time into every zip entry header. Its
+  member *contents* are already deterministic, so only the timestamps need
+  normalising — and the first check passed by luck, because two renders
+  milliseconds apart landed in the same second.
+- **Pillow's PDF writer** stamps a creation date that cannot be pinned at all,
+  so the scanned pages are drawn with Pillow and assembled with fpdf2.
+
+Three things nearly shipped broken, all of the same shape — correct locally,
+wrong somewhere else:
+
+- **`dist/` is in the stock Python `.gitignore`.** The 25 PDFs and DOCX files
+  were written there, `git add data/corpus` skipped all of them without a word,
+  and the working tree, the tests and the manifest were all still right. Only a
+  fresh clone would have been missing two of the three formats. Found by hashing
+  what git had *stored* rather than what was on disk; that check is now a test,
+  and the directory is `published/`.
+- **`.docx` was being handled as text.** Under `* text=auto eol=lf` git was
+  deciding by content heuristic whether to rewrite line endings inside a zip
+  whose SHA-256 the manifest records. `*.pdf binary` was already there; `*.docx`
+  is now too.
+- **fpdf2's core fonts are Latin-1, not cp1252**, so the em dash in every
+  document title was unrenderable. Known typography is now transliterated and
+  anything else outside Latin-1 raises — which means a Hungarian document routed
+  to a PDF fails instead of silently losing its accents, in a corpus whose
+  Hungarian exists to measure cross-language retrieval.
+
+A fourth was a design mistake rather than a platform one. Placeholders a
+document could not supply originally rendered as an em dash, which produced
+"Empty the — litre hopper" in a scrubber-dryer manual: a document confidently
+describing a part the machine does not have. Unfillable phrases are now never
+selected, and because that makes a *misspelled* placeholder silently shrink a
+bank instead of failing, the fragments are checked against the known
+placeholder set at the gate.
+
+Six documents are deliberately wrong — a pair of conflicting procedure
+revisions, a shift note disputing the brush wear limit, and three indirect
+prompt injections, one of them reachable only through OCR. None of them says so
+in its own front matter. A `planted` flag would be indexed along with the text
+and turn every one of these into something a metadata filter solves.
+
+Still open: uploading. The storage account and the `raw-docs` container exist,
+but the data plane needs **Storage Blob Data Contributor** on the user
+principal, and subscription Owner does not grant it — Owner is management
+plane. `just corpus-upload` dry-runs; `--apply` needs that role first.
+
 ## 2026-09-15 — Local container stack
 
 `compose.yaml` brings up pgvector on postgres 16, self-hosted Langfuse, and the
