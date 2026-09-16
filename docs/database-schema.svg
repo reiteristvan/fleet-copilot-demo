@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="1200" height="820" fill="#ffffff"/>
+<defs><marker id="crow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,6 L11,2 M2,6 L11,6 M2,6 L11,10" stroke="#64748b" fill="none" stroke-width="1.2"/></marker><marker id="dot" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><circle cx="4" cy="4" r="2.6" fill="#94a3b8"/></marker><marker id="arw" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker><marker id="arwv" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6d28d9"/></marker></defs>
+<text x="24" y="34" font-size="19" font-weight="700" fill="#0f172a">fleet-copilot &#8212; database relations</text>
+<text x="24" y="56" font-size="12.5" fill="#475569">Schema <tspan font-weight="600">fleet</tspan> holds the data and is invisible to the agent; schema <tspan font-weight="600">reporting</tspan> is everything it can read.</text>
+<rect x="14" y="72" width="586" height="670" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity="0.18"/>
+<text x="26" y="730" font-size="10.5" font-weight="700" letter-spacing="1.3" fill="#1d4ed8" opacity="0.6">REGISTRY</text>
+<rect x="610" y="72" width="288" height="670" rx="10" fill="#fffbeb" stroke="#b45309" stroke-opacity="0.18"/>
+<text x="622" y="730" font-size="10.5" font-weight="700" letter-spacing="1.3" fill="#b45309" opacity="0.6">OPERATIONAL</text>
+<rect x="908" y="72" width="278" height="670" rx="10" fill="#ecfdf5" stroke="#047857" stroke-opacity="0.18"/>
+<text x="920" y="730" font-size="10.5" font-weight="700" letter-spacing="1.3" fill="#047857" opacity="0.6">ROLLUPS  &#183;  REPORTING</text>
+<path d="M153.0,198 C153.0,215.0 153.0,215.0 153.0,232" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M282,315.5 C302.0,315.5 302.0,351.0 322,351.0" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M451.0,246 C451.0,273.0 451.0,273.0 451.0,300" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M451.0,246 C451.0,343.0 451.0,343.0 451.0,440" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M282,494.5 C451.0,494.5 451.0,566.5 620,566.5" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M153.0,537 C153.0,548.5 153.0,548.5 153.0,560" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M580,351.0 C600.0,351.0 600.0,171.0 620,171.0" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M580,351.0 C600.0,351.0 600.0,364.0 620,364.0" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M580,351.0 C600.0,351.0 600.0,566.5 620,566.5" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M580,351.0 C600.0,351.0 600.0,709.0 620,709.0" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M580,482.5 C600.0,482.5 600.0,709.0 620,709.0" fill="none" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/>
+<path d="M878,171.0 C898.0,171.0 898.0,233.5 918,233.5" fill="none" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+<path d="M878,364.0 C898.0,364.0 898.0,233.5 918,233.5" fill="none" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+<path d="M1047.0,317 C1047.0,336.5 1047.0,336.5 1047.0,356" fill="none" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+<path d="M1047.0,455 C1047.0,472.5 1047.0,472.5 1047.0,490" fill="none" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+<rect x="24" y="96" width="258" height="102" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M24,122 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="34" y="114" font-size="12.5" font-weight="700" fill="#ffffff">machine_type</text>
+<text x="34" y="135" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">code</text>
+<text x="272" y="135" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="34" y="152" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">family</text>
+<text x="34" y="169" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">name_en</text>
+<text x="34" y="186" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">name_hu</text>
+<rect x="24" y="232" width="258" height="167" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M24,258 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="34" y="250" font-size="12.5" font-weight="700" fill="#ffffff">machine_config</text>
+<text x="34" y="271" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">item_number</text>
+<text x="272" y="271" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="34" y="288" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">machine_type_code</text>
+<text x="272" y="288" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">FK</text>
+<text x="34" y="305" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">battery_chemistry</text>
+<text x="34" y="322" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">deck</text>
+<text x="34" y="339" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">solution_tank_l</text>
+<text x="34" y="356" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">recovery_tank_l</text>
+<text x="34" y="373" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">hopper_l</text>
+<text x="34" y="391" font-size="9.8" font-style="italic" fill="#1d4ed8" opacity="0.95">recovery &gt;= solution</text>
+<rect x="24" y="452" width="258" height="85" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M24,478 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="34" y="470" font-size="12.5" font-weight="700" fill="#ffffff">error_code</text>
+<text x="34" y="491" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">code</text>
+<text x="272" y="491" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="34" y="508" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">title_en</text>
+<text x="34" y="525" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">title_hu</text>
+<rect x="24" y="560" width="258" height="68" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M24,586 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="34" y="578" font-size="12.5" font-weight="700" fill="#ffffff">error_code_machine_type</text>
+<text x="34" y="599" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">code</text>
+<text x="272" y="599" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK FK</text>
+<text x="34" y="616" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">machine_type_code</text>
+<text x="272" y="616" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK FK</text>
+<rect x="322" y="96" width="258" height="150" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M322,122 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="332" y="114" font-size="12.5" font-weight="700" fill="#ffffff">site</text>
+<text x="332" y="135" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">slug</text>
+<text x="570" y="135" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="332" y="152" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">name</text>
+<text x="332" y="169" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">address</text>
+<text x="332" y="186" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">language</text>
+<text x="332" y="203" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">centre  point</text>
+<text x="332" y="220" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">geofence  polygon</text>
+<text x="332" y="238" font-size="9.8" font-style="italic" fill="#1d4ed8" opacity="0.95">centre inside geofence</text>
+<rect x="322" y="300" width="258" height="102" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M322,326 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="332" y="318" font-size="12.5" font-weight="700" fill="#ffffff">machine</text>
+<text x="332" y="339" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">serial</text>
+<text x="570" y="339" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="332" y="356" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">item_number</text>
+<text x="570" y="356" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">FK</text>
+<text x="332" y="373" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">site_slug</text>
+<text x="570" y="373" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">FK</text>
+<text x="332" y="390" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">commissioned_on</text>
+<rect x="322" y="440" width="258" height="85" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M322,466 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="332" y="458" font-size="12.5" font-weight="700" fill="#ffffff">operator</text>
+<text x="332" y="479" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">id</text>
+<text x="570" y="479" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="332" y="496" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">full_name</text>
+<text x="332" y="513" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">site_slug</text>
+<text x="570" y="513" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">FK</text>
+<rect x="322" y="560" width="258" height="82" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.25"/>
+<path d="M322,586 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#1d4ed8"/>
+<text x="332" y="578" font-size="12.5" font-weight="700" fill="#ffffff">reporting_as_of</text>
+<text x="332" y="599" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">only_row</text>
+<text x="570" y="599" font-size="9" font-weight="700" fill="#1d4ed8" opacity="0.8" text-anchor="end">PK</text>
+<text x="332" y="616" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">as_of</text>
+<text x="332" y="634" font-size="9.8" font-style="italic" fill="#1d4ed8" opacity="0.95">exactly one row</text>
+<rect x="620" y="96" width="258" height="150" rx="7" fill="#ffffff" stroke="#b45309" stroke-width="1.25"/>
+<path d="M620,122 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#b45309"/>
+<text x="630" y="114" font-size="12.5" font-weight="700" fill="#ffffff">machine_state_interval</text>
+<text x="630" y="135" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">id</text>
+<text x="868" y="135" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">PK</text>
+<text x="630" y="152" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">serial</text>
+<text x="868" y="152" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">FK</text>
+<text x="630" y="169" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">state</text>
+<text x="630" y="186" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">period  tstzrange</text>
+<text x="630" y="203" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">started_at  gen</text>
+<text x="630" y="220" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">ended_at  gen</text>
+<text x="630" y="238" font-size="9.8" font-style="italic" fill="#b45309" opacity="0.95">EXCLUDE: no overlap per serial</text>
+<rect x="620" y="272" width="258" height="184" rx="7" fill="#ffffff" stroke="#b45309" stroke-width="1.25"/>
+<path d="M620,298 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#b45309"/>
+<text x="630" y="290" font-size="12.5" font-weight="700" fill="#ffffff">telemetry_sample</text>
+<text x="630" y="311" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">serial</text>
+<text x="868" y="311" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">PK FK</text>
+<text x="630" y="328" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">ts</text>
+<text x="868" y="328" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">PK</text>
+<text x="630" y="345" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">internal_temp_c</text>
+<text x="630" y="362" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">battery_soc_pct</text>
+<text x="630" y="379" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">battery_voltage_v</text>
+<text x="630" y="396" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">battery_temp_c</text>
+<text x="630" y="413" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">lat / lon</text>
+<text x="630" y="430" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">speed_kmh</text>
+<text x="630" y="448" font-size="9.8" font-style="italic" fill="#b45309" opacity="0.95">PARTITION BY RANGE (ts), monthly</text>
+<rect x="620" y="500" width="258" height="133" rx="7" fill="#ffffff" stroke="#b45309" stroke-width="1.25"/>
+<path d="M620,526 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#b45309"/>
+<text x="630" y="518" font-size="12.5" font-weight="700" fill="#ffffff">fault_event</text>
+<text x="630" y="539" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">id</text>
+<text x="868" y="539" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">PK</text>
+<text x="630" y="556" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">serial</text>
+<text x="868" y="556" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">FK</text>
+<text x="630" y="573" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">code</text>
+<text x="868" y="573" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">FK</text>
+<text x="630" y="590" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">occurred_at</text>
+<text x="630" y="607" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">doc_id</text>
+<text x="630" y="625" font-size="9.8" font-style="italic" fill="#b45309" opacity="0.95">doc_id points at a corpus document</text>
+<rect x="620" y="634" width="258" height="150" rx="7" fill="#ffffff" stroke="#b45309" stroke-width="1.25"/>
+<path d="M620,660 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#b45309"/>
+<text x="630" y="652" font-size="12.5" font-weight="700" fill="#ffffff">service_ticket</text>
+<text x="630" y="673" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">id</text>
+<text x="868" y="673" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">PK</text>
+<text x="630" y="690" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">serial</text>
+<text x="868" y="690" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">FK</text>
+<text x="630" y="707" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">opened_at</text>
+<text x="630" y="724" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">closed_at</text>
+<text x="630" y="741" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">status</text>
+<text x="630" y="758" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#b45309">raised_by</text>
+<text x="868" y="758" font-size="9" font-weight="700" fill="#b45309" opacity="0.8" text-anchor="end">FK</text>
+<text x="630" y="776" font-size="9.8" font-style="italic" fill="#b45309" opacity="0.95">closed_at set iff closed</text>
+<rect x="918" y="150" width="258" height="167" rx="7" fill="#ffffff" stroke="#047857" stroke-width="1.25"/>
+<path d="M918,176 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#047857"/>
+<text x="928" y="168" font-size="12.5" font-weight="700" fill="#ffffff">telemetry_hourly</text>
+<text x="928" y="189" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">serial, hour_start</text>
+<text x="1166" y="189" font-size="9" font-weight="700" fill="#047857" opacity="0.8" text-anchor="end">PK</text>
+<text x="928" y="206" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">working/transit/idle/off min</text>
+<text x="928" y="223" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">internal_temp min/max/avg</text>
+<text x="928" y="240" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">battery_soc start/end</text>
+<text x="928" y="257" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">distance_m</text>
+<text x="928" y="274" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">outside_geofence_samples</text>
+<text x="928" y="291" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">off_site_samples</text>
+<text x="928" y="309" font-size="9.8" font-style="italic" fill="#047857" opacity="0.95">MATERIALIZED VIEW</text>
+<rect x="918" y="356" width="258" height="99" rx="7" fill="#ffffff" stroke="#047857" stroke-width="1.25"/>
+<path d="M918,382 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#047857"/>
+<text x="928" y="374" font-size="12.5" font-weight="700" fill="#ffffff">telemetry_daily</text>
+<text x="928" y="395" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="700" fill="#0f172a">serial, day</text>
+<text x="1166" y="395" font-size="9" font-weight="700" fill="#047857" opacity="0.8" text-anchor="end">PK</text>
+<text x="928" y="412" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">the same, per calendar day</text>
+<text x="928" y="429" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">temp averages weighted</text>
+<text x="928" y="447" font-size="9.8" font-style="italic" fill="#047857" opacity="0.95">MATERIALIZED VIEW</text>
+<rect x="918" y="490" width="258" height="167" rx="7" fill="#ffffff" stroke="#6d28d9" stroke-width="1.25"/>
+<path d="M918,516 h258 v-19 a7,7 0 0 0 -7,-7 h-244 a7,7 0 0 0 -7,7 z" fill="#6d28d9"/>
+<text x="928" y="508" font-size="12.5" font-weight="700" fill="#ffffff">reporting  (7 views)</text>
+<text x="928" y="529" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">as_of  /  as_of()</text>
+<text x="928" y="546" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">machine</text>
+<text x="928" y="563" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">site</text>
+<text x="928" y="580" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">machine_hour</text>
+<text x="928" y="597" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">machine_day</text>
+<text x="928" y="614" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">fault_event</text>
+<text x="928" y="631" font-size="11.5" font-family="Consolas, Menlo, monospace" font-weight="400" fill="#334155">service_ticket</text>
+<text x="928" y="649" font-size="9.8" font-style="italic" fill="#6d28d9" opacity="0.95">the only thing copilot_ro sees</text>
+<rect x="918" y="700" width="258" height="40" rx="20" fill="#6d28d9"/>
+<text x="1047.0" y="725" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">copilot_ro &#8212; SELECT only</text>
+<path d="M1047.0,657 L1047.0,700" stroke="#6d28d9" stroke-width="1.8" marker-end="url(#arwv)" fill="none"/>
+<path d="M878,442 C1028,562 880,670 918,720" fill="none" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="2 5" opacity="0.5"/>
+<path d="M580,388 C730,508 880,670 918,720" fill="none" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="2 5" opacity="0.5"/>
+<text x="905" y="690" font-size="10" font-weight="700" fill="#dc2626" text-anchor="end" opacity="0.85">no grant</text>
+<g font-size="10.8" fill="#475569">
+<line x1="26" y1="776" x2="58" y2="776" stroke="#94a3b8" stroke-width="1.3" marker-start="url(#dot)" marker-end="url(#crow)"/><text x="66" y="780">foreign key, one to many</text>
+<line x1="232" y1="776" x2="264" y2="776" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/><text x="272" y="780">aggregated into</text>
+<line x1="400" y1="776" x2="432" y2="776" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="2 5"/><text x="440" y="780">refused by grants, not by convention</text>
+<text x="726" y="780"><tspan font-weight="700" fill="#0f172a">PK</tspan> primary key &#183; <tspan font-weight="700" fill="#b45309">FK</tspan> foreign key &#183; gen = generated column</text>
+</g>
+</svg>

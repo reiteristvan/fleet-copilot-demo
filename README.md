@@ -115,6 +115,8 @@ The agent connects as `copilot_ro`, which can read the `reporting` views and
 nothing else — not the raw samples, not the base tables, no DML, no DDL. That is
 enforced by grants and proven in `tests/fleet/test_database.py`.
 
+![Database relations](docs/database-schema.svg)
+
 ERD, rollup semantics and the reasoning: [docs/data-model.md](docs/data-model.md).
 Storage choice: [ADR 0004](docs/adr/0004-telemetry-storage-and-partitioning.md).
 

@@ -9,6 +9,14 @@ The registry is generated from the same `data/catalogue.yaml` as the document
 corpus, so a serial quoted in a service report resolves to a machine and a site
 named in a handover note has machines standing on it.
 
+## The schema at a glance
+
+![Database relations](database-schema.svg)
+
+A rendered SVG, so it opens in a browser or an image viewer without a Mermaid
+renderer. The Mermaid source below is the editable, diffable form of the same
+thing; the SVG is the picture.
+
 ## Entity relationship diagram
 
 ```mermaid
