@@ -2,7 +2,7 @@
 doc_id: vs-75-operator-manual
 type: operator_manual
 machine_types: [VS-75]
-item_numbers: ["1.688-420.0"]
+item_numbers: ["1.688-420.0", "1.688-421.0"]
 serials: []
 site: null
 language: en
@@ -15,6 +15,13 @@ effective_date: 2026-02-02
 ## Intended use
 
 The Vacuum sweeper VS-75 is intended for cleaning sealed hard floors indoors. It is not approved for outdoor use, for floors with a gradient above the value on the machine plate, or for picking up burning, explosive or toxic material.
+
+## Configurations covered
+
+| Item number | Battery | Deck | Capacity |
+| --- | --- | --- | --- |
+| 1.688-420.0 | AGM | brush | 50 l hopper |
+| 1.688-421.0 | lithium-ion | brush | 50 l hopper |
 
 ## Controls
 

@@ -2,7 +2,7 @@
 doc_id: sd-50b-operator-manual
 type: operator_manual
 machine_types: [SD-50B]
-item_numbers: ["1.512-342.0"]
+item_numbers: ["1.512-340.0", "1.512-341.0", "1.512-342.0"]
 serials: []
 site: null
 language: en
@@ -15,6 +15,14 @@ effective_date: 2026-02-02
 ## Intended use
 
 The Walk-behind scrubber-dryer SD-50B is intended for cleaning sealed hard floors indoors. It is not approved for outdoor use, for floors with a gradient above the value on the machine plate, or for picking up burning, explosive or toxic material.
+
+## Configurations covered
+
+| Item number | Battery | Deck | Capacity |
+| --- | --- | --- | --- |
+| 1.512-340.0 | AGM | brush | 50 l solution / 55 l recovery |
+| 1.512-341.0 | lithium-ion | brush | 50 l solution / 55 l recovery |
+| 1.512-342.0 | AGM | pad | 40 l solution / 45 l recovery |
 
 ## Controls
 

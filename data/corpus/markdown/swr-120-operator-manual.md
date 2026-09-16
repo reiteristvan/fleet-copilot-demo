@@ -2,7 +2,7 @@
 doc_id: swr-120-operator-manual
 type: operator_manual
 machine_types: [SWR-120]
-item_numbers: ["1.721-106.0"]
+item_numbers: ["1.721-105.0", "1.721-106.0", "1.721-107.0"]
 serials: []
 site: null
 language: en
@@ -15,6 +15,14 @@ effective_date: 2026-02-02
 ## Intended use
 
 This manual covers the Ride-on sweeper SWR-120, item number 1.721-106.0. The machine is designed for commercial indoor use on sealed floors. Any other use is outside its approval and voids the warranty.
+
+## Configurations covered
+
+| Item number | Battery | Deck | Capacity |
+| --- | --- | --- | --- |
+| 1.721-105.0 | AGM | brush | 60 l hopper |
+| 1.721-106.0 | lithium-ion | brush | 60 l hopper |
+| 1.721-107.0 | lithium-ion | brush | 80 l hopper |
 
 ## Controls
 

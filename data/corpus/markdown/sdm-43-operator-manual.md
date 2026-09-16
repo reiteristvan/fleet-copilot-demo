@@ -2,7 +2,7 @@
 doc_id: sdm-43-operator-manual
 type: operator_manual
 machine_types: [SDM-43]
-item_numbers: ["1.291-101.0"]
+item_numbers: ["1.291-100.0", "1.291-101.0"]
 serials: []
 site: null
 language: en
@@ -15,6 +15,13 @@ effective_date: 2026-02-02
 ## Intended use
 
 The Single-disc machine SDM-43 is intended for cleaning sealed hard floors indoors. It is not approved for outdoor use, for floors with a gradient above the value on the machine plate, or for picking up burning, explosive or toxic material.
+
+## Configurations covered
+
+| Item number | Battery | Deck | Capacity |
+| --- | --- | --- | --- |
+| 1.291-100.0 | AGM | pad | no tanks fitted |
+| 1.291-101.0 | lithium-ion | brush | no tanks fitted |
 
 ## Controls
 

@@ -791,8 +791,8 @@
       "language": "en",
       "format": "markdown",
       "path": "markdown/sd-50b-operator-manual.md",
-      "sha256": "8bd39e758ed8465416db1644c733a9c33313b58429c10239ec79768037262085",
-      "bytes": 2571,
+      "sha256": "962f8e7b99a5157de4d50ee3491d2685507d875d278514841791c404e2ecfc15",
+      "bytes": 2891,
       "planted": false
     },
     {
@@ -801,8 +801,8 @@
       "language": "hu",
       "format": "markdown",
       "path": "markdown/sd-50b-operator-manual-hu.md",
-      "sha256": "ed2c84efd90560b5664e438152c16b34c17db6ce7b3b656e3c8a0790d1560f4e",
-      "bytes": 2939,
+      "sha256": "d1277233e3feffe9eadcdc09f138b86df4021cc28df5e6dc9a1f0d47f56f2518",
+      "bytes": 3261,
       "planted": false
     },
     {
@@ -841,8 +841,8 @@
       "language": "en",
       "format": "markdown",
       "path": "markdown/sdm-43-operator-manual.md",
-      "sha256": "b9aef98aa31eede8056e7b3a82601e2a124959b156b6616e567052bdf7bab50b",
-      "bytes": 2388,
+      "sha256": "b0736e46f7d1a2add26361bc1a6c2435680cdbe1c297f9242bf03bc27b325b24",
+      "bytes": 2603,
       "planted": false
     },
     {
@@ -891,8 +891,8 @@
       "language": "en",
       "format": "pdf",
       "path": "published/sdr-90-operator-manual.pdf",
-      "sha256": "18feb014b2e018c7ded096aa800cd434c100f7b43286c11cb0e0145d8fb35667",
-      "bytes": 2790,
+      "sha256": "24976f24fbcbdde175131d003a5110952d17c353e90c52327356c33e69ff23cd",
+      "bytes": 2909,
       "planted": false
     },
     {
@@ -901,8 +901,8 @@
       "language": "hu",
       "format": "docx",
       "path": "published/sdr-90-operator-manual-hu.docx",
-      "sha256": "809c25b1670cc4165fdb6146c5456b6e018f8e4f1570fc4045b8f99ccf32a57e",
-      "bytes": 38163,
+      "sha256": "8684aa827f289853431d06a2a01da9bc565a7b9a3b8f5f3ab82235be36b7642a",
+      "bytes": 38445,
       "planted": false
     },
     {
@@ -1157,8 +1157,8 @@
       "language": "en",
       "format": "markdown",
       "path": "markdown/swr-120-operator-manual.md",
-      "sha256": "40c58a8b1902cf32b654e9010a9932024424dcc4b0c45a273be5bd7e63652c77",
-      "bytes": 2477,
+      "sha256": "e479a5d23bcd3bd5b0b9e2927842e11dd07c90a4a5a370e086086709422b5afb",
+      "bytes": 2753,
       "planted": false
     },
     {
@@ -1207,8 +1207,8 @@
       "language": "en",
       "format": "markdown",
       "path": "markdown/vs-75-operator-manual.md",
-      "sha256": "9b17d0f793b7c68bcd9ff311e14a8e4b1bc69198034556d54f006dbf324f7de4",
-      "bytes": 2372,
+      "sha256": "38cd3a4224f263abb6555490f02024da3e2592f1cb8272e0d2eb6d3b1b473721",
+      "bytes": 2581,
       "planted": false
     },
     {

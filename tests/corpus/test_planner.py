@@ -337,3 +337,47 @@ class TestSerials:
                 stem = serial.split("-")[0]
                 codes = {code.replace("-", "") for code in doc.plan.front_matter.machine_types}
                 assert stem in codes, doc.doc_id
+
+
+class TestOperatorManualsCoverEveryVariant:
+    def test_a_manual_lists_every_item_number_of_its_machine(
+        self, corpus: tuple[PlannedDocument, ...], catalogue: Catalogue
+    ) -> None:
+        """A manual covers a machine type, so a reader filtering on any one of
+        its item numbers has to find it."""
+        manuals = [
+            doc for doc in corpus if doc.plan.front_matter.type is DocumentType.OPERATOR_MANUAL
+        ]
+        assert manuals
+        for manual in manuals:
+            code = manual.plan.front_matter.machine_types[0]
+            expected = {variant.item_number for variant in catalogue.machine(code).variants}
+            assert set(manual.plan.front_matter.item_numbers) == expected, manual.doc_id
+
+    def test_a_manual_tabulates_each_variant_separately(
+        self, corpus: tuple[PlannedDocument, ...], catalogue: Catalogue
+    ) -> None:
+        """The figures differ by item number -- AGM and lithium take different
+        charging regimes, the pad deck carries a smaller tank -- so a question
+        about one variant must find the right row, not just the right document."""
+        for doc in corpus:
+            if doc.plan.front_matter.type is not DocumentType.OPERATOR_MANUAL:
+                continue
+            code = doc.plan.front_matter.machine_types[0]
+            text = doc.plan.plain_text()
+            for variant in catalogue.machine(code).variants:
+                assert variant.item_number in text, f"{doc.doc_id}/{variant.item_number}"
+
+    def test_a_manual_states_the_capacity_its_family_is_measured_by(
+        self, corpus: tuple[PlannedDocument, ...], catalogue: Catalogue
+    ) -> None:
+        for doc in corpus:
+            if doc.plan.front_matter.type is not DocumentType.OPERATOR_MANUAL:
+                continue
+            machine = catalogue.machine(doc.plan.front_matter.machine_types[0])
+            text = doc.plan.plain_text()
+            for variant in machine.variants:
+                if variant.solution_tank_l is not None:
+                    assert str(variant.solution_tank_l) in text, doc.doc_id
+                elif variant.hopper_l is not None:
+                    assert str(variant.hopper_l) in text, doc.doc_id

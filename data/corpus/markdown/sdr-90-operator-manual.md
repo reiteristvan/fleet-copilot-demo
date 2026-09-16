@@ -2,7 +2,7 @@
 doc_id: sdr-90-operator-manual
 type: operator_manual
 machine_types: [SDR-90]
-item_numbers: ["1.534-212.0"]
+item_numbers: ["1.534-210.0", "1.534-211.0", "1.534-212.0"]
 serials: []
 site: null
 language: en
@@ -15,6 +15,14 @@ effective_date: 2026-02-02
 ## Intended use
 
 The Ride-on scrubber-dryer SDR-90 is a battery machine for indoor hard-floor cleaning. Do not use it to pick up liquids other than cleaning solution, and never use it to recover flammable liquids.
+
+## Configurations covered
+
+| Item number | Battery | Deck | Capacity |
+| --- | --- | --- | --- |
+| 1.534-210.0 | AGM | brush | 110 l solution / 120 l recovery |
+| 1.534-211.0 | lithium-ion | brush | 110 l solution / 120 l recovery |
+| 1.534-212.0 | lithium-ion | pad | 150 l solution / 160 l recovery |
 
 ## Controls
 

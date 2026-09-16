@@ -238,14 +238,23 @@ def _plan(
     variant: Variant | None = None,
     serial: str | None = None,
     site: Site | None = None,
+    item_numbers: tuple[str, ...] | None = None,
 ) -> DocumentPlan:
-    """Assemble a :class:`DocumentPlan` with its front matter."""
+    """Assemble a :class:`DocumentPlan` with its front matter.
+
+    ``item_numbers`` defaults to the single variant the document is written
+    about. An operator manual passes every variant of its machine instead,
+    because it covers the machine type and its configuration table names them
+    all -- and a reader filtering on an item number must find that manual.
+    """
+    if item_numbers is None:
+        item_numbers = (variant.item_number,) if variant else ()
     return DocumentPlan(
         front_matter=FrontMatter(
             doc_id=doc_id,
             type=document_type,
             machine_types=(machine.code,) if machine else (),
-            item_numbers=(variant.item_number,) if variant else (),
+            item_numbers=item_numbers,
             serials=(serial,) if serial else (),
             site=site.slug if site else None,
             language=language,
@@ -280,6 +289,7 @@ def _operator_manuals(
                     effective=date(CORPUS_YEAR, 2, 2),
                     machine=machine,
                     variant=variant,
+                    item_numbers=tuple(v.item_number for v in machine.variants),
                 ),
                 None,
             )

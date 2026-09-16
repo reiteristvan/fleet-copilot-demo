@@ -53,6 +53,7 @@ one procedure disagree by exactly these two numbers.
 
 _HEADINGS: Mapping[str, tuple[str, str]] = {
     "intended_use": ("Intended use", "Rendeltetésszerű használat"),
+    "configurations": ("Configurations covered", "Érintett kivitelek"),
     "controls": ("Controls", "Kezelőszervek"),
     "daily_operation": ("Daily operation", "Napi üzemeltetés"),
     "filling_emptying": ("Filling and emptying", "Feltöltés és ürítés"),
@@ -251,14 +252,64 @@ def _one(rng: random.Random, phrases: Sequence[str], subject: Subject) -> str:
     return fill(rng.choice(_usable(phrases, subject)), subject)
 
 
+def _capacity_cell(variant: Variant, language: Language) -> str:
+    """Describe what a variant holds, in the terms its family is measured by."""
+    if variant.solution_tank_l is not None and variant.recovery_tank_l is not None:
+        unit = "l solution" if language is Language.EN else "l oldat"
+        recovered = "l recovery" if language is Language.EN else "l szennyvíz"
+        return f"{variant.solution_tank_l} {unit} / {variant.recovery_tank_l} {recovered}"
+    if variant.hopper_l is not None:
+        unit = "l hopper" if language is Language.EN else "l szeméttartály"
+        return f"{variant.hopper_l} {unit}"
+    return "no tanks fitted" if language is Language.EN else "nincs tartály"
+
+
+def configuration_table(machine: MachineType, language: Language) -> Table:
+    """One row per orderable variant of ``machine``.
+
+    A manual covers a machine type, but the figures an operator needs differ by
+    item number: the AGM and lithium variants of one machine take different
+    charging regimes, and the pad-deck variant carries a smaller tank. Putting
+    every variant in one table means a question about a specific item number has
+    to find the right row rather than the right document, which is the harder
+    and more realistic retrieval problem.
+    """
+    header = (
+        ("Item number", "Battery", "Deck", "Capacity")
+        if language is Language.EN
+        else ("Cikkszám", "Akkumulátor", "Tárcsa", "Kapacitás")
+    )
+    return Table(
+        header=header,
+        rows=tuple(
+            (
+                variant.item_number,
+                _battery_label(variant.battery),
+                variant.deck.value,
+                _capacity_cell(variant, language),
+            )
+            for variant in machine.variants
+        ),
+    )
+
+
 def operator_manual(subject: Subject, rng: random.Random, bank: FragmentSet) -> tuple[Section, ...]:
     """Build an operator manual: what the person driving the machine needs."""
     language = subject.language
+    configuration: tuple[Section, ...] = ()
+    if subject.machine is not None:
+        configuration = (
+            Section(
+                heading=heading("configurations", language),
+                blocks=(configuration_table(subject.machine, language),),
+            ),
+        )
     return (
         Section(
             heading=heading("intended_use", language),
             blocks=(Paragraph(text=_one(rng, bank.bank("intended_use"), subject)),),
         ),
+        *configuration,
         Section(
             heading=heading("controls", language),
             blocks=(Bullets(items=_filled(rng, bank.bank("controls"), 5, subject)),),

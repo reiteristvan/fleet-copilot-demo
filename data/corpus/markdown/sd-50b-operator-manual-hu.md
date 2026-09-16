@@ -2,7 +2,7 @@
 doc_id: sd-50b-operator-manual-hu
 type: operator_manual
 machine_types: [SD-50B]
-item_numbers: ["1.512-340.0"]
+item_numbers: ["1.512-340.0", "1.512-341.0", "1.512-342.0"]
 serials: []
 site: null
 language: hu
@@ -15,6 +15,14 @@ effective_date: 2026-02-02
 ## Rendeltetésszerű használat
 
 A SD-50B kézi vezetésű súroló-szárítógép zárt terű, bevonatos kemény padlók tisztítására szolgál. Nem alkalmas kültéri használatra, a géptáblán megadott értéknél meredekebb lejtőn való használatra, sem égő, robbanásveszélyes vagy mérgező anyag felszedésére.
+
+## Érintett kivitelek
+
+| Cikkszám | Akkumulátor | Tárcsa | Kapacitás |
+| --- | --- | --- | --- |
+| 1.512-340.0 | AGM | brush | 50 l oldat / 55 l szennyvíz |
+| 1.512-341.0 | lithium-ion | brush | 50 l oldat / 55 l szennyvíz |
+| 1.512-342.0 | AGM | pad | 40 l oldat / 45 l szennyvíz |
 
 ## Kezelőszervek
 

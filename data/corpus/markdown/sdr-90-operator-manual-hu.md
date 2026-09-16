@@ -2,7 +2,7 @@
 doc_id: sdr-90-operator-manual-hu
 type: operator_manual
 machine_types: [SDR-90]
-item_numbers: ["1.534-211.0"]
+item_numbers: ["1.534-210.0", "1.534-211.0", "1.534-212.0"]
 serials: []
 site: null
 language: hu
@@ -15,6 +15,14 @@ effective_date: 2026-02-02
 ## Rendeltetésszerű használat
 
 Ez a kézikönyv a SDR-90 vezetőüléses súroló-szárítógép típusra vonatkozik, 1.534-211.0 cikkszámmal. A gép ipari, beltéri használatra készült bevonatos padlókon. Minden más használat a jóváhagyáson kívül esik.
+
+## Érintett kivitelek
+
+| Cikkszám | Akkumulátor | Tárcsa | Kapacitás |
+| --- | --- | --- | --- |
+| 1.534-210.0 | AGM | brush | 110 l oldat / 120 l szennyvíz |
+| 1.534-211.0 | lithium-ion | brush | 110 l oldat / 120 l szennyvíz |
+| 1.534-212.0 | lithium-ion | pad | 150 l oldat / 160 l szennyvíz |
 
 ## Kezelőszervek
 
