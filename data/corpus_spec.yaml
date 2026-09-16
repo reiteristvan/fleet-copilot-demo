@@ -21,11 +21,17 @@ quotas:
   - type: service_manual
     en: 5
 
-  # Four procedures per machine type (squeegee blade change, brush wear limits,
-  # battery care, filter cleaning), plus one superseded revision of battery care
-  # that contradicts its replacement. The extra document is the planted conflict.
+  # Procedures are written only for the machines they apply to, because a
+  # squeegee-blade procedure for a sweeper would be a document describing a part
+  # the machine does not have:
+  #   squeegee blade change  scrubber-dryers only      2
+  #   brush wear limits      every machine             5
+  #   battery care           every machine             5
+  #   filter cleaning        sweepers and vacuum only  2
+  # That is 14, plus one superseded revision of battery care that contradicts
+  # its replacement. The extra document is the planted conflict.
   - type: maintenance_procedure
-    en: 21
+    en: 15
     hu: 1
 
   # Battery charging, three detergent safety data sheets, ride-on operation,
@@ -37,14 +43,14 @@ quotas:
   # The bulk of the corpus and the noisiest part of it: dated, chatty, written
   # at shift end, and occasionally wrong. Six are written at Hungarian sites.
   - type: handover_note
-    en: 41
+    en: 38
     hu: 6
 
   - type: service_report
-    en: 15
+    en: 20
 
   - type: fault_report
-    en: 10
+    en: 14
 
   - type: error_code_reference
     en: 1
