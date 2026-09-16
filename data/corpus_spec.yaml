@@ -1,0 +1,67 @@
+# How many documents of each type and language the corpus contains.
+#
+# `total` is what the corpus promises and the quotas are how it is delivered;
+# fleet_copilot.corpus.models.CorpusSpec rejects the file if they disagree, so
+# the count here, in the README and in the manifest cannot drift apart quietly.
+#
+# Validated on load. See docs/adr/0003-synthetic-corpus-contract.md.
+
+# Drives every random choice in the generator. Changing it rewrites the whole
+# corpus, and therefore every hash in data/manifest.json.
+seed: 20260916
+
+total: 120
+
+quotas:
+  # One per machine type, plus Hungarian versions of the two most-cited.
+  - type: operator_manual
+    en: 5
+    hu: 2
+
+  - type: service_manual
+    en: 5
+
+  # Four procedures per machine type (squeegee blade change, brush wear limits,
+  # battery care, filter cleaning), plus one superseded revision of battery care
+  # that contradicts its replacement. The extra document is the planted conflict.
+  - type: maintenance_procedure
+    en: 21
+    hu: 1
+
+  # Battery charging, three detergent safety data sheets, ride-on operation,
+  # PPE, lockout, spill response.
+  - type: safety_document
+    en: 8
+    hu: 2
+
+  # The bulk of the corpus and the noisiest part of it: dated, chatty, written
+  # at shift end, and occasionally wrong. Six are written at Hungarian sites.
+  - type: handover_note
+    en: 41
+    hu: 6
+
+  - type: service_report
+    en: 15
+
+  - type: fault_report
+    en: 10
+
+  - type: error_code_reference
+    en: 1
+    hu: 1
+
+  - type: glossary
+    en: 1
+    hu: 1
+
+# Format subsets, drawn from the documents above. A converted document replaces
+# its Markdown in the uploaded set rather than accompanying it (ADR 0003), so
+# these three counts come out of the 120 rather than adding to it:
+#   120 - 25 = 95 Markdown, 20 PDF, 5 DOCX.
+#
+# Scanned PDFs carry no text layer at all. They exist so OCR is a path under
+# test rather than a pass-through, and one planted prompt injection is reachable
+# only through them.
+pdf_count: 15
+scanned_pdf_count: 5
+docx_count: 5

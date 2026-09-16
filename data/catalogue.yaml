@@ -1,0 +1,176 @@
+# The machine catalogue every document in the corpus draws its nouns from.
+#
+# Machine names and codes are invented. The shapes are not: item numbers follow
+# the manufacturer's real N.NNN-NNN.N format and error codes follow E-NNN,
+# because those are exactly the tokens a retriever is most likely to split on,
+# and a corpus that used simpler shapes would not exercise the case that breaks.
+#
+# Validated by fleet_copilot.corpus.models.Catalogue on load. Item numbers are
+# unique across the whole file, and every code in applies_to must name a machine
+# type declared here.
+
+machine_types:
+  - code: SD-50B
+    family: scrubber_dryer_walk_behind
+    name_en: Walk-behind scrubber-dryer SD-50B
+    name_hu: SD-50B kézi vezetésű súroló-szárítógép
+    variants:
+      - item_number: "1.512-340.0"
+        battery: agm
+        deck: brush
+        solution_tank_l: 50
+        recovery_tank_l: 55
+      - item_number: "1.512-341.0"
+        battery: lithium-ion
+        deck: brush
+        solution_tank_l: 50
+        recovery_tank_l: 55
+      - item_number: "1.512-342.0"
+        battery: agm
+        deck: pad
+        solution_tank_l: 40
+        recovery_tank_l: 45
+
+  - code: SDR-90
+    family: scrubber_dryer_ride_on
+    name_en: Ride-on scrubber-dryer SDR-90
+    name_hu: SDR-90 vezetőüléses súroló-szárítógép
+    variants:
+      - item_number: "1.534-210.0"
+        battery: agm
+        deck: brush
+        solution_tank_l: 110
+        recovery_tank_l: 120
+      - item_number: "1.534-211.0"
+        battery: lithium-ion
+        deck: brush
+        solution_tank_l: 110
+        recovery_tank_l: 120
+      - item_number: "1.534-212.0"
+        battery: lithium-ion
+        deck: pad
+        solution_tank_l: 150
+        recovery_tank_l: 160
+
+  - code: SWR-120
+    family: sweeper_ride_on
+    name_en: Ride-on sweeper SWR-120
+    name_hu: SWR-120 vezetőüléses seprőgép
+    variants:
+      - item_number: "1.721-105.0"
+        battery: agm
+        deck: brush
+        hopper_l: 60
+      - item_number: "1.721-106.0"
+        battery: lithium-ion
+        deck: brush
+        hopper_l: 60
+      - item_number: "1.721-107.0"
+        battery: lithium-ion
+        deck: brush
+        hopper_l: 80
+
+  - code: VS-75
+    family: vacuum_sweeper
+    name_en: Vacuum sweeper VS-75
+    name_hu: VS-75 szívó seprőgép
+    variants:
+      - item_number: "1.688-420.0"
+        battery: agm
+        deck: brush
+        hopper_l: 50
+      - item_number: "1.688-421.0"
+        battery: lithium-ion
+        deck: brush
+        hopper_l: 50
+
+  - code: SDM-43
+    family: single_disc
+    name_en: Single-disc machine SDM-43
+    name_hu: SDM-43 egytárcsás gép
+    variants:
+      - item_number: "1.291-100.0"
+        battery: agm
+        deck: pad
+      - item_number: "1.291-101.0"
+        battery: lithium-ion
+        deck: brush
+
+error_codes:
+  - code: E-017
+    title_en: Squeegee lift fault
+    title_hu: Lehúzógumi emelési hiba
+    applies_to: [SD-50B, SDR-90]
+  - code: E-041
+    title_en: Battery over-temperature
+    title_hu: Akkumulátor túlmelegedés
+    applies_to: [SD-50B, SDR-90, SWR-120, VS-75, SDM-43]
+  - code: E-052
+    title_en: Recovery tank full
+    title_hu: Szennyvíztartály tele
+    applies_to: [SD-50B, SDR-90]
+  - code: E-063
+    title_en: Brush motor overload
+    title_hu: Kefemotor túlterhelés
+    applies_to: [SD-50B, SDR-90, SWR-120, SDM-43]
+  - code: E-074
+    title_en: Solution flow blocked
+    title_hu: Oldatáramlás elzáródott
+    applies_to: [SD-50B, SDR-90]
+  - code: E-088
+    title_en: Traction motor overcurrent
+    title_hu: Hajtómotor túláram
+    applies_to: [SDR-90, SWR-120]
+  - code: E-101
+    title_en: Charger communication lost
+    title_hu: Töltő kommunikáció megszakadt
+    applies_to: [SD-50B, SDR-90, SWR-120, VS-75, SDM-43]
+  - code: E-113
+    title_en: Side broom jam
+    title_hu: Oldalkefe elakadás
+    applies_to: [SWR-120, VS-75]
+  - code: E-126
+    title_en: Filter shaker failure
+    title_hu: Szűrőrázó meghibásodás
+    applies_to: [SWR-120, VS-75]
+  - code: E-134
+    title_en: Hopper not seated
+    title_hu: Szeméttartály nincs a helyén
+    applies_to: [SWR-120, VS-75]
+  - code: E-147
+    title_en: Deep discharge lockout
+    title_hu: Mélykisütés elleni zárolás
+    applies_to: [SD-50B, SDR-90, SWR-120, VS-75, SDM-43]
+  - code: E-152
+    title_en: Vacuum motor over-temperature
+    title_hu: Szívómotor túlmelegedés
+    applies_to: [VS-75]
+
+sites:
+  - slug: depot-north
+    name: Depot North
+    language: en
+  - slug: riverside-mall
+    name: Riverside Mall
+    language: en
+  - slug: hangar-seven
+    name: Hangar Seven
+    language: en
+  - slug: city-hospital
+    name: City Hospital
+    language: en
+  - slug: metro-logistics
+    name: Metro Logistics Centre
+    language: en
+  - slug: harbour-terminal
+    name: Harbour Terminal
+    language: en
+  - slug: budapest-raktar
+    name: Budapest Raktár
+    language: hu
+  - slug: debrecen-uzem
+    name: Debreceni Üzem
+    language: hu
+  - slug: gyor-logisztika
+    name: Győri Logisztikai Központ
+    language: hu
