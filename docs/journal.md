@@ -30,7 +30,16 @@ across a real time gap rather than by reading the docs:
 - **Pillow's PDF writer** stamps a creation date that cannot be pinned at all,
   so the scanned pages are drawn with Pillow and assembled with fpdf2.
 
-Three things nearly shipped broken, all of the same shape — correct locally,
+One thing did ship broken, and it is the same shape as the three below:
+**`zipfile.ZipInfo` takes its create-system byte from `sys.platform`** — 0 on
+Windows, 3 on Unix. The DOCX normaliser pinned entry timestamps and inherited
+that byte, so all five DOCX files hashed differently in CI and nowhere else.
+Every determinism check passed locally, including two that render twice and
+compare, because they all ran on one platform. Reproduced in a Linux container
+in about five minutes; the lesson is that "deterministic" was only ever tested
+against *time*, never against *platform*.
+
+Three more nearly shipped broken, all of the same shape — correct locally,
 wrong somewhere else:
 
 - **`dist/` is in the stock Python `.gitignore`.** The 25 PDFs and DOCX files

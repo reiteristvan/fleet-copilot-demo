@@ -5,9 +5,11 @@ property the committed manifest depends on:
 
 - **PDF** stamps the current time into ``CreationDate`` unless it is pinned, so
   :func:`_new_pdf` pins it and the producer string.
-- **DOCX** writes the current time into every zip entry header. The member
-  *contents* are already deterministic -- python-docx's template carries a fixed
-  ``dcterms:created`` -- so only the entry timestamps need normalising.
+- **DOCX** writes the current time into every zip entry header, and the header
+  also records which platform wrote it. The member *contents* are already
+  deterministic -- python-docx's template carries a fixed ``dcterms:created`` --
+  so the fix is entirely in the entry headers: pin the timestamp and pin the
+  create-system byte, which ``zipfile`` otherwise takes from ``sys.platform``.
 - **Scanned PDF** is drawn with Pillow but assembled with fpdf2, because
   Pillow's own PDF writer stamps an unpinnable creation date. Going through one
   writer means one place where reproducibility can break.
@@ -54,6 +56,15 @@ every hash in the manifest.
 
 _ZIP_TIMESTAMP: Final = (1980, 1, 1, 0, 0, 0)
 """The earliest timestamp the zip format can represent."""
+
+_ZIP_CREATE_SYSTEM: Final = 0
+"""The "created by" byte written into every zip entry header.
+
+``zipfile.ZipInfo`` defaults this from ``sys.platform`` -- 0 for Windows, 3 for
+Unix -- so a DOCX built on a laptop and the same DOCX built in CI differ by one
+byte per entry and nothing else. Pinning it to 0 (MS-DOS/FAT) is what makes the
+committed hash mean the same thing on both. Word does not read this field.
+"""
 
 _PAGE_WIDTH_MM: Final = 210
 _PAGE_HEIGHT_MM: Final = 297
@@ -277,6 +288,7 @@ def _normalise_zip(data: bytes) -> bytes:
             pinned = zipfile.ZipInfo(info.filename, date_time=_ZIP_TIMESTAMP)
             pinned.compress_type = info.compress_type
             pinned.external_attr = info.external_attr
+            pinned.create_system = _ZIP_CREATE_SYSTEM
             destination.writestr(pinned, source.read(info.filename))
     return output.getvalue()
 

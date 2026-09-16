@@ -154,6 +154,31 @@ class TestDocx:
         archive = zipfile.ZipFile(io.BytesIO(render_docx(plan())))
         assert {info.date_time for info in archive.infolist()} == {(1980, 1, 1, 0, 0, 0)}
 
+    def test_every_zip_entry_records_the_same_creating_platform(self) -> None:
+        """zipfile takes this byte from sys.platform -- 0 on Windows, 3 on Unix.
+
+        Unpinned, a DOCX built on a laptop and the same DOCX built in CI differ
+        by exactly one byte per entry and by nothing else, so the corpus is
+        reproducible on whichever platform generated it and nowhere else. This
+        is the bug that got through the first time: every other determinism
+        check passed on one machine.
+        """
+        archive = zipfile.ZipFile(io.BytesIO(render_docx(plan())))
+        assert {info.create_system for info in archive.infolist()} == {0}
+
+    def test_no_zip_header_field_is_left_to_the_platform(self) -> None:
+        """Each header field that could vary carries one value across all
+        entries, so a future field picking up a platform default shows up as a
+        set with two elements rather than as a CI failure nobody can reproduce.
+        """
+        archive = zipfile.ZipFile(io.BytesIO(render_docx(plan())))
+        entries = archive.infolist()
+        assert len({info.date_time for info in entries}) == 1
+        assert len({info.create_system for info in entries}) == 1
+        assert len({info.create_version for info in entries}) == 1
+        assert len({info.external_attr for info in entries}) == 1
+        assert len({info.compress_type for info in entries}) == 1
+
     def test_is_byte_identical_between_renders(self) -> None:
         assert render_docx(plan()) == render_docx(plan())
 
