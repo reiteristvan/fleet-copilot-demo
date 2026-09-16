@@ -27,15 +27,18 @@ local run and a green pipeline mean the same thing.
 ```
 src/fleet_copilot/
   corpus/      generate the synthetic document corpus from data/
+  fleet/       generate the operational fleet: registry, states, telemetry
   ingest/      load source documents and split them into retrievable chunks
   retrieval/   index chunks and fetch the ones relevant to a question
   agents/      plan over and answer from retrieved context
   evals/       score the retrieval and agent layers offline
   api/         entry points: a CLI today, an HTTP service later
 data/          corpus seed data, the generated corpus and its manifest
-scripts/       thin CLI shims over src/ (corpus generation, corpus upload)
+scripts/       thin CLI shims over src/ (corpus generation, upload, fleet seed)
+migrations/    Alembic migrations, hand-written SQL
 tests/         mirrors the source layout
 infra/         Bicep templates, per-environment parameters and deploy.sh
+docs/data-model.md  ERD and the reasoning behind the schema
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 ```
@@ -80,6 +83,40 @@ $ python -c "import json;m=json.load(open('data/manifest.json'));  print([d['pla
 ```
 
 Details and the reasoning: [ADR 0003](docs/adr/0003-synthetic-corpus-contract.md).
+
+## The fleet database
+
+The operational half: what the machines in those documents actually did. Forty
+machines across the corpus's nine sites, ninety days, one telemetry sample per
+powered-on minute.
+
+```console
+$ just up            # postgres
+$ just db-migrate    # apply every migration
+$ just db-seed       # ~2.3M samples, about two minutes
+$ just db-queries    # the six reference queries, as copilot_ro, with timings
+```
+
+| | |
+| --- | --- |
+| Telemetry samples | 2.34M, range-partitioned by month |
+| State intervals | 100k, with overlap rejected by the database |
+| Fault events | 787, of which 46 link to a corpus document by `doc_id` |
+| Rollups | hourly and daily materialised views |
+| Reference queries | 6, slowest 3.1 ms against a 500 ms budget |
+
+Half the machines carry serials the corpus already cites, so a join from
+telemetry to documents has both hits and misses. Three machines are deliberately
+unwell, and their faults match documents in the corpus: one overheats and raises
+`E-041` repeatedly, one AGM machine deep-discharges, one reports from outside
+every site geofence for a day.
+
+The agent connects as `copilot_ro`, which can read the `reporting` views and
+nothing else — not the raw samples, not the base tables, no DML, no DDL. That is
+enforced by grants and proven in `tests/fleet/test_database.py`.
+
+ERD, rollup semantics and the reasoning: [docs/data-model.md](docs/data-model.md).
+Storage choice: [ADR 0004](docs/adr/0004-telemetry-storage-and-partitioning.md).
 
 ## Local stack
 

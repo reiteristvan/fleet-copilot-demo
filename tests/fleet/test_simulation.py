@@ -101,11 +101,13 @@ class TestDeterminism:
         assert patterns == {True, False}
 
 
-class TestStateIntervals:
-    @pytest.fixture(scope="class")
-    def intervals(self) -> list[behaviour.StateInterval]:
-        return behaviour.build_intervals(MACHINES[0], behaviour.machine_rng(MACHINES[0].serial))
+@pytest.fixture(scope="module")
+def intervals() -> list[behaviour.StateInterval]:
+    """One machine's whole 90-day interval cover, built once for the module."""
+    return behaviour.build_intervals(MACHINES[0], behaviour.machine_rng(MACHINES[0].serial))
 
+
+class TestStateIntervals:
     def test_they_cover_the_window_without_gaps(
         self, intervals: list[behaviour.StateInterval]
     ) -> None:

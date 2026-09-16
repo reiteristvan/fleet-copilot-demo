@@ -3,6 +3,55 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-16 — The operational half: registry, states and telemetry
+
+Forty machines across the corpus's nine sites, ninety days, 2.34M telemetry
+samples at one-minute cadence, plus 100k state intervals, 787 fault events and
+63 tickets. Generated from the same `data/catalogue.yaml` as the documents, so
+a serial in a service report resolves to a machine and 46 fault events carry
+the `doc_id` of the document describing them — read out of the corpus rather
+than declared. [docs/data-model.md](data-model.md),
+[ADR 0004](adr/0004-telemetry-storage-and-partitioning.md).
+
+Four things worth keeping.
+
+**`CROSS JOIN reporting.as_of` plans terribly.** The clock lives in a one-row
+table so "last 7 days" means the same thing whenever it is asked. But the
+planner cannot know what a one-row table holds, so the predicate became a join
+filter applied *after* the rows were produced: all 3,640 daily rows
+materialised, 3,360 thrown away, 330 ms to return 40. Two of the six reference
+queries were over budget and nothing about the SQL looked wrong. The same value
+behind a `STABLE` function can be used as an index qualifier — 332 ms to 1.8 ms.
+It needs `SECURITY DEFINER` too: unlike a view, a function runs as the invoker,
+so the first version was refused inside its own body.
+
+**Half-open ranges are load-bearing, not stylistic.** With an inclusive upper
+bound, two adjacent intervals share their boundary instant, the exclusion
+constraint rejects the pair, and the machine can never change state at all.
+
+**The hour grid has to come from the state intervals, not the samples.** A
+switched-off machine emits no telemetry, so a sample-derived grid has no row for
+those hours and "minutes off" reads as missing rather than zero — the difference
+between a machine that was idle and a machine nobody can account for.
+
+**`hash()` is not a stable hash.** Python randomises string hashing per process,
+so using it to decide which machines run two shifts dealt the fleet a different
+shape on every run. Caught before it shipped this time, unlike the DOCX
+create-system byte last session; same class of bug, which is "reproducible on
+this machine" mistaken for "reproducible".
+
+Tuning the behaviour model was not decoration: it was making the reference
+queries able to discriminate. The first pass had 22 of 40 machines
+deep-discharging daily, because a 30-minute shift handover cannot recharge a
+pack — so "machines finishing flat" would have been a question about the shift
+pattern rather than about the machines. A realistic handover gap and a realistic
+charge rate brought it to 6.
+
+Still open: the database tests skip when PostgreSQL is unreachable, because CI
+runs no PostgreSQL service and `.github/workflows/` needs a human go-ahead to
+touch. 24 of the fleet tests run everywhere; 26 need `just up`. Adding a
+service container to CI is the obvious fix and is a decision, not a diff.
+
 ## 2026-09-16 — A synthetic corpus with known defects in it
 
 120 fleet documents generated offline from `data/`: a catalogue of five machine
