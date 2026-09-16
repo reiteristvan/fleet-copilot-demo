@@ -110,6 +110,58 @@ class TestVariant:
 
 
 class TestMachineType:
+    def test_rejects_a_scrubber_dryer_variant_with_no_tanks(self) -> None:
+        bare = variant_data("1.512-350.0")
+        del bare["solution_tank_l"]
+        del bare["recovery_tank_l"]
+        payload = machine_data(variants=[variant_data(), bare])
+        with pytest.raises(ValidationError, match="needs both tanks"):
+            MachineType.model_validate(payload)
+
+    def test_rejects_a_sweeper_variant_with_no_hopper(self) -> None:
+        payload = machine_data(
+            code="SWR-120",
+            family="sweeper_ride_on",
+            variants=[
+                variant_data(
+                    "1.721-105.0", hopper_l=60, solution_tank_l=None, recovery_tank_l=None
+                ),
+                variant_data("1.721-106.0", solution_tank_l=None, recovery_tank_l=None),
+            ],
+        )
+        with pytest.raises(ValidationError, match="needs a hopper capacity"):
+            MachineType.model_validate(payload)
+
+    def test_accepts_a_sweeper_described_by_its_hopper(self) -> None:
+        """A sweeper has no tanks at all, and that is not missing data."""
+        payload = machine_data(
+            code="SWR-120",
+            family="sweeper_ride_on",
+            variants=[
+                variant_data(
+                    "1.721-105.0", hopper_l=60, solution_tank_l=None, recovery_tank_l=None
+                ),
+                variant_data(
+                    "1.721-106.0", hopper_l=80, solution_tank_l=None, recovery_tank_l=None
+                ),
+            ],
+        )
+        machine = MachineType.model_validate(payload)
+        assert machine.variants[0].hopper_l == 60
+        assert machine.variants[0].solution_tank_l is None
+
+    def test_accepts_a_single_disc_machine_with_neither(self) -> None:
+        """A single-disc machine is described by its deck, not by a capacity."""
+        payload = machine_data(
+            code="SDM-43",
+            family="single_disc",
+            variants=[
+                variant_data("1.291-100.0", solution_tank_l=None, recovery_tank_l=None),
+                variant_data("1.291-101.0", solution_tank_l=None, recovery_tank_l=None),
+            ],
+        )
+        assert MachineType.model_validate(payload).code == "SDM-43"
+
     def test_rejects_a_repeated_item_number(self) -> None:
         payload = machine_data(variants=[variant_data(), variant_data()])
         with pytest.raises(ValidationError, match="repeats an item number"):

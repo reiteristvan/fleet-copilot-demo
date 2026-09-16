@@ -111,8 +111,9 @@ class Variant(BaseModel):
     item_number: ItemNumber
     battery: BatteryChemistry
     deck: DeckType
-    solution_tank_l: Annotated[int, Field(gt=0)]
-    recovery_tank_l: Annotated[int, Field(gt=0)]
+    solution_tank_l: Annotated[int, Field(gt=0)] | None = None
+    recovery_tank_l: Annotated[int, Field(gt=0)] | None = None
+    hopper_l: Annotated[int, Field(gt=0)] | None = None
 
     @model_validator(mode="after")
     def _recovery_tank_holds_the_solution_tank(self) -> Self:
@@ -124,7 +125,13 @@ class Variant(BaseModel):
         text telling an operator to overflow the machine, and the mistake would
         be visible only to someone who knows the domain -- by which point it is
         in 120 documents and in the eval baselines built on them.
+
+        Both capacities are optional because a sweeper carries a hopper and no
+        tanks at all; which capacities a machine must declare is a question
+        about its family, and is answered in :class:`MachineType`.
         """
+        if self.solution_tank_l is None or self.recovery_tank_l is None:
+            return self
         if self.recovery_tank_l < self.solution_tank_l:
             msg = (
                 f"recovery tank ({self.recovery_tank_l} l) is smaller than the "
@@ -158,6 +165,34 @@ class MachineType(BaseModel):
         if len(set(seen)) != len(seen):
             msg = f"{self.code} repeats an item number: {sorted(seen)}"
             raise ValueError(msg)
+        return self
+
+    @model_validator(mode="after")
+    def _variants_declare_the_capacities_their_family_uses(self) -> Self:
+        """Reject a machine whose variants omit the capacity its family works by.
+
+        A scrubber-dryer is described by its two tanks and a sweeper by its
+        hopper, and documents quote those figures directly -- tank capacities in
+        the filling procedure, hopper capacity in the emptying interval. A
+        variant missing the one its family uses does not fail generation; it
+        produces a manual with a blank where the number should be, which reads
+        as a formatting bug rather than as missing seed data.
+        """
+        needs_tanks = self.family in {
+            MachineFamily.SCRUBBER_DRYER_WALK_BEHIND,
+            MachineFamily.SCRUBBER_DRYER_RIDE_ON,
+        }
+        needs_hopper = self.family in {
+            MachineFamily.SWEEPER_RIDE_ON,
+            MachineFamily.VACUUM_SWEEPER,
+        }
+        for variant in self.variants:
+            if needs_tanks and (variant.solution_tank_l is None or variant.recovery_tank_l is None):
+                msg = f"{self.code} is a scrubber-dryer, so {variant.item_number} needs both tanks"
+                raise ValueError(msg)
+            if needs_hopper and variant.hopper_l is None:
+                msg = f"{self.code} is a sweeper, so {variant.item_number} needs a hopper capacity"
+                raise ValueError(msg)
         return self
 
     def name(self, language: Language) -> str:
