@@ -51,6 +51,16 @@ it.** Nothing else holds text. Every chunker therefore slices one coordinate
 system, and `Chunk`'s span invariant is satisfiable by construction rather than
 re-derived, differently, four times.
 
+**Spans are requested in `unicodeCodePoint`, and block text is always derived
+from the span rather than copied.** The SDK defaults `string_index_type` to
+`textElements`, which counts grapheme clusters; Python indexes strings by code
+point. The two agree until they do not, and where they disagree every offset
+after the disagreement is wrong with nothing to show for it. Blocks likewise
+take their text as `content[start:end]` rather than from the service's own
+`paragraph.content`, which in Markdown mode is the undecorated text and does not
+always coincide with what its span covers. Deriving makes the invariant true by
+construction instead of by hope.
+
 **Page headers, footers and page numbers stay in `content`, tagged by role.**
 Stripping them is the obvious move and it is wrong: it shifts every offset after
 the strip, so no span can be checked against the cached JSON any more. Tagging
