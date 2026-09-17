@@ -17,3 +17,4 @@ Format: context, decision, consequences. Keep it to a page.
 | [0002](0002-keyless-azure-access.md) | Keyless access to every Azure data plane | Accepted |
 | [0003](0003-synthetic-corpus-contract.md) | A deterministic synthetic corpus, and the contract it publishes | Accepted |
 | [0004](0004-telemetry-storage-and-partitioning.md) | Native range partitioning for telemetry, not TimescaleDB | Accepted |
+| [0005](0005-document-parsing-and-the-layout-cache.md) | Layout parsing through Document Intelligence, and the cache in front of it | Accepted |
