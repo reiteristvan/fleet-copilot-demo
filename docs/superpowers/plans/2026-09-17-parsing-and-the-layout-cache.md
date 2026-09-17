@@ -1,18 +1,23 @@
-# Document Intelligence Parsing and the Layout Cache — Implementation Plan
+# Parsing and the Layout Cache — Implementation Plan (1 of 3)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Give `ingest` a parser that turns the corpus's PDF and DOCX files into one Markdown string with role-tagged spans over it, backed by a content-addressed cache, so the four chunking strategies of the next story all read byte-identical input.
+**Goal:** Give `ingest` a parser that turns all 120 corpus documents into one Markdown string with role-tagged spans over it — Markdown natively, PDF and DOCX through Document Intelligence — backed by a content-addressed cache, and carry the four metadata keys that rendering strips through the manifest instead.
 
-**Architecture:** A `DocumentParser` Protocol with two implementations — `AzureLayoutParser` (Azure AI Document Intelligence, `prebuilt-layout`, Markdown output) and `LocalParser` (pymupdf for PDF, python-docx for DOCX) which raises rather than degrading on a file it cannot honestly read. A `LayoutCache` Protocol with a blob-backed and a directory-backed implementation stores the *raw* `AnalyzeResult` JSON keyed by content hash, so re-interpreting a layout is free and re-analysing is the only thing that costs. Every module holding a decision is pure and importable without the Azure SDK; only the `run`-shaped functions touch the network.
+**Architecture:** A `DocumentParser` Protocol with three implementations. `MarkdownParser` reads the 95 Markdown documents natively; `AzureLayoutParser` sends the 25 converted files to `prebuilt-layout` with Markdown output; `LocalParser` reads a PDF text layer offline and raises rather than degrading on the five image-only files. A `LayoutCache` Protocol with a blob-backed and a directory-backed implementation stores the *raw* `AnalyzeResult` JSON keyed by content hash, so re-interpreting a layout is free and re-analysing is the only thing that costs. Every module holding a decision is pure and importable without the Azure SDK; only the `run`-shaped functions touch the network.
 
 **Tech Stack:** Python 3.12, pydantic v2 (frozen, `extra="forbid"`), `azure-ai-documentintelligence` 1.0.x (aio client), `azure-identity` (aio credential), `pymupdf`, `python-docx`, `azure-storage-blob`, Bicep, pytest + pytest-asyncio (strict mode), mypy --strict, ruff.
 
-**Spec:** `docs/adr/0005-document-parsing-and-the-layout-cache.md`
+**Spec:** `docs/adr/0005-document-parsing-and-the-layout-cache.md` and `docs/adr/0006-the-chunk-contract.md`
+
+**Scope boundary.** This plan builds *what the chunkers read*. It writes no chunker, does not touch `Chunk`, and makes no embedding call.
+
+- **Plan 2 — chunking:** the ten-field `Chunk` contract, the three strategies, table chunks, unsplit step lists, `scripts/chunk_stats.py`, `docs/chunking.md`.
+- **Plan 3 — embeddings:** `text-embedding-3-large`, batching, async, 429 backoff, the Postgres cache keyed by `content_hash`, and the "zero embedding calls on a clean re-run" criterion.
 
 ## Global Constraints
 
-Copied from `CLAUDE.md` and ADR 0005. Every task's requirements implicitly include this section.
+From `CLAUDE.md` and the two ADRs. Every task's requirements implicitly include this section.
 
 - **`just check` is the gate.** Paste its output; never assert it passed.
 - **Never weaken a gate to make a change land.** No new ruff ignores, no relaxed mypy settings, no `xfail` to get green. If a gate is genuinely wrong, say so and stop.
@@ -25,13 +30,14 @@ Copied from `CLAUDE.md` and ADR 0005. Every task's requirements implicitly inclu
 - **Async tests opt in** with `@pytest.mark.asyncio` (`asyncio_mode = "strict"`).
 - **Tests mirror the source layout.** `src/fleet_copilot/ingest/x.py` → `tests/ingest/test_x.py`. New behaviour ships with its tests in the same commit.
 - **Test invalid input through `model_validate`,** not with a cast or an ignore on the constructor.
-- **Comment only what the code cannot say itself** — a constraint, a rejected alternative, a non-obvious failure prevented, an external fact. A comment restating the line below it will be removed in review.
-- **Never introduce key-based auth to an Azure data plane.** Use `get_credential()` / `get_async_credential()` from `fleet_copilot.credentials`. `tests/test_no_key_based_auth.py` enforces this.
-- **Pin Azure API versions to values already checked for this work:** ARM `2026-03-01` for `Microsoft.CognitiveServices/accounts`, `2025-08-01` for storage, `2024-08-01` for budgets, `2022-04-01` for role assignments; data-plane `2024-11-30` (the SDK default, v4.0 GA).
-- **Commits are atomic and semantic** (`feat(ingest): …`, `build: …`, `ci: …`). One concern per commit; the body says *why*.
+- **Comment only what the code cannot say itself** — a constraint, a rejected alternative, a non-obvious failure prevented, an external fact.
+- **Never introduce key-based auth to an Azure data plane.** Use `get_credential()` / `get_async_credential()`. `tests/test_no_key_based_auth.py` enforces this.
+- **Pin Azure API versions to values already checked:** ARM `2026-03-01` for `Microsoft.CognitiveServices/accounts`, `2025-08-01` for storage, `2024-08-01` for budgets, `2022-04-01` for role assignments; data-plane `2024-11-30` (the SDK default, v4.0 GA).
+- **Commits are atomic and semantic.** One concern per commit; the body says *why*.
 - **Subscription:** `00000000-0000-0000-0000-000000000000` ("Azure subscription 1"), tenant `00000000-0000-0000-0000-000000000000`, region `swedencentral`, resource group `rg-fleet-copilot-dev`.
-- **Role definition id for Cognitive Services User:** `a97b65f3-24c7-4388-baec-2e87135dc908` (verified with `az role definition list`).
+- **Role definition id for Cognitive Services User:** `a97b65f3-24c7-4388-baec-2e87135dc908`.
 - **Spans are `unicodeCodePoint`**, never the SDK's `textElements` default, and `ParsedBlock.text` is always `content[start:end]` — derived, never copied from `paragraph.content`.
+- **`MANIFEST_VERSION` goes to 2** in this plan. Document bytes and their SHA-256s do not change; only `data/manifest.json` gains four keys.
 
 ## File Structure
 
@@ -43,19 +49,24 @@ Copied from `CLAUDE.md` and ADR 0005. Every task's requirements implicitly inclu
 | `infra/main.bicep` (modify) | Wires the module in; outputs the endpoint and cache container. |
 | `infra/budget.bicep` (modify) | Gains the second, resource-filtered $15 budget. |
 | `infra/deploy.sh` (modify) | Prints the two new environment variables. |
+| `src/fleet_copilot/corpus/manifest.py` (modify) | `ManifestEntry` gains four keys; `MANIFEST_VERSION` → 2. |
+| `src/fleet_copilot/corpus/writer.py` (modify) | Populates them from the front matter. |
+| `src/fleet_copilot/corpus/upload.py` (modify) | Writes them as blob metadata. |
 | `src/fleet_copilot/ingest/parse.py` (new) | The contract: `BlockRole`, `ParsedBlock`, `ParsedPage`, `ParsedDocument`, `DocumentParser`, `ParseError`. Pure; no SDK import. |
 | `src/fleet_copilot/ingest/layout.py` (new) | `layout_from_analyze_result()` (pure) and `AzureLayoutParser` (network, lazy import). |
+| `src/fleet_copilot/ingest/markdown.py` (new) | `MarkdownParser`. Pure, no third-party dependency. |
 | `src/fleet_copilot/ingest/fallback.py` (new) | `LocalParser`. Raises on anything it cannot honestly read. |
 | `src/fleet_copilot/ingest/cache.py` (new) | `cache_key()`, `LayoutCache`, `LocalLayoutCache`, `BlobLayoutCache`. |
-| `src/fleet_copilot/ingest/run.py` (new) | `CachedParser`, `ParseReport`, `run()`. The only module that ties the others together. |
-| `src/fleet_copilot/ingest/models.py` (modify) | `Chunk.context_prefix` and `Chunk.embed_text`. |
+| `src/fleet_copilot/ingest/run.py` (new) | Dispatch, `CachedParser`, `ParseReport`, `run()`. |
 | `src/fleet_copilot/credentials.py` (modify) | `get_async_credential()`. |
 | `src/fleet_copilot/config.py` (modify) | Three new settings. |
-| `scripts/parse_corpus.py` (new) | Argument-parsing shim only, matching `upload_corpus.py`. |
+| `scripts/parse_corpus.py` (new) | Argument-parsing shim only. |
 | `scripts/capture_layout_fixtures.py` (new) | One-shot fixture capture, committed so it is repeatable. |
 | `tests/ingest/fixtures/layout/*.json` (new) | Three real `AnalyzeResult` payloads, captured once. |
 
-Task order is dependency order. Tasks 3–8 need no Azure account and can be reviewed independently of Tasks 1–2.
+Task order is dependency order. Only Task 2 spends money; Tasks 3–9 need no Azure account.
+
+**A deliberate non-decision:** `BlockRole` has no `LIST_ITEM`. Document Intelligence has no list role, so a Markdown parser that emitted one would produce output the Azure parser could not match, and a chunker would then behave differently depending on which parser ran. ADR 0006 requires step lists to be atomic; the chunker gets that by reading Markdown ordered-list syntax out of `content`, which both parsers produce identically.
 
 ---
 
@@ -326,7 +337,7 @@ Change the `storage.bicep` row to name both containers:
 | `storage.bicep` | Storage account with a `raw-docs` and a `layout-cache` container |
 ```
 
-Extend the teardown note at line 118 — it currently reads `az consumption budget delete --budget-name budget-fleet-copilot` — to name the second budget too:
+Extend the teardown note at line 118 to name the second budget too:
 
 ```console
 $ az consumption budget delete --budget-name budget-fleet-copilot
@@ -359,7 +370,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 The only task that spends money. Expected total well under $1 — three single-file analyses at $10/1,000 pages.
 
-**Depends on Task 3** for `get_async_credential`. Do Task 3 first, or do Steps 1–4 here, then Task 3, then return for Steps 5–10.
+**Depends on Task 3** for `get_async_credential`. Do Steps 1–4, then Task 3, then return for Steps 5–10.
 
 **Files:**
 - Modify: `pyproject.toml` (`[dependency-groups].dev` only), `uv.lock` (via `uv`), `.env.example`, `src/fleet_copilot/config.py`
@@ -368,7 +379,7 @@ The only task that spends money. Expected total well under $1 — three single-f
 
 **Interfaces:**
 - Consumes: Task 1's `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT`; Task 3's `get_async_credential`.
-- Produces: `Settings.azure_document_intelligence_endpoint: str | None`, `Settings.azure_document_intelligence_api_version: str = "2024-11-30"`, `Settings.azure_layout_cache_container: str = "layout-cache"`, and three fixture files at `tests/ingest/fixtures/layout/<stem>.json`, each the `as_dict()` of a real `AnalyzeResult`. Tasks 6 and 9 read these.
+- Produces: `Settings.azure_document_intelligence_endpoint: str | None`, `Settings.azure_document_intelligence_api_version: str = "2024-11-30"`, `Settings.azure_layout_cache_container: str = "layout-cache"`, and three fixture files at `tests/ingest/fixtures/layout/<stem>.json`, each the `as_dict()` of a real `AnalyzeResult`. Tasks 6 and 10 read these.
 
 - [ ] **Step 1: Add the dependencies**
 
@@ -423,8 +434,6 @@ Expected: an endpoint ending `.cognitiveservices.azure.com/`, `"localAuthDisable
 Role assignments take a few minutes to propagate. If Step 6 returns 403, wait and retry — never add a key.
 
 - [ ] **Step 5: Write `scripts/capture_layout_fixtures.py`**
-
-Committed rather than throwaway, so the fixtures can be regenerated when the API version moves.
 
 ```python
 """Capture real AnalyzeResult payloads to use as test fixtures.
@@ -501,7 +510,7 @@ uv run python scripts/capture_layout_fixtures.py
 
 Expected: three lines, each with a non-zero character count. The scanned PDF (`service-report-sd50b-2026-10142-17`) reporting a non-zero count is the proof that OCR ran — that file has no text layer at all.
 
-If any count is zero, stop. A zero-length result from `prebuilt-layout` means the request succeeded and returned nothing, which is the failure mode F0 produces and S0 should not.
+If any count is zero, stop. A zero-length result means the request succeeded and returned nothing, which is the failure mode F0 produces and S0 should not.
 
 - [ ] **Step 7: Write the fixture guard test**
 
@@ -510,10 +519,10 @@ Create `tests/ingest/test_fixtures.py`:
 ```python
 """Assert the committed fixtures are what the rest of the ingest tests assume.
 
-These three files stand in for the Document Intelligence service everywhere
-else in the suite. If one is truncated, re-captured against a different API
-version, or committed empty, every test reading it would go on passing against
-a weaker document than it was written for.
+These three files stand in for the Document Intelligence service everywhere else
+in the suite. If one is truncated, re-captured against a different API version,
+or committed empty, every test reading it would go on passing against a weaker
+document than it was written for.
 """
 
 from __future__ import annotations
@@ -542,12 +551,22 @@ def test_fixture_is_a_usable_analyze_result(stem: str) -> None:
     assert payload["paragraphs"], "no paragraphs means no structure to chunk on"
 
 
+def test_the_service_manual_fixture_has_a_table() -> None:
+    """ADR 0006 makes every table its own chunk, so the mapper must see one.
+
+    The SDM-43 manual has a service-interval table. If prebuilt-layout returns
+    no tables for it, Task 6 has nothing to map and Plan 2 has nothing to chunk.
+    """
+    payload = json.loads((FIXTURES / "sdm-43-service-manual.json").read_text(encoding="utf-8"))
+
+    assert payload.get("tables"), "no tables in a document that has one"
+
+
 def test_the_scanned_fixture_proves_ocr_ran() -> None:
     """The scanned PDF has no text layer, so any content at all came from OCR.
 
     This is the fixture that makes the Azure path worth paying for. If it comes
-    back empty, the local fallback and the service are indistinguishable, and
-    the comparison the next story runs would be measuring nothing.
+    back empty, the local fallback and the service are indistinguishable.
     """
     payload = json.loads(
         (FIXTURES / "service-report-sd50b-2026-10142-17.json").read_text(encoding="utf-8")
@@ -559,7 +578,7 @@ def test_the_scanned_fixture_proves_ocr_ran() -> None:
 - [ ] **Step 8: Run the fixture tests**
 
 Run: `uv run pytest tests/ingest/test_fixtures.py -v`
-Expected: 4 passed.
+Expected: 5 passed.
 
 - [ ] **Step 9: Check the fixture sizes before committing**
 
@@ -567,7 +586,7 @@ Expected: 4 passed.
 ls -la tests/ingest/fixtures/layout/
 ```
 
-The pre-commit `check for added large files` hook rejects anything over its threshold. OCR emits a word entry with a polygon per word, so the scanned fixture is the large one. If it trips the hook, do **not** raise the hook's limit — that is weakening a gate. Store that one gzipped and decompress it in `fixture()` instead, and say so in a comment.
+The pre-commit `check for added large files` hook rejects anything over its threshold. OCR emits a word entry with a polygon per word, so the scanned fixture is the large one. If it trips the hook, do **not** raise the hook's limit — that is weakening a gate. Store that one gzipped and decompress it in the `fixture()` helper instead, with a comment saying why.
 
 - [ ] **Step 10: Commit**
 
@@ -597,7 +616,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `get_async_credential() -> azure.identity.aio.DefaultAzureCredential`. Tasks 2 and 9 use it.
+- Produces: `get_async_credential() -> azure.identity.aio.DefaultAzureCredential`. Tasks 2 and 10 use it.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -665,136 +684,187 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 ---
 
-### Task 4: `Chunk.context_prefix` and `Chunk.embed_text`
+### Task 4: Manifest v2 — carry the metadata that rendering strips
 
-Pure model change, no parser involvement. ADR 0005 explains why it lands now rather than with the chunkers: retrieval binds to `embed_text`, and adding it afterwards is a reindex.
+ADR 0006. A chunk must carry `machine_types`, `item_numbers`, `revision` and `effective_date`, and none of them survive into the PDF the parser reads.
 
 **Files:**
-- Modify: `src/fleet_copilot/ingest/models.py:60-100`
-- Test: `tests/ingest/test_models.py`
+- Modify: `src/fleet_copilot/corpus/manifest.py:24-76`, `src/fleet_copilot/corpus/writer.py:84-99`, `src/fleet_copilot/corpus/upload.py:83-99`
+- Test: `tests/corpus/test_manifest.py`, `tests/corpus/test_upload.py`
+- Regenerate: `data/manifest.json`
 
 **Interfaces:**
-- Consumes: nothing.
-- Produces: `Chunk.context_prefix: str | None = None` and the computed `Chunk.embed_text: str`.
+- Consumes: `FrontMatter` from `corpus/document.py`.
+- Produces: `ManifestEntry.machine_types: tuple[str, ...]`, `.item_numbers: tuple[str, ...]`, `.revision: int`, `.effective_date: date`; `MANIFEST_VERSION = 2`; blob metadata keys `machine_types`, `item_numbers`, `revision`, `effective_date`.
 
 - [ ] **Step 1: Write the failing tests**
 
-Append to `tests/ingest/test_models.py` (add `from pydantic import ValidationError` to its imports if absent):
+Append to `tests/corpus/test_manifest.py` (add `from datetime import date` and `MANIFEST_VERSION` to its imports):
 
 ```python
-def test_embed_text_is_the_text_when_there_is_no_prefix() -> None:
-    chunk = Chunk(doc_id="d", ordinal=0, text="abc", start=0, end=3)
+def test_an_entry_carries_the_metadata_rendering_strips() -> None:
+    """Front matter does not survive into a PDF, so the manifest carries it.
 
-    assert chunk.embed_text == "abc"
-
-
-def test_embed_text_joins_the_prefix_without_disturbing_the_span() -> None:
-    chunk = Chunk(
-        doc_id="sdm-43-service-manual",
-        ordinal=14,
-        text="The emergency stop is not an isolator.",
-        start=1794,
-        end=1832,
-        context_prefix="Single-disc machine SDM-43 - service manual > Safety",
-    )
-
-    assert chunk.embed_text == (
-        "Single-disc machine SDM-43 - service manual > Safety\n\n"
-        "The emergency stop is not an isolator."
-    )
-    # The span still describes text alone. That is the whole point of the field.
-    assert chunk.end - chunk.start == len(chunk.text)
-
-
-def test_a_blank_prefix_is_rejected() -> None:
-    """A blank prefix is not the same as no prefix, and reads as one.
-
-    It produces embed_text with two leading newlines, embedding one chunk
-    slightly differently from its unprefixed neighbours -- exactly the silent
-    skew an A/B between chunking strategies cannot survive.
+    Decompressing a published PDF's text streams finds the prose and none of the
+    YAML keys, so a chunk built from one cannot recover its own machine types or
+    effective date from what was parsed (ADR 0006).
     """
-    with pytest.raises(ValidationError):
-        Chunk.model_validate(
-            {
-                "doc_id": "d",
-                "ordinal": 0,
-                "text": "abc",
-                "start": 0,
-                "end": 3,
-                "context_prefix": "  ",
-            }
-        )
+    entry = ManifestEntry.model_validate(
+        {
+            "doc_id": "sdm-43-service-manual",
+            "type": "service_manual",
+            "language": "en",
+            "format": "pdf",
+            "path": "published/sdm-43-service-manual.pdf",
+            "sha256": "0" * 64,
+            "bytes": 2639,
+            "machine_types": ["SDM-43"],
+            "item_numbers": ["1.291-101.0"],
+            "revision": 3,
+            "effective_date": "2026-03-09",
+        }
+    )
+
+    assert entry.machine_types == ("SDM-43",)
+    assert entry.item_numbers == ("1.291-101.0",)
+    assert entry.revision == 3
+    assert entry.effective_date == date(2026, 3, 9)
+
+
+def test_the_manifest_version_is_two() -> None:
+    """Bumped with the four new keys so a reader can tell an old manifest from a
+    corrupt one -- which is the only reason the field exists."""
+    assert MANIFEST_VERSION == 2
 ```
 
-Note `end=1832`: the sentence is 38 characters. Count it rather than trusting this line — the validator will reject a mismatch, which is the test working.
+Append to `tests/corpus/test_upload.py`:
+
+```python
+def test_blob_metadata_carries_the_four_stripped_keys() -> None:
+    """An ingest reading only the container must reach the same metadata.
+
+    Reading it from the local Markdown copy instead would work on a laptop and
+    fail wherever those copies are not present, which is everywhere else.
+    """
+    manifest = a_manifest_with_one_pdf_entry()
+
+    upload = plan_uploads(manifest, Path("data/corpus"))[0]
+
+    assert upload.metadata["machine_types"] == "SDM-43"
+    assert upload.metadata["item_numbers"] == "1.291-101.0"
+    assert upload.metadata["revision"] == "3"
+    assert upload.metadata["effective_date"] == "2026-03-09"
+```
+
+Write `a_manifest_with_one_pdf_entry()` as a local helper in that module, following the builder style already used there.
 
 - [ ] **Step 2: Run them and watch them fail**
 
-Run: `uv run pytest tests/ingest/test_models.py -v -k "embed_text or blank_prefix"`
-Expected: FAIL — `extra fields not permitted` on `context_prefix`, and `AttributeError` on `embed_text`.
+Run: `uv run pytest tests/corpus/test_manifest.py tests/corpus/test_upload.py -v`
+Expected: FAIL — `extra fields not permitted` on the four new keys, and `MANIFEST_VERSION == 1`.
 
-- [ ] **Step 3: Implement**
+- [ ] **Step 3: Extend `ManifestEntry` and bump the version**
 
-In `src/fleet_copilot/ingest/models.py`, add the field to `Chunk` after `end`:
+In `src/fleet_copilot/corpus/manifest.py`, change the constant:
 
 ```python
-    context_prefix: NonEmptyStr | None = None
-    """Headings above this chunk, joined into a breadcrumb.
+MANIFEST_VERSION: Final = 2
+"""Schema version of ``data/manifest.json``.
 
-    Outside the span on purpose. A chunk's subject often appears only in the
-    heading above it, which is not in its own text; embedding the breadcrumb
-    recovers that without moving start/end, so a citation still highlights the
-    source exactly.
+Bumped when the entry shape changes, so a reader can tell an old manifest from a
+corrupt one. Version 2 added the four front-matter keys that rendering strips
+out of a published PDF (ADR 0006).
+"""
+```
+
+Add the fields to `ManifestEntry`, after `bytes`, and `from datetime import date` to the imports:
+
+```python
+    machine_types: tuple[str, ...] = ()
+    item_numbers: tuple[str, ...] = ()
+    revision: Annotated[int, Field(ge=1)]
+    effective_date: date
+    """The four front-matter keys a chunk needs and a rendered document loses.
+
+    Not a convenience copy: the PDF and DOCX renderers drop the front matter, so
+    for the 25 converted documents this manifest and the blob metadata beside
+    them are the only places these values exist outside the Markdown source that
+    ADR 0003 deliberately does not upload.
     """
 ```
 
-`Chunk`'s `model_config` does not set `str_strip_whitespace`, so `min_length=1` alone would admit `"  "`. Add the validator:
+- [ ] **Step 4: Populate them in `writer.py`**
+
+Extend the `ManifestEntry(...)` call at line 87 with four arguments from the front matter:
 
 ```python
-    @field_validator("context_prefix")
-    @classmethod
-    def _reject_a_blank_prefix(cls, value: str | None) -> str | None:
-        """Treat a whitespace-only prefix as the error it is, not as no prefix.
-
-        A blank prefix produces embed_text with two leading newlines, embedding
-        one chunk slightly differently from its unprefixed neighbours -- the
-        kind of skew that makes a chunking A/B measure the wrong thing.
-        """
-        if value is not None and not value.strip():
-            msg = "context_prefix must not be blank; omit it instead"
-            raise ValueError(msg)
-        return value
+machine_types = (document.plan.front_matter.machine_types,)
+item_numbers = (document.plan.front_matter.item_numbers,)
+revision = (document.plan.front_matter.revision,)
+effective_date = (document.plan.front_matter.effective_date,)
 ```
 
-and the computed field after `chunk_id`:
+`FrontMatter._sorted_and_unique` has already sorted and deduplicated the two lists, so the manifest inherits a deterministic order without re-sorting here.
+
+- [ ] **Step 5: Write them as blob metadata in `upload.py`**
+
+In `plan_uploads`, extend the `metadata` dict:
 
 ```python
-    @computed_field  # type: ignore[prop-decorator]  # mypy: decorators over @property
-    @property
-    def embed_text(self) -> str:
-        """What the retriever embeds, as opposed to what a citation quotes."""
-        if self.context_prefix is None:
-            return self.text
-        return f"{self.context_prefix}\n\n{self.text}"
+metadata = (
+    {
+        CHECKSUM_METADATA_KEY: entry.sha256,
+        "doc_id": entry.doc_id,
+        "type": entry.type.value,
+        "language": entry.language.value,
+        "format": entry.format.value,
+        # Blob metadata is sent as HTTP headers, so these must be
+        # ASCII scalars. Machine codes and item numbers are ASCII
+        # already; the lists are comma-joined and the date is
+        # ISO-8601, which keeps the whole set well inside the 8 KB
+        # limit for 120 documents.
+        "machine_types": ",".join(entry.machine_types),
+        "item_numbers": ",".join(entry.item_numbers),
+        "revision": str(entry.revision),
+        "effective_date": entry.effective_date.isoformat(),
+    },
+)
 ```
 
-- [ ] **Step 4: Run them and watch them pass**
+- [ ] **Step 6: Run them and watch them pass**
 
-Run: `uv run pytest tests/ingest/test_models.py -v`
+Run: `uv run pytest tests/corpus/ -v`
 Expected: all pass.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 7: Regenerate the manifest**
 
 ```bash
-git add src/fleet_copilot/ingest/models.py tests/ingest/test_models.py
-git commit -m "feat(ingest): separate what a chunk embeds from what it cites
+just corpus
+git diff --stat data/
+```
 
-A chunk's subject often lives only in the heading above it, outside its own
-span. context_prefix carries the breadcrumb and embed_text joins it; text and
-start/end stay verbatim, so the validator keeping citations honest is untouched.
+Expected: **`data/manifest.json` is the only changed file.** Document bytes are unaffected by a manifest change, so no `.md`, `.pdf` or `.docx` should appear in the diff. If one does, something in this task touched the renderers — stop and find it, because ADR 0003's reproducibility test is what would catch it next and it is cheaper to catch here.
 
-Lands now rather than with the chunkers because retrieval binds to embed_text,
-and adding it afterwards is a reindex.
+- [ ] **Step 8: Confirm the corpus still reproduces**
+
+Run: `just corpus-check`
+Then: `uv run pytest tests/corpus/ -v`
+Expected: no drift reported, all tests pass.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add src/fleet_copilot/corpus/ tests/corpus/ data/manifest.json
+git commit -m "feat(corpus): carry the four front-matter keys rendering strips
+
+A chunk must record machine_types, item_numbers, revision and effective_date
+(ADR 0006), and none of them survive into a published PDF -- decompressing the
+text streams finds the prose and no YAML keys. They travel in the manifest and
+in blob metadata instead, so an ingest reading only the container reaches the
+same values a laptop does.
+
+MANIFEST_VERSION goes to 2. Document bytes and their hashes are unchanged; only
+the manifest differs.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ```
@@ -813,12 +883,12 @@ Pure. No SDK import, no network. Every later task depends on this file.
 - Consumes: nothing.
 - Produces:
   - `class ParseError(RuntimeError)`
-  - `class ParserId(StrEnum)`: `AZURE_LAYOUT = "azure-document-intelligence"`, `LOCAL = "local"`
-  - `class BlockRole(StrEnum)`: `TITLE`, `SECTION_HEADING`, `PARAGRAPH`, `PAGE_HEADER`, `PAGE_FOOTER`, `PAGE_NUMBER`, `FOOTNOTE`, `FORMULA_BLOCK`, `TABLE`
+  - `class ParserId(StrEnum)`: `AZURE_LAYOUT = "azure-document-intelligence"`, `MARKDOWN = "markdown"`, `LOCAL = "local"`
+  - `class BlockRole(StrEnum)`: `TITLE`, `SECTION_HEADING`, `PARAGRAPH`, `TABLE`, `PAGE_HEADER`, `PAGE_FOOTER`, `PAGE_NUMBER`, `FOOTNOTE`, `FORMULA_BLOCK`
   - `HEADING_ROLES: frozenset[BlockRole]`
-  - `class ParsedPage(BaseModel)`: `page_number: int`, `start: int`, `end: int`
-  - `class ParsedBlock(BaseModel)`: `role: BlockRole`, `text: str`, `start: int`, `end: int`, `page_number: int`
-  - `class ParsedDocument(BaseModel)`: `doc_id`, `source_sha256`, `parser`, `model_id`, `api_version`, `content`, `blocks`, `pages`, `parsed_at`; method `headings() -> tuple[ParsedBlock, ...]`
+  - `class ParsedPage(BaseModel)`: `page_number`, `start`, `end`
+  - `class ParsedBlock(BaseModel)`: `role`, `text`, `start`, `end`, `page_number`
+  - `class ParsedDocument(BaseModel)`: `doc_id`, `source_sha256`, `parser`, `model_id`, `api_version`, `content`, `blocks`, `pages`, `parsed_at`; methods `headings()` and `tables()`
   - `class DocumentParser(Protocol)`: `async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument`
 
 - [ ] **Step 1: Write the failing tests**
@@ -851,8 +921,8 @@ def a_document(**overrides: object) -> ParsedDocument:
     fields: dict[str, object] = {
         "doc_id": "manual",
         "source_sha256": "0" * 64,
-        "parser": ParserId.LOCAL,
-        "model_id": "local",
+        "parser": ParserId.MARKDOWN,
+        "model_id": "markdown",
         "api_version": None,
         "content": CONTENT,
         "blocks": (
@@ -888,7 +958,7 @@ def test_a_block_whose_span_does_not_match_its_text_is_rejected() -> None:
 
 
 def test_blocks_must_be_in_reading_order() -> None:
-    """Chunk ordinals come from block order, and an ordinal ordered wrongly is wrong."""
+    """Chunk indices come from block order, and an index ordered wrongly is wrong."""
     with pytest.raises(ValidationError, match="reading order"):
         a_document(
             blocks=(
@@ -900,6 +970,22 @@ def test_blocks_must_be_in_reading_order() -> None:
                     page_number=1,
                 ),
                 ParsedBlock(role=BlockRole.TITLE, text="# Manual", start=0, end=8, page_number=1),
+            )
+        )
+
+
+def test_blocks_must_not_overlap() -> None:
+    """A table's cells arrive as paragraphs as well as in the table.
+
+    Emitting both would double every table's text: once inside a TABLE chunk and
+    once as loose prose, so a retriever would see each row twice and a citation
+    could land on either copy.
+    """
+    with pytest.raises(ValidationError, match="overlaps"):
+        a_document(
+            blocks=(
+                ParsedBlock(role=BlockRole.TITLE, text="# Manual", start=0, end=8, page_number=1),
+                ParsedBlock(role=BlockRole.PARAGRAPH, text="Manual", start=2, end=8, page_number=1),
             )
         )
 
@@ -916,9 +1002,11 @@ def test_a_block_reaching_past_the_content_is_rejected() -> None:
 
 
 def test_headings_returns_titles_and_section_headings_only() -> None:
-    document = a_document()
+    assert tuple(block.role for block in a_document().headings()) == (BlockRole.TITLE,)
 
-    assert tuple(block.role for block in document.headings()) == (BlockRole.TITLE,)
+
+def test_tables_returns_table_blocks_only() -> None:
+    assert a_document().tables() == ()
 
 
 def test_a_naive_parsed_at_is_rejected() -> None:
@@ -938,8 +1026,12 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'fleet_copilot.ingest.p
 """What a parsed document is, independently of what parsed it.
 
 One ``content`` string, and blocks that are spans into it. Nothing else holds
-text. Four chunking strategies will slice this, and they slice one coordinate
+text. Three chunking strategies will slice this, and they slice one coordinate
 system rather than each re-deriving offsets and getting it differently wrong.
+
+All three parsers produce this same shape, so a chunker cannot tell a Markdown
+document from an OCR'd one -- which is what makes a strategy comparison across
+the whole corpus mean anything.
 
 Deliberately free of any SDK import: this module is the contract, and the things
 that import it -- tests, chunkers, the eval harness -- must not need an Azure
@@ -965,31 +1057,38 @@ class ParserId(StrEnum):
     """Which implementation produced a document."""
 
     AZURE_LAYOUT = "azure-document-intelligence"
+    MARKDOWN = "markdown"
     LOCAL = "local"
 
 
 class BlockRole(StrEnum):
     """What a span of content is.
 
-    The first eight mirror Document Intelligence's paragraph roles one for one,
+    Seven of these mirror Document Intelligence's paragraph roles one for one,
     including the three kinds of page furniture. Those are kept rather than
     stripped: removing them would shift every later offset, and a chunker that
     wants to skip them can filter on the role.
+
+    There is deliberately no LIST_ITEM. The service has no list role, so a
+    Markdown parser that emitted one would produce output the Azure parser could
+    not match, and a chunker would behave differently depending on which parser
+    ran. ADR 0006 keeps step lists atomic by reading Markdown ordered-list syntax
+    out of ``content``, which both parsers produce identically.
     """
 
     TITLE = "title"
     SECTION_HEADING = "section_heading"
     PARAGRAPH = "paragraph"
+    TABLE = "table"
     PAGE_HEADER = "page_header"
     PAGE_FOOTER = "page_footer"
     PAGE_NUMBER = "page_number"
     FOOTNOTE = "footnote"
     FORMULA_BLOCK = "formula_block"
-    TABLE = "table"
 
 
 HEADING_ROLES: frozenset[BlockRole] = frozenset({BlockRole.TITLE, BlockRole.SECTION_HEADING})
-"""Roles a breadcrumb is built from. The layout-aware chunker reads this."""
+"""Roles a breadcrumb is built from. The contextual-header strategy reads this."""
 
 
 class ParsedPage(BaseModel):
@@ -1054,9 +1153,9 @@ class ParsedDocument(BaseModel):
     def _require_aware_timestamp(cls, value: datetime) -> datetime:
         """Reject naive timestamps, matching Document.ingested_at.
 
-        A parse may run on a laptop in one timezone and in CI in another; a
-        naive timestamp cannot be ordered against one from the other without
-        guessing its offset.
+        A parse may run on a laptop in one timezone and in CI in another; a naive
+        timestamp cannot be ordered against one from the other without guessing
+        its offset.
         """
         if value.tzinfo is None:
             msg = "parsed_at must be timezone-aware"
@@ -1064,15 +1163,19 @@ class ParsedDocument(BaseModel):
         return value.astimezone(UTC)
 
     @model_validator(mode="after")
-    def _blocks_are_ordered_slices_of_content(self) -> Self:
+    def _blocks_partition_the_content_they_cover(self) -> Self:
         """Check every block against the content it claims to describe.
 
-        Two failures, both invisible downstream. A block whose text is not what
+        Three failures, all invisible downstream. A block whose text is not what
         its span covers mis-slices every chunk built from it. Blocks out of
-        reading order give chunk ordinals that scramble a multi-chunk answer
-        while every individual citation still looks correct.
+        reading order give chunk indices that scramble a multi-chunk answer while
+        every individual citation still looks correct. Overlapping blocks
+        duplicate text -- the service reports a table's cells as paragraphs as
+        well as in the table itself -- so a retriever would see each row twice
+        and a citation could land on either copy.
         """
         previous_start = -1
+        previous_end = 0
         for block in self.blocks:
             if block.end > len(self.content):
                 msg = (
@@ -1086,23 +1189,31 @@ class ParsedDocument(BaseModel):
             if block.start < previous_start:
                 msg = f"block at {block.start} is not in reading order"
                 raise ValueError(msg)
+            if block.start < previous_end:
+                msg = f"block at {block.start} overlaps the one ending at {previous_end}"
+                raise ValueError(msg)
             previous_start = block.start
+            previous_end = block.end
         return self
 
     def headings(self) -> tuple[ParsedBlock, ...]:
         """Every title and section heading, in reading order."""
         return tuple(block for block in self.blocks if block.role in HEADING_ROLES)
 
+    def tables(self) -> tuple[ParsedBlock, ...]:
+        """Every table, in reading order. ADR 0006 makes each one its own chunk."""
+        return tuple(block for block in self.blocks if block.role is BlockRole.TABLE)
+
 
 @runtime_checkable
 class DocumentParser(Protocol):
     """Turns bytes into a :class:`ParsedDocument`.
 
-    ``parse`` is async because the Azure implementation is a network call and
-    the local one reads files; neither may hold the event loop. A parser that
-    cannot read what it was given raises :class:`ParseError` rather than
-    returning an empty document -- an empty document is indistinguishable from
-    a blank page, and this corpus contains neither.
+    ``parse`` is async because the Azure implementation is a network call and the
+    others read files; none may hold the event loop. A parser that cannot read
+    what it was given raises :class:`ParseError` rather than returning an empty
+    document -- an empty document is indistinguishable from a blank page, and
+    this corpus contains neither.
     """
 
     async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument: ...
@@ -1111,7 +1222,7 @@ class DocumentParser(Protocol):
 - [ ] **Step 4: Run them and watch them pass**
 
 Run: `uv run pytest tests/ingest/test_parse.py -v`
-Expected: 6 passed.
+Expected: 9 passed.
 
 - [ ] **Step 5: Type-check, because the Protocol is the point**
 
@@ -1124,13 +1235,14 @@ Expected: `Success: no issues found`
 git add src/fleet_copilot/ingest/parse.py tests/ingest/test_parse.py
 git commit -m "feat(ingest): define what a parsed document is
 
-One content string, blocks as spans into it, nothing else holding text. Four
-chunking strategies are queued to run over this; sharing one coordinate system
-is what lets Chunk's span invariant hold by construction rather than be
-re-derived, differently, four times.
+One content string, blocks as spans into it, nothing else holding text. All
+three parsers produce this shape, so a chunker cannot tell a Markdown document
+from an OCR'd one -- which is what makes a strategy comparison across the whole
+corpus mean anything.
 
-Page headers and footers are tagged rather than stripped: stripping shifts
-every later offset, and a chunker that wants to skip them can filter.
+Blocks may not overlap. The service reports a table's cells as paragraphs as
+well as in the table, and emitting both would put every row in the index twice
+with a citation able to land on either copy.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ```
@@ -1139,7 +1251,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 ### Task 6: The Document Intelligence mapper
 
-The pure half of the Azure parser: `AnalyzeResult` JSON in, `ParsedDocument` out. Tested entirely against Task 2's fixtures — no network, no account.
+The pure half of the Azure parser. Tested entirely against Task 2's fixtures — no network, no account.
 
 **Files:**
 - Create: `src/fleet_copilot/ingest/layout.py`
@@ -1166,7 +1278,7 @@ from typing import Any
 import pytest
 
 from fleet_copilot.ingest.layout import layout_from_analyze_result
-from fleet_copilot.ingest.parse import BlockRole, ParseError, ParserId
+from fleet_copilot.ingest.parse import BlockRole, ParsedDocument, ParseError, ParserId
 
 FIXTURES = Path(__file__).parent / "fixtures" / "layout"
 STEMS = (
@@ -1181,6 +1293,10 @@ def fixture(stem: str) -> Mapping[str, Any]:
     return payload
 
 
+def parsed(stem: str) -> ParsedDocument:
+    return layout_from_analyze_result(fixture(stem), doc_id=stem, source_sha256="a" * 64)
+
+
 @pytest.mark.parametrize("stem", STEMS)
 def test_every_block_is_a_verbatim_slice_of_content(stem: str) -> None:
     """The invariant the whole design rests on, checked against real output.
@@ -1189,7 +1305,7 @@ def test_every_block_is_a_verbatim_slice_of_content(stem: str) -> None:
     paragraph.content rather than from the span fails here rather than produce
     chunks quoting something the document does not say.
     """
-    document = layout_from_analyze_result(fixture(stem), doc_id=stem, source_sha256="a" * 64)
+    document = parsed(stem)
 
     for block in document.blocks:
         assert document.content[block.start : block.end] == block.text
@@ -1197,47 +1313,52 @@ def test_every_block_is_a_verbatim_slice_of_content(stem: str) -> None:
 
 @pytest.mark.parametrize("stem", STEMS)
 def test_the_parser_and_model_are_recorded(stem: str) -> None:
-    document = layout_from_analyze_result(fixture(stem), doc_id=stem, source_sha256="a" * 64)
+    document = parsed(stem)
 
     assert document.parser is ParserId.AZURE_LAYOUT
     assert document.model_id == "prebuilt-layout"
     assert document.api_version == "2024-11-30"
 
 
-@pytest.mark.parametrize("stem", STEMS)
-def test_every_block_carries_a_known_role(stem: str) -> None:
-    """Page furniture is tagged, not dropped.
-
-    Dropping it would shift every offset after it, and no span could then be
-    checked against the cached JSON.
-    """
-    document = layout_from_analyze_result(fixture(stem), doc_id=stem, source_sha256="a" * 64)
-
-    assert document.blocks
-    for block in document.blocks:
-        assert block.role in set(BlockRole)
-
-
 def test_the_service_manual_yields_headings() -> None:
-    """Headings are what three of the four chunking strategies split on."""
-    document = layout_from_analyze_result(
-        fixture("sdm-43-service-manual"), doc_id="sdm-43-service-manual", source_sha256="a" * 64
-    )
+    """Headings are what two of the three chunking strategies split on."""
+    headings = parsed("sdm-43-service-manual").headings()
 
-    headings = document.headings()
     assert headings, "prebuilt-layout returned no headings for a document that has six"
     assert any("Safety" in block.text for block in headings)
 
 
+def test_the_service_manual_yields_a_table_block() -> None:
+    """ADR 0006 makes each table its own chunk, so the mapper must emit one."""
+    tables = parsed("sdm-43-service-manual").tables()
+
+    assert tables, "the service-interval table did not survive mapping"
+    assert "|" in tables[0].text, "a table block should be the Markdown table, pipes and all"
+
+
+def test_table_cells_are_not_also_emitted_as_paragraphs() -> None:
+    """The service reports a table's cells as paragraphs as well as in the table.
+
+    Emitting both would put every interval row in the index twice, once inside
+    the table chunk and once as loose prose. ParsedDocument rejects overlapping
+    blocks, so this passing means the mapper dropped the duplicates.
+    """
+    document = parsed("sdm-43-service-manual")
+    table = document.tables()[0]
+
+    inside = [
+        block
+        for block in document.blocks
+        if block.role is not BlockRole.TABLE
+        and block.start >= table.start
+        and block.end <= table.end
+    ]
+    assert inside == []
+
+
 def test_the_scanned_report_yields_blocks() -> None:
     """An image-only PDF. Any block at all came out of OCR."""
-    document = layout_from_analyze_result(
-        fixture("service-report-sd50b-2026-10142-17"),
-        doc_id="service-report-sd50b-2026-10142-17",
-        source_sha256="a" * 64,
-    )
-
-    assert document.blocks
+    assert parsed("service-report-sd50b-2026-10142-17").blocks
 
 
 def test_an_empty_content_payload_is_refused() -> None:
@@ -1318,6 +1439,48 @@ def _span_bounds(spans: Sequence[Mapping[str, Any]]) -> tuple[int, int]:
     return min(offsets), max(ends)
 
 
+def _page_number(element: Mapping[str, Any]) -> int:
+    """Return the page an element sits on, defaulting to the first."""
+    regions = element.get("boundingRegions") or [{"pageNumber": 1}]
+    return int(regions[0]["pageNumber"])
+
+
+def _table_blocks(
+    payload: Mapping[str, Any], content: str
+) -> tuple[tuple[ParsedBlock, ...], tuple[tuple[int, int], ...]]:
+    """Return the table blocks, and the spans they occupy.
+
+    The spans come back too so the paragraph pass can drop the cells the service
+    reports twice -- once as paragraphs, once inside the table.
+    """
+    blocks: list[ParsedBlock] = []
+    spans: list[tuple[int, int]] = []
+    for table in payload.get("tables") or []:
+        table_spans = table.get("spans") or []
+        if not table_spans:
+            continue
+        start, end = _span_bounds(table_spans)
+        text = content[start:end]
+        if not text.strip():
+            continue
+        spans.append((start, end))
+        blocks.append(
+            ParsedBlock(
+                role=BlockRole.TABLE,
+                text=text,
+                start=start,
+                end=end,
+                page_number=_page_number(table),
+            )
+        )
+    return tuple(blocks), tuple(spans)
+
+
+def _within(start: int, end: int, spans: Sequence[tuple[int, int]]) -> bool:
+    """Whether ``start:end`` falls inside any of ``spans``."""
+    return any(span_start <= start and end <= span_end for span_start, span_end in spans)
+
+
 def layout_from_analyze_result(
     payload: Mapping[str, Any], *, doc_id: str, source_sha256: str
 ) -> ParsedDocument:
@@ -1343,16 +1506,22 @@ def layout_from_analyze_result(
             ParsedPage(page_number=int(page["pageNumber"]), start=page_start, end=page_end)
         )
 
-    blocks: list[ParsedBlock] = []
+    table_blocks, table_spans = _table_blocks(payload, content)
+    blocks: list[ParsedBlock] = list(table_blocks)
+
     for paragraph in payload.get("paragraphs") or []:
         spans = paragraph.get("spans") or []
         if not spans:
             continue
         start, end = _span_bounds(spans)
+        # Cells arrive as paragraphs as well as inside the table. Keeping both
+        # would put every row in the index twice and let a citation land on
+        # either copy; ParsedDocument rejects the overlap outright.
+        if _within(start, end, table_spans):
+            continue
         text = content[start:end]
         if not text:
             continue
-        regions = paragraph.get("boundingRegions") or [{"pageNumber": 1}]
         blocks.append(
             ParsedBlock(
                 role=ROLE_BY_DI_NAME.get(str(paragraph.get("role") or ""), BlockRole.PARAGRAPH),
@@ -1363,7 +1532,7 @@ def layout_from_analyze_result(
                 text=text,
                 start=start,
                 end=end,
-                page_number=int(regions[0]["pageNumber"]),
+                page_number=_page_number(paragraph),
             )
         )
 
@@ -1382,14 +1551,14 @@ def layout_from_analyze_result(
     )
 ```
 
-Task 9 adds `AzureLayoutParser` to this same module and will need `import hashlib` at the top then. Do not add it now — ruff flags an unused import and `just lint` would fail.
+Task 10 adds `AzureLayoutParser` to this same module and will need `import hashlib` at the top then. Do not add it now — ruff flags an unused import and `just lint` would fail.
 
 - [ ] **Step 4: Run them and watch them pass**
 
 Run: `uv run pytest tests/ingest/test_layout.py -v`
 Expected: all pass.
 
-If `test_every_block_is_a_verbatim_slice_of_content` fails, the mapper is at fault, not the test — that assertion *is* the contract. The likeliest cause is a paragraph with non-contiguous spans; the outer-bounds approach exists precisely to survive that, so investigate before touching the assertion.
+If a document raises `overlaps` from `ParsedDocument`, either the service returned two tables sharing a span, or a paragraph straddles a table boundary rather than sitting inside it. Widen `_within` to drop any paragraph that *intersects* a table span rather than only one contained by it — but look at the actual spans first, because a straddling paragraph may mean the table bounds are wrong.
 
 - [ ] **Step 5: Lint and type-check**
 
@@ -1404,19 +1573,330 @@ git commit -m "feat(ingest): map Document Intelligence layout onto ParsedDocumen
 
 Block text is derived from the span rather than copied from paragraph.content:
 in Markdown mode the service returns undecorated text there, which does not
-always coincide with what the span covers. Deriving makes the span invariant
-true by construction, and the tests assert it against real service output.
+always coincide with what the span covers.
 
-A successful call that returned no content raises rather than caching an empty
-document -- that is the F0 failure mode, and cached, every chunker would read
-it as a blank page forever.
+Tables are emitted as their own blocks and their cells dropped from the
+paragraph pass. The service reports both, and keeping both would put every
+interval row in the index twice with a citation able to land on either copy.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ```
 
 ---
 
-### Task 7: The local fallback
+### Task 7: The Markdown parser
+
+95 of the 120 documents. They carry their headings in the text already, so paying per page to OCR them would be absurd.
+
+**Files:**
+- Create: `src/fleet_copilot/ingest/markdown.py`
+- Test: `tests/ingest/test_markdown.py`
+
+**Interfaces:**
+- Consumes: Task 5's contract.
+- Produces: `class MarkdownParser` implementing `DocumentParser`; `strip_front_matter(text: str) -> str`.
+
+- [ ] **Step 1: Write the failing tests**
+
+Create `tests/ingest/test_markdown.py`:
+
+```python
+"""The native Markdown parser: 95 of the 120 documents take this path."""
+
+from __future__ import annotations
+
+import hashlib
+from pathlib import Path
+
+import pytest
+
+from fleet_copilot.ingest.markdown import MarkdownParser, strip_front_matter
+from fleet_copilot.ingest.parse import BlockRole, DocumentParser, ParseError, ParserId
+
+CORPUS = Path(__file__).resolve().parents[2] / "data" / "corpus" / "markdown"
+MANUAL = CORPUS / "sdm-43-service-manual.md"
+MARKDOWN_TYPE = "text/markdown; charset=utf-8"
+
+
+def test_front_matter_is_removed_from_the_content() -> None:
+    """Front matter is metadata, not prose.
+
+    Left in, the fixed-size baseline would spend its first chunk on YAML and the
+    contextual-header strategy would embed the doc_id twice.
+    """
+    body = strip_front_matter(MANUAL.read_text(encoding="utf-8"))
+
+    assert body.startswith("# Single-disc machine SDM-43")
+    assert "doc_id:" not in body
+
+
+def test_a_document_without_front_matter_is_left_alone() -> None:
+    assert strip_front_matter("# Title\n\nBody.\n") == "# Title\n\nBody.\n"
+
+
+@pytest.mark.asyncio
+async def test_every_block_is_a_verbatim_slice_of_content() -> None:
+    document = await MarkdownParser().parse(
+        MANUAL.read_bytes(), doc_id="sdm-43-service-manual", content_type=MARKDOWN_TYPE
+    )
+
+    for block in document.blocks:
+        assert document.content[block.start : block.end] == block.text
+
+
+@pytest.mark.asyncio
+async def test_atx_levels_become_title_and_section_heading() -> None:
+    document = await MarkdownParser().parse(
+        MANUAL.read_bytes(), doc_id="sdm-43-service-manual", content_type=MARKDOWN_TYPE
+    )
+
+    roles = [block.role for block in document.headings()]
+    assert roles[0] is BlockRole.TITLE
+    assert roles.count(BlockRole.TITLE) == 1, "a document has one title and many sections"
+    assert BlockRole.SECTION_HEADING in roles
+    assert any("Safety" in block.text for block in document.headings())
+
+
+@pytest.mark.asyncio
+async def test_a_markdown_table_becomes_one_table_block() -> None:
+    """The service-interval table, pipes and all, as a single chunkable unit."""
+    document = await MarkdownParser().parse(
+        MANUAL.read_bytes(), doc_id="sdm-43-service-manual", content_type=MARKDOWN_TYPE
+    )
+
+    tables = document.tables()
+    assert len(tables) == 1
+    assert tables[0].text.count("\n") >= 5, "header, separator and five interval rows"
+    assert "1000 h" in tables[0].text
+
+
+@pytest.mark.asyncio
+async def test_the_source_hash_covers_the_original_bytes() -> None:
+    """The manifest hashes the file, front matter included. Hashing the stripped
+    body instead would make every cache lookup and drift check miss."""
+    data = MANUAL.read_bytes()
+
+    document = await MarkdownParser().parse(
+        data, doc_id="sdm-43-service-manual", content_type=MARKDOWN_TYPE
+    )
+
+    assert document.source_sha256 == hashlib.sha256(data).hexdigest()
+    assert document.parser is ParserId.MARKDOWN
+
+
+@pytest.mark.asyncio
+async def test_the_whole_markdown_corpus_parses() -> None:
+    """Every Markdown document, because the failure mode here is one odd file.
+
+    ParsedDocument validates spans, ordering and overlap on construction, so this
+    exercises all three against 120 real documents in two languages.
+    """
+    parser = MarkdownParser()
+    paths = sorted(CORPUS.glob("*.md"))
+    assert len(paths) == 120
+
+    for path in paths:
+        document = await parser.parse(
+            path.read_bytes(), doc_id=path.stem, content_type=MARKDOWN_TYPE
+        )
+        assert document.blocks, f"{path.name} produced no blocks"
+
+
+@pytest.mark.asyncio
+async def test_a_document_that_is_only_front_matter_raises() -> None:
+    with pytest.raises(ParseError, match="no content"):
+        await MarkdownParser().parse(
+            b"---\ndoc_id: x\n---\n", doc_id="x", content_type=MARKDOWN_TYPE
+        )
+
+
+def test_markdown_parser_satisfies_the_protocol() -> None:
+    assert isinstance(MarkdownParser(), DocumentParser)
+```
+
+- [ ] **Step 2: Run them and watch them fail**
+
+Run: `uv run pytest tests/ingest/test_markdown.py -v`
+Expected: FAIL — `ModuleNotFoundError: No module named 'fleet_copilot.ingest.markdown'`
+
+- [ ] **Step 3: Implement `src/fleet_copilot/ingest/markdown.py`**
+
+```python
+"""Parse the Markdown documents natively.
+
+Ninety-five of the corpus's 120 documents are Markdown, and their structure is
+already in the text: ATX headings mark the sections, pipe rows mark the tables.
+Sending them to Document Intelligence would pay per page to recover what is
+sitting in plain sight, and would OCR prose we wrote ourselves.
+
+The output is the same ParsedDocument the Azure parser produces, so a chunker
+cannot tell which path a document came down.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import hashlib
+from datetime import UTC, datetime
+from typing import Final
+
+from fleet_copilot.ingest.parse import (
+    BlockRole,
+    ParsedBlock,
+    ParsedDocument,
+    ParsedPage,
+    ParseError,
+    ParserId,
+)
+
+MODEL_ID: Final = "markdown"
+FRONT_MATTER_FENCE: Final = "---\n"
+
+
+def strip_front_matter(text: str) -> str:
+    """Return ``text`` without its YAML front matter block.
+
+    The metadata is not prose. Left in, the fixed-size baseline would spend its
+    first chunk on YAML, and the contextual-header strategy would embed the
+    doc_id once in the header and once in the body.
+    """
+    if not text.startswith(FRONT_MATTER_FENCE):
+        return text
+    rest = text[len(FRONT_MATTER_FENCE) :]
+    end = rest.find("\n" + FRONT_MATTER_FENCE)
+    if end == -1:
+        return text
+    return rest[end + 1 + len(FRONT_MATTER_FENCE) :].lstrip("\n")
+
+
+def _line_spans(content: str) -> list[tuple[int, int, str]]:
+    """Return ``(start, end, text)`` per line, with the line ending excluded.
+
+    Offsets accumulate as the lines are walked rather than being searched for:
+    two identical bullets in one document -- which the fragment banks produce
+    routinely -- would both find the first occurrence.
+    """
+    spans: list[tuple[int, int, str]] = []
+    cursor = 0
+    for line in content.splitlines(keepends=True):
+        stripped = line.rstrip("\n").rstrip("\r")
+        spans.append((cursor, cursor + len(stripped), stripped))
+        cursor += len(line)
+    return spans
+
+
+def _classify(line: str) -> BlockRole | None:
+    """Return the role of ``line``, or None for a blank one."""
+    if not line.strip():
+        return None
+    if line.startswith("#"):
+        level = len(line) - len(line.lstrip("#"))
+        return BlockRole.TITLE if level == 1 else BlockRole.SECTION_HEADING
+    if line.lstrip().startswith("|"):
+        return BlockRole.TABLE
+    return BlockRole.PARAGRAPH
+
+
+def _blocks(content: str) -> tuple[ParsedBlock, ...]:
+    """Group lines into blocks: headings alone, everything else in runs."""
+    blocks: list[ParsedBlock] = []
+    run_role: BlockRole | None = None
+    run_start = 0
+    run_end = 0
+
+    def close() -> None:
+        nonlocal run_role
+        if run_role is not None:
+            blocks.append(
+                ParsedBlock(
+                    role=run_role,
+                    text=content[run_start:run_end],
+                    start=run_start,
+                    end=run_end,
+                    page_number=1,
+                )
+            )
+            run_role = None
+
+    for start, end, line in _line_spans(content):
+        role = _classify(line)
+        if role in (BlockRole.TITLE, BlockRole.SECTION_HEADING):
+            close()
+            blocks.append(
+                ParsedBlock(role=role, text=content[start:end], start=start, end=end, page_number=1)
+            )
+            continue
+        if role is not run_role:
+            close()
+        if role is not None:
+            if run_role is None:
+                run_role = role
+                run_start = start
+            run_end = end
+
+    close()
+    return tuple(blocks)
+
+
+class MarkdownParser:
+    """Parses Markdown natively. Implements :class:`DocumentParser`."""
+
+    async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument:
+        """Parse ``data``.
+
+        ``content_type`` is unused -- the caller dispatched on format to pick
+        this parser -- but is in the signature because DocumentParser requires it.
+        """
+        text = await asyncio.to_thread(data.decode, "utf-8")
+        content = strip_front_matter(text)
+        if not content.strip():
+            msg = f"{doc_id}: no content once the front matter is removed"
+            raise ParseError(msg)
+
+        return ParsedDocument(
+            doc_id=doc_id,
+            # The manifest hashes the file as written, front matter included.
+            # Hashing the stripped body instead would make every cache lookup and
+            # every drift check miss.
+            source_sha256=hashlib.sha256(data).hexdigest(),
+            parser=ParserId.MARKDOWN,
+            model_id=MODEL_ID,
+            api_version=None,
+            content=content,
+            blocks=_blocks(content),
+            # Markdown has no pages. One page covering the whole document keeps
+            # the shape identical to the Azure parser's rather than making every
+            # consumer special-case an empty tuple.
+            pages=(ParsedPage(page_number=1, start=0, end=len(content)),),
+            parsed_at=datetime.now(UTC),
+        )
+```
+
+- [ ] **Step 4: Run them and watch them pass**
+
+Run: `uv run pytest tests/ingest/test_markdown.py -v`
+Expected: 9 passed, including the sweep over all 120 documents.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/fleet_copilot/ingest/markdown.py tests/ingest/test_markdown.py
+git commit -m "feat(ingest): parse the Markdown corpus natively
+
+Ninety-five of the 120 documents carry their structure in the text already.
+Sending them to Document Intelligence would pay per page to recover what is
+sitting in plain sight, and would OCR prose we wrote ourselves.
+
+Output is the same ParsedDocument the Azure parser produces, so a chunker cannot
+tell which path a document came down -- which is what makes a strategy
+comparison across the whole corpus mean anything.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+```
+
+---
+
+### Task 8: The local fallback
 
 **Files:**
 - Create: `src/fleet_copilot/ingest/fallback.py`
@@ -1424,7 +1904,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Interfaces:**
 - Consumes: Task 5's contract.
-- Produces: `class LocalParser` implementing `DocumentParser`, with `async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument`.
+- Produces: `class LocalParser` implementing `DocumentParser`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1478,8 +1958,8 @@ async def test_a_scanned_pdf_raises_instead_of_returning_nothing() -> None:
     """The whole reason the Azure path is worth paying for.
 
     Five of the twenty PDFs in this corpus have no text layer, and one hides a
-    planted prompt injection. A fallback that returned an empty document for
-    them would keep the suite green while the OCR path went untested.
+    planted prompt injection. A fallback that returned an empty document for them
+    would keep the suite green while the OCR path went untested.
     """
     with pytest.raises(ParseError, match="no text layer"):
         await LocalParser().parse(
@@ -1499,7 +1979,7 @@ async def test_a_docx_is_parsed() -> None:
 
 
 @pytest.mark.asyncio
-async def test_it_produces_no_headings() -> None:
+async def test_it_produces_no_headings_and_no_tables() -> None:
     """Not a silent limitation. A chunking comparison run against this parser
     would measure the fallback rather than the pipeline, and this says so."""
     document = await LocalParser().parse(
@@ -1507,6 +1987,7 @@ async def test_it_produces_no_headings() -> None:
     )
 
     assert document.headings() == ()
+    assert document.tables() == ()
 
 
 @pytest.mark.asyncio
@@ -1530,10 +2011,10 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'fleet_copilot.ingest.f
 ```python
 """A parser that needs no Azure account, and refuses to pretend it is one.
 
-This is what unit tests and Markdown-only runs use, so CI never calls the
-service. It is deliberately a weaker parser, not an equivalent one: it produces
-no heading roles and no table structure, and it raises on a PDF with no text
-layer rather than returning an empty document.
+This is what unit tests use, so CI never calls the service. It is deliberately a
+weaker parser, not an equivalent one: it produces no heading roles and no table
+structure, and it raises on a PDF with no text layer rather than returning an
+empty document.
 
 That last refusal is the point. Five of the twenty PDFs in this corpus are
 image-only, and one carries a planted prompt injection reachable by no other
@@ -1612,10 +2093,7 @@ def _assemble(doc_id: str, source_sha256: str, pieces: list[tuple[str, int]]) ->
             )
         )
         known = page_bounds.get(page_number)
-        page_bounds[page_number] = (
-            cursor if known is None else known[0],
-            cursor + len(text),
-        )
+        page_bounds[page_number] = (cursor if known is None else known[0], cursor + len(text))
         cursor += len(text)
 
     return ParsedDocument(
@@ -1673,7 +2151,7 @@ Expected: 7 passed.
 - [ ] **Step 5: Type-check**
 
 Run: `uv run mypy`
-Expected: clean. If `pymupdf` has no stubs, mypy --strict will object to the untyped import; resolve it with a targeted `# type: ignore[import-untyped]` carrying that code and a reason naming pymupdf, **not** by adding a global mypy override.
+Expected: clean. If `pymupdf` ships no stubs, mypy --strict will object to the untyped import; resolve it with a targeted `# type: ignore[import-untyped]` carrying that code and a reason naming pymupdf, **not** by adding a global mypy override.
 
 - [ ] **Step 6: Commit**
 
@@ -1682,17 +2160,17 @@ git add src/fleet_copilot/ingest/fallback.py tests/ingest/test_fallback.py
 git commit -m "feat(ingest): add the offline parser, which refuses to fake OCR
 
 Deliberately weaker than the service and explicit about it: no heading roles,
-no tables, and a ParseError on a PDF with no text layer. Five of the twenty
-PDFs here are image-only and one hides a planted injection; a fallback that
-returned an empty document for them would keep the suite green while the OCR
-path went untested.
+no tables, and a ParseError on a PDF with no text layer. Five of the twenty PDFs
+here are image-only and one hides a planted injection; a fallback that returned
+an empty document for them would keep the suite green while the OCR path went
+untested.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ```
 
 ---
 
-### Task 8: The layout cache
+### Task 9: The layout cache
 
 **Files:**
 - Create: `src/fleet_copilot/ingest/cache.py`
@@ -1700,10 +2178,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Interfaces:**
 - Consumes: `get_credential` from `fleet_copilot.credentials`.
-- Produces:
-  - `cache_key(*, source_sha256: str, model_id: str, api_version: str) -> str` returning `f"{model_id}/{api_version}/{source_sha256}.json"`
-  - `class LayoutCache(Protocol)`: `async def get(self, key: str) -> Mapping[str, Any] | None`, `async def put(self, key: str, payload: Mapping[str, Any]) -> None`
-  - `class LocalLayoutCache(root: Path)` and `class BlobLayoutCache(endpoint: str, container: str)`
+- Produces: `cache_key(*, source_sha256: str, model_id: str, api_version: str) -> str`; `class LayoutCache(Protocol)` with `get`/`put`; `class LocalLayoutCache(root: Path)`; `class BlobLayoutCache(endpoint: str, container: str)`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1748,9 +2223,7 @@ def test_a_short_hash_is_refused() -> None:
 
 @pytest.mark.asyncio
 async def test_a_miss_returns_none(tmp_path: Path) -> None:
-    cache = LocalLayoutCache(tmp_path)
-
-    assert await cache.get("prebuilt-layout/2024-11-30/deadbeef.json") is None
+    assert await LocalLayoutCache(tmp_path).get("prebuilt-layout/2024-11-30/deadbeef.json") is None
 
 
 @pytest.mark.asyncio
@@ -1881,8 +2354,8 @@ class LocalLayoutCache:
 class BlobLayoutCache:
     """A blob container. Implements :class:`LayoutCache`.
 
-    The SDK is imported per call rather than at module scope so this module
-    stays importable without azure-storage-blob, which is a dev-only dependency.
+    The SDK is imported per call rather than at module scope so this module stays
+    importable without azure-storage-blob, which is a dev-only dependency.
     Authentication is get_credential() and nothing else: ADR 0002 disables
     shared-key access at the resource level, so a connection string here would
     not fail in review, it would fail at runtime.
@@ -1943,9 +2416,9 @@ Expected: 6 passed.
 git add src/fleet_copilot/ingest/cache.py tests/ingest/test_cache.py
 git commit -m "feat(ingest): cache analysed layouts by content hash
 
-Stores the raw AnalyzeResult, not our model of it: re-interpreting a layout
-must be free while re-analysing is the thing that costs, and caching the parsed
-model would invert that.
+Stores the raw AnalyzeResult, not our model of it: re-interpreting a layout must
+be free while re-analysing is the thing that costs, and caching the parsed model
+would invert that.
 
 Model id and API version are in the key, so moving to a different model or
 version invalidates by construction rather than silently serving output whose
@@ -1956,9 +2429,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 ---
 
-### Task 9: The Azure parser, the run script, and the docs
-
-The thin network layer, and the command that puts it all together.
+### Task 10: The Azure parser, the dispatch, and the run script
 
 **Files:**
 - Modify: `src/fleet_copilot/ingest/layout.py`, `justfile`, `README.md`, `docs/journal.md`
@@ -1967,11 +2438,11 @@ The thin network layer, and the command that puts it all together.
 
 **Interfaces:**
 - Consumes: everything above.
-- Produces: `class AzureLayoutParser(endpoint: str, *, api_version: str)` with `async def analyse(self, data: bytes) -> Mapping[str, Any]` and `async def parse(...)`; `class Analyser(Protocol)`; `class CachedParser(analyser: Analyser, cache: LayoutCache, *, api_version: str)`; `class ParseReport`; `async def run(manifest, corpus_root, settings, *, dry_run: bool = True) -> ParseReport`.
+- Produces: `class AzureLayoutParser(endpoint: str, *, api_version: str)` with `analyse()` and `parse()`; `class Analyser(Protocol)`; `class Target`; `analyse_targets()`, `native_targets()`; `class CachedParser`; `class ParseReport`; `async def run(...)`.
 
 - [ ] **Step 1: Add `AzureLayoutParser` to `src/fleet_copilot/ingest/layout.py`**
 
-Append to the module written in Task 6:
+Add `import hashlib` to the module's imports, then append:
 
 ```python
 class AzureLayoutParser:
@@ -2023,7 +2494,7 @@ class AzureLayoutParser:
 
         ``content_type`` is unused: the service sniffs the format itself and
         rejects what it cannot read. It is in the signature because
-        DocumentParser requires it and the local parser genuinely needs it.
+        DocumentParser requires it and the other two parsers need it.
         """
         payload = await self.analyse(data)
         return layout_from_analyze_result(
@@ -2031,12 +2502,12 @@ class AzureLayoutParser:
         )
 ```
 
-- [ ] **Step 2: Write the failing test for the cache-aware wrapper**
+- [ ] **Step 2: Write the failing tests**
 
 Create `tests/ingest/test_run.py`:
 
 ```python
-"""The wrapper that makes a second parse of the same bytes free."""
+"""The cache wrapper, and the dispatch that decides which parser runs."""
 
 from __future__ import annotations
 
@@ -2048,9 +2519,11 @@ from typing import Any
 
 import pytest
 
+from fleet_copilot.corpus.build import corpus_root, manifest_path
+from fleet_copilot.corpus.manifest import load_manifest
 from fleet_copilot.ingest.cache import LocalLayoutCache, cache_key
 from fleet_copilot.ingest.parse import ParsedDocument
-from fleet_copilot.ingest.run import CachedParser
+from fleet_copilot.ingest.run import CachedParser, analyse_targets, native_targets
 
 FIXTURE = Path(__file__).parent / "fixtures" / "layout" / "sdm-43-service-manual.json"
 
@@ -2080,7 +2553,7 @@ async def test_the_second_parse_of_the_same_bytes_does_not_call_the_service(
 ) -> None:
     """The reason the cache exists.
 
-    Four chunking strategies will read these documents. A comparison is only
+    Three chunking strategies will read these documents. A comparison is only
     meaningful if every one reads identical input, which a re-analysed document
     does not guarantee.
     """
@@ -2112,9 +2585,19 @@ async def test_the_cached_entry_lands_under_the_content_hash(tmp_path: Path) -> 
         api_version="2024-11-30",
     )
     assert (tmp_path / expected).is_file()
+
+
+def test_only_the_converted_documents_are_sent_to_the_service() -> None:
+    """Markdown is parsed natively; sending it would pay per page for nothing."""
+    manifest = load_manifest(manifest_path(None))
+
+    assert len(analyse_targets(manifest)) == 25
+    assert len(native_targets(manifest)) == 95
+    assert len(analyse_targets(manifest)) + len(native_targets(manifest)) == manifest.total
+    assert corpus_root(None).is_dir()
 ```
 
-- [ ] **Step 3: Run it and watch it fail**
+- [ ] **Step 3: Run them and watch them fail**
 
 Run: `uv run pytest tests/ingest/test_run.py -v`
 Expected: FAIL — `ModuleNotFoundError: No module named 'fleet_copilot.ingest.run'`
@@ -2122,11 +2605,11 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'fleet_copilot.ingest.r
 - [ ] **Step 4: Implement `src/fleet_copilot/ingest/run.py`**
 
 ```python
-"""Parse the corpus once, and never twice for the same bytes.
+"""Parse the whole corpus, and never twice for the same bytes.
 
-Split the way corpus/upload.py is split: :class:`CachedParser` holds the
-decision and is tested against a fake analyser, and only :func:`run` reaches
-outside the repository.
+Split the way corpus/upload.py is split: the dispatch and the caching are pure
+functions and small classes tested against a fake analyser, and only :func:`run`
+reaches outside the repository.
 """
 
 from __future__ import annotations
@@ -2141,10 +2624,12 @@ from pydantic import BaseModel, ConfigDict
 
 from fleet_copilot.config import Settings
 from fleet_copilot.corpus.manifest import Manifest
+from fleet_copilot.corpus.models import OutputFormat
 from fleet_copilot.corpus.seed import CorpusDataError
 from fleet_copilot.corpus.upload import content_type_for
 from fleet_copilot.ingest.cache import BlobLayoutCache, LayoutCache, cache_key
 from fleet_copilot.ingest.layout import MODEL_ID, AzureLayoutParser, layout_from_analyze_result
+from fleet_copilot.ingest.markdown import MarkdownParser
 from fleet_copilot.ingest.parse import ParsedDocument
 
 
@@ -2152,6 +2637,42 @@ class Analyser(Protocol):
     """Anything that can turn bytes into a raw AnalyzeResult payload."""
 
     async def analyse(self, data: bytes) -> Mapping[str, Any]: ...
+
+
+class Target(BaseModel):
+    """One document to parse, and what it is."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    doc_id: str
+    path: str
+    content_type: str
+
+
+def _targets(manifest: Manifest, *, converted: bool) -> tuple[Target, ...]:
+    return tuple(
+        Target(
+            doc_id=entry.doc_id,
+            path=entry.path,
+            content_type=content_type_for(Path(entry.path).suffix),
+        )
+        for entry in manifest.documents
+        if (entry.format is not OutputFormat.MARKDOWN) is converted
+    )
+
+
+def analyse_targets(manifest: Manifest) -> tuple[Target, ...]:
+    """The 25 documents that go to Document Intelligence."""
+    return _targets(manifest, converted=True)
+
+
+def native_targets(manifest: Manifest) -> tuple[Target, ...]:
+    """The 95 Markdown documents, parsed locally and never sent anywhere.
+
+    Their headings are already in the text. Sending them would pay per page to
+    recover what is sitting in plain sight and would OCR prose we wrote.
+    """
+    return _targets(manifest, converted=False)
 
 
 class CachedParser:
@@ -2162,23 +2683,27 @@ class CachedParser:
         self._cache = cache
         self._api_version = api_version
 
+    def key_for(self, data: bytes) -> str:
+        """The cache key these bytes would be stored under."""
+        return cache_key(
+            source_sha256=hashlib.sha256(data).hexdigest(),
+            model_id=MODEL_ID,
+            api_version=self._api_version,
+        )
+
     async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument:
         """Return the parsed document, analysing only on a cache miss.
 
         ``content_type`` is unused: the service sniffs the format itself. It is
         in the signature because DocumentParser requires it.
         """
-        source_sha256 = hashlib.sha256(data).hexdigest()
-        key = cache_key(
-            source_sha256=source_sha256, model_id=MODEL_ID, api_version=self._api_version
-        )
-
-        payload = await self._cache.get(key)
+        payload = await self._cache.get(self.key_for(data))
         if payload is None:
             payload = await self._analyser.analyse(data)
-            await self._cache.put(key, payload)
-
-        return layout_from_analyze_result(payload, doc_id=doc_id, source_sha256=source_sha256)
+            await self._cache.put(self.key_for(data), payload)
+        return layout_from_analyze_result(
+            payload, doc_id=doc_id, source_sha256=hashlib.sha256(data).hexdigest()
+        )
 
 
 class ParseReport(BaseModel):
@@ -2187,6 +2712,7 @@ class ParseReport(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     planned: int
+    native: int
     analysed: int
     cached: int
     dry_run: bool
@@ -2194,38 +2720,35 @@ class ParseReport(BaseModel):
     def describe(self) -> str:
         """One ASCII line, safe for a cp1252 Windows console."""
         verb = "would analyse" if self.dry_run else "analysed"
-        return f"{self.planned} documents, {verb} {self.analysed}, {self.cached} already cached"
-
-
-def parse_targets(manifest: Manifest) -> tuple[tuple[str, str, str], ...]:
-    """Return ``(doc_id, path, content_type)`` for every document worth analysing.
-
-    Markdown is excluded: it has no layout to recover, and sending it would pay
-    per page for an OCR of text we already hold.
-    """
-    return tuple(
-        (entry.doc_id, entry.path, content_type_for(Path(entry.path).suffix))
-        for entry in manifest.documents
-        if entry.is_converted
-    )
-
-
-def endpoint_and_container(settings: Settings) -> tuple[str, str]:
-    """Return the endpoint and cache container, or explain what is missing."""
-    if not settings.azure_document_intelligence_endpoint:
-        msg = (
-            "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT is not set. Populate it from "
-            "`./infra/deploy.sh dev`, which prints it as an export line."
+        return (
+            f"{self.planned} documents, {self.native} parsed natively, "
+            f"{verb} {self.analysed}, {self.cached} already cached"
         )
-        raise CorpusDataError(msg)
-    if not settings.azure_storage_blob_endpoint:
+
+
+def endpoints(settings: Settings) -> tuple[str, str, str]:
+    """Return the DI endpoint, the blob endpoint and the cache container.
+
+    Or name the variables that are missing, in the wording corpus/upload.py uses
+    for the same failure.
+    """
+    missing = [
+        name
+        for name, value in (
+            ("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", settings.azure_document_intelligence_endpoint),
+            ("AZURE_STORAGE_BLOB_ENDPOINT", settings.azure_storage_blob_endpoint),
+        )
+        if not value
+    ]
+    if missing:
         msg = (
-            "AZURE_STORAGE_BLOB_ENDPOINT is not set. Populate it from "
+            f"{' and '.join(missing)} is not set. Populate it from "
             "`./infra/deploy.sh dev`, which prints it as an export line."
         )
         raise CorpusDataError(msg)
     return (
-        settings.azure_document_intelligence_endpoint,
+        str(settings.azure_document_intelligence_endpoint),
+        str(settings.azure_storage_blob_endpoint),
         settings.azure_layout_cache_container,
     )
 
@@ -2237,54 +2760,58 @@ async def run(
     *,
     dry_run: bool = True,
 ) -> ParseReport:
-    """Parse every converted document, or report what a parse would do.
+    """Parse every document, or report what a parse would do.
 
     ``dry_run`` defaults to true because this is the part that reaches outside
     the repository and spends money; the default should be the one that cannot
     surprise anybody.
     """
-    endpoint, container = endpoint_and_container(settings)
-    targets = parse_targets(manifest)
+    di_endpoint, blob_endpoint, container = endpoints(settings)
     api_version = settings.azure_document_intelligence_api_version
-    blob_endpoint = settings.azure_storage_blob_endpoint or ""
     cache = BlobLayoutCache(blob_endpoint, container)
+    parser = CachedParser(
+        AzureLayoutParser(di_endpoint, api_version=api_version), cache, api_version=api_version
+    )
+
+    native = MarkdownParser()
+    native_count = 0
+    for target in native_targets(manifest):
+        data = await asyncio.to_thread((corpus_root / target.path).read_bytes)
+        if not dry_run:
+            await native.parse(data, doc_id=target.doc_id, content_type=target.content_type)
+        native_count += 1
 
     analysed = 0
     cached = 0
-    parser = CachedParser(
-        AzureLayoutParser(endpoint, api_version=api_version), cache, api_version=api_version
-    )
-
-    for doc_id, path, content_type in targets:
-        data = await asyncio.to_thread((corpus_root / path).read_bytes)
-        key = cache_key(
-            source_sha256=hashlib.sha256(data).hexdigest(),
-            model_id=MODEL_ID,
-            api_version=api_version,
-        )
-        if await cache.get(key) is not None:
+    for target in analyse_targets(manifest):
+        data = await asyncio.to_thread((corpus_root / target.path).read_bytes)
+        if await cache.get(parser.key_for(data)) is not None:
             cached += 1
             continue
-        if dry_run:
-            analysed += 1
-            continue
-        await parser.parse(data, doc_id=doc_id, content_type=content_type)
+        if not dry_run:
+            await parser.parse(data, doc_id=target.doc_id, content_type=target.content_type)
         analysed += 1
 
-    return ParseReport(planned=len(targets), analysed=analysed, cached=cached, dry_run=dry_run)
+    return ParseReport(
+        planned=manifest.total,
+        native=native_count,
+        analysed=analysed,
+        cached=cached,
+        dry_run=dry_run,
+    )
 ```
 
 - [ ] **Step 5: Run the tests and watch them pass**
 
 Run: `uv run pytest tests/ingest/ -v`
-Expected: all pass.
+Expected: all pass, including the dispatch test reporting 25 and 95.
 
 - [ ] **Step 6: Write `scripts/parse_corpus.py`**
 
 A shim with no logic, mirroring `scripts/upload_corpus.py`. The one difference is `asyncio.run`: `corpus.upload.run` is synchronous and `ingest.run.run` is a coroutine.
 
 ```python
-"""Parse the published corpus through Azure AI Document Intelligence.
+"""Parse the corpus: Markdown natively, PDF and DOCX through the service.
 
     python scripts/parse_corpus.py            report what would be analysed
     python scripts/parse_corpus.py --apply    actually call the service
@@ -2369,7 +2896,7 @@ just corpus-parse --apply
 just corpus-parse
 ```
 
-Expected: the first reports 25 documents, 25 to analyse, 0 cached; the second analyses them; the third reports 25 documents, 0 to analyse, 25 cached. That third line is the deliverable of this whole story.
+Expected: the first reports `120 documents, 95 parsed natively, would analyse 25, 0 already cached`; the second analyses them; the third reports `120 documents, 95 parsed natively, would analyse 0, 25 already cached`. That third line is the deliverable of this plan.
 
 - [ ] **Step 9: Run the full gate**
 
@@ -2384,8 +2911,8 @@ Add a table to `README.md` after the corpus counts table (`README.md:58-63`), in
 ```markdown
 | Parsing | |
 | --- | --- |
-| Analysed through `prebuilt-layout` | 25 of 120 documents; the other 95 are Markdown and have no layout |
-| Billable units per full parse | ~30, about $0.30 |
+| Markdown, parsed natively | 95 documents, no service call |
+| PDF / DOCX through `prebuilt-layout` | 25 documents, ~30 billable units, about $0.30 |
 | Re-parses after the first | 0 — cached by content hash, model and API version |
 | Local fallback | pymupdf + python-docx; raises on the 5 image-only PDFs rather than returning nothing |
 ```
@@ -2396,14 +2923,13 @@ Add a `docs/journal.md` entry matching the format already in that file — read 
 
 ```bash
 git add src/fleet_copilot/ingest/ scripts/parse_corpus.py justfile README.md docs/journal.md tests/ingest/
-git commit -m "feat(ingest): parse the corpus through Document Intelligence, once
+git commit -m "feat(ingest): parse the whole corpus, each format by the right route
 
-CachedParser makes the second parse of the same bytes free, which is what makes
-the next story's four-way chunking comparison meaningful: every strategy reads
-byte-identical input rather than whatever the service returned that run.
-
-Markdown documents are excluded from the parse -- they have no layout to
-recover, and sending them would pay per page to OCR text we already hold.
+Markdown natively, PDF and DOCX through prebuilt-layout, both producing the same
+ParsedDocument. CachedParser makes the second parse of the same bytes free,
+which is what makes Plan 2's three-way chunking comparison meaningful: every
+strategy reads byte-identical input rather than whatever the service returned
+that run.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ```
@@ -2415,13 +2941,23 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 1. `just check` — all three stages, output pasted, not asserted.
 2. `uv run pre-commit run --all-files`.
 3. `./infra/deploy.sh dev --what-if` reports no drift against what was deployed.
-4. `just corpus-parse` reports 25 documents, 0 to analyse, 25 cached.
-5. Re-read ADR 0005 and confirm nothing implemented contradicts it.
-6. Confirm the scope held: **no chunker was written.** `ingest/` gained a parser and a cache, and nothing that splits a document. An empty package is empty on purpose.
+4. `just corpus-parse` reports `120 documents, 95 parsed natively, would analyse 0, 25 already cached`.
+5. `just corpus-check` reports no drift: the manifest gained four keys and no document byte changed.
+6. Re-read ADR 0005 and ADR 0006 and confirm nothing implemented contradicts them.
+7. Confirm the scope held: **no chunker was written, `Chunk` was not touched, and no embedding call was made.** Those are Plans 2 and 3.
+
+## What Plan 2 Inherits
+
+Written down here so the next plan does not have to re-derive it:
+
+- `ParsedDocument.content` is one Markdown string; `blocks` are non-overlapping, in reading order, and `content[start:end] == text` for every one. Chunkers slice `content` and never read `block.text`.
+- `document.headings()` gives the breadcrumb material for the contextual-header strategy; `document.tables()` gives the blocks that become table chunks.
+- `machine_types`, `item_numbers`, `revision` and `effective_date` come from `ManifestEntry`, not from the parsed document.
+- Step-list atomicity is detected from Markdown ordered-list syntax in `content`. There is no `LIST_ITEM` role, deliberately — see the note above Task 1.
+- `content_hash` hashes `embed_text`, not `text` (ADR 0006). Strategies 2 and 3 produce the same slice with different headers; hashing `text` would give them one embedding cache key between them.
+- `LocalParser` is never wired into `run()`. It exists for tests and for a machine with no Azure access; a chunking comparison run against it would measure the fallback, not the pipeline.
 
 ## Known Gaps, Deliberately Left
 
 - **No cache pruning.** A corpus regeneration changes every content hash and strands the old entries. ADR 0005 records this as harmless-but-accumulating. A `--prune` flag is a separate, small task if it is wanted.
-- **Tables are tagged, not modelled.** `BlockRole.TABLE` exists but the mapper does not emit it; `AnalyzeResult.tables` stays in the cached payload for the layout-aware chunker to read next story. Modelling table structure before a chunker needs it would be guessing at its shape.
-- **The corpus's 95 Markdown documents never reach a parser.** They have no layout to analyse. Whether they get a trivial `ParsedDocument` or bypass parsing entirely is a chunking-story decision.
-- **`LocalParser` is never wired into `run()`.** It exists for the tests and for a Markdown-only run; choosing between the two parsers at runtime is a decision the chunking story will actually have to make.
+- **`run()` discards what it parses.** It exists to populate the cache and prove the round trip; Plan 2 is what consumes `ParsedDocument`. Returning them before anything reads them would be guessing at the shape Plan 2 wants.
