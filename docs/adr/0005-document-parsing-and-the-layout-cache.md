@@ -12,12 +12,15 @@ Accepted
 read is 120 documents, of which 25 are published as PDF or DOCX and 95 stay
 Markdown (ADR 0003). Five of the twenty PDFs are image-only: no text layer at
 all, one of them carrying a planted prompt injection that is reachable by no
-other route. Markdown needs no parser. The other two formats do, and for five
-files that parser has to be an OCR engine.
+other route. All three formats need a parser, but not the same one: Markdown
+carries its structure in the text and is read natively, while PDF and DOCX have
+to have theirs recovered -- and for five files that recovery is OCR.
 
-Downstream, four chunking strategies want to run over the same documents and be
-compared: a fixed token window, a layout-aware splitter, a hierarchical
-parent-child splitter, and a semantic one. A comparison is only meaningful if
+Downstream, three chunking strategies want to run over the same documents and
+be compared in story 3.3: a fixed-size window with overlap, a heading-aware
+structural splitter, and that same splitter with a contextual header --
+document title, section path, machine types, item numbers -- prepended to each
+chunk before it is embedded. A comparison is only meaningful if
 every strategy reads *identical* input. A parser that is re-run per strategy
 does not guarantee that, and a service that is re-run at all introduces a
 variable the comparison is supposed to hold still.
@@ -33,23 +36,27 @@ Cost is not what justifies a cache here. Reproducibility is.
 **`prebuilt-layout`, not `prebuilt-read`.** Read is OCR only, at roughly
 $1.50/1,000 pages against layout's $10. The extra $8.50 buys headings,
 paragraph roles, reading order and table structure — which is the entire input
-to three of the four chunking strategies. Buying Read would mean reconstructing
+to two of the three chunking strategies, and tables to all of them. Buying Read
+would mean reconstructing
 document structure by counting `#` characters, which is what a framework default
 does and what returns nothing at all on the five scanned files, where there are
 no `#` characters to count.
 
-**A parser is a `Protocol` with two implementations, and the local one raises
-rather than degrades.** `AzureLayoutParser` calls the service; `PyMuPdfParser`
-reads a text layer and is what unit tests and Markdown-only runs use, so CI
-never touches Azure. `PyMuPdfParser` raises on a PDF with no text layer instead
+**A parser is a `Protocol` with three implementations, and the local one raises
+rather than degrades.** `MarkdownParser` reads the 95 Markdown documents
+natively -- their headings are already in the text and paying per page to OCR
+them would be absurd. `AzureLayoutParser` calls the service for the 25 converted
+files. `LocalParser` reads a PDF text layer and is what unit tests use, so CI
+never touches Azure. `LocalParser` raises on a PDF with no text layer instead
 of returning an empty document. A silent empty return would make the suite green
 while the OCR path — and the injection planted behind it — went untested, which
 is the failure this project can least afford to ship.
 
 **A parsed document is one `content` string plus blocks that are spans into
-it.** Nothing else holds text. Every chunker therefore slices one coordinate
-system, and `Chunk`'s span invariant is satisfiable by construction rather than
-re-derived, differently, four times.
+it.** Nothing else holds text, and all three parsers produce the same shape, so
+a chunker cannot tell a Markdown document from an OCR'd one. Every chunker
+slices one coordinate system, and `Chunk`'s span invariant is satisfiable by
+construction rather than re-derived, differently, three times.
 
 **Spans are requested in `unicodeCodePoint`, and block text is always derived
 from the span rather than copied.** The SDK defaults `string_index_type` to
@@ -104,6 +111,11 @@ anything. This also keeps PyMuPDF's AGPL-3.0 licence out of an MIT wheel.
 - A corpus regeneration changes content hashes and orphans the cached JSON under
   the old keys. Orphans are harmless — they are never read — but the container
   grows by one full corpus per regeneration until someone prunes it.
-- Nothing in this ADR decides how documents are chunked. It decides what the
-  chunkers read, and fixes it so that four of them can be compared on equal
-  terms.
+- Tables are emitted as their own blocks rather than left inside the prose.
+  Story 3.2 makes each table its own chunk, serialised as Markdown, so the
+  mapper has to mark where one starts and stops. In Markdown output mode the
+  service already renders tables into `content`, so a table block is a span like
+  any other and the invariant is unaffected.
+- Nothing in this ADR decides how documents are chunked -- that is ADR 0006. It
+  decides what the chunkers read, and fixes it so that three of them can be
+  compared on equal terms.
