@@ -272,3 +272,66 @@ checked before pushing.
 Open: `retrieval`, `agents` and `evals` are empty. `just eval` runs a harness
 that discovers zero suites — wired up so the first eval has somewhere to land
 rather than arriving with its own bespoke runner.
+
+## 2026-09-18 — parsing, and three things the corpus was hiding
+
+Added Azure AI Document Intelligence and the layout cache in front of it:
+Markdown parsed natively, PDF and DOCX through `prebuilt-layout`, all three
+producing the same `ParsedDocument` so a chunker cannot tell which route a
+document took. ADR 0005 and ADR 0006 carry the decisions.
+
+Three things turned up that had nothing to do with the feature.
+
+**The PDFs had been shredded since story 1.1, and every test passed.** fpdf2
+defaults `multi_cell`'s `new_x` to `XPos.RIGHT`, and the renderer assumed the
+cursor returned to the left margin. Every other line started at the right
+margin and ran off the page. The service manual reached the service as 699
+characters of fragments — `- The emer` / `isolator is h` where the safety
+bullet should be — and the two manuals kept 32% and 35% of their text. The
+corpus suite was green throughout, because the output was still a valid PDF and
+still byte-identical between runs. Determinism tests prove a generator is
+repeatable. They say nothing about whether it is right, and every assertion we
+had was about repeatability.
+
+It only surfaced because `prebuilt-layout` returned no tables for a document
+that has one, and that was worth not explaining away. The fix is one argument
+per call; after it every PDF keeps 100%+ of its source and the manual comes back
+with a title and five section headings. A fixture assertion now pins the
+character count, so a silent return to 699 fails as a renderer regression rather
+than passing as a parser that found less.
+
+**Subscription Owner grants no data-plane access.** `upload_corpus.py` has said
+so in its docstring since it was written, and the developer principal still had
+only `Owner` — so `just corpus-upload --apply` would have 403ed too, and nobody
+had run it. The Bicep now takes a `developerPrincipalId` and grants Cognitive
+Services User and Storage Blob Data Contributor, with `principalType` as a
+parameter so a team can point it at a group instead. A docstring that predicts a
+failure is not a mitigation.
+
+**In Markdown mode the service still emits tables as HTML.** `<table><tr><th>`,
+not pipe rows — while the Markdown parser emits pipes, straight from the source.
+So the two parsers agree on everything except the one construct ADR 0006 gives
+its own chunk type. Recorded as a test rather than patched over, because plan 2
+has to normalise it or the strategy comparison stops being like-for-like.
+
+Smaller corrections, all from the plan being written before the code ran:
+
+- **`azure.identity.aio` needs an async transport.** The module imports fine
+  without `aiohttp` and fails at construction, so nothing caught it until the
+  credential was built. `azure-core[aio]` is a main dependency, not a dev one:
+  `get_async_credential()` is part of the package surface.
+- **`what-if` reports a role assignment as *unsupported*, not as a create** — its
+  id depends on a runtime `reference()`. The ten modifies it lists are
+  pre-existing noise about undeclared read-only properties. Verified by running
+  what-if against the unmodified template and diffing the counts, which is the
+  only way to read that output honestly.
+- **`git stash` corrupts `deploy.sh` on Windows.** It holds one intentional bare
+  CR in `tr -d`, and the round-trip normalises it to LF, which would collapse
+  eleven deployment outputs onto one line. `pathlib.write_text` translating `
+`
+  to `
+` is how it got there.
+
+Open: the PDF renderer writes a table as space-separated text rather than a
+grid, so `prebuilt-layout` finds tables only in the DOCX. Chunking and embedding
+are planned but not built.

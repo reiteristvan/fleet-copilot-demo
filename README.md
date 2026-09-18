@@ -53,6 +53,7 @@ an error-code reference and a glossary — across three formats and two language
 $ just corpus          # regenerate into data/corpus/ and data/manifest.json
 $ just corpus-check    # report drift without writing
 $ just corpus-upload   # dry-run the upload to Blob Storage
+$ just corpus-parse    # dry-run the parse; --apply calls Document Intelligence
 ```
 
 | | Count |
@@ -61,6 +62,25 @@ $ just corpus-upload   # dry-run the upload to Blob Storage
 | PDF (15 with a text layer, 5 scanned image-only) | 20 |
 | DOCX | 5 |
 | English / Hungarian | 107 / 13 |
+
+## Parsing
+
+Every document becomes one Markdown string with role-tagged spans over it, so
+a chunker cannot tell which route a document came down. Three parsers behind
+one interface produce that shape.
+
+| | |
+| --- | --- |
+| Markdown, parsed natively | 95 documents, no service call |
+| PDF / DOCX through `prebuilt-layout` | 25 documents, ~30 billable pages, about $0.30 |
+| Re-parses after the first | 0 -- cached in Blob by content hash, model and API version |
+| Local fallback | pymupdf + python-docx; raises on the 5 image-only PDFs rather than returning nothing |
+
+`prebuilt-layout` rather than `prebuilt-read` because headings and tables are
+what two of the three chunking strategies split on, and five of the PDFs are
+image-only -- there is no `#` character to count. The cache holds the raw
+`AnalyzeResult`, not our model of it, so re-interpreting a layout is free and
+re-analysing is the only thing that costs.
 
 Generation is **offline and deterministic**: a seed in `data/corpus_spec.yaml`
 drives the whole corpus, and regenerating reproduces every byte. That is what
