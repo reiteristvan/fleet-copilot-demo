@@ -321,7 +321,37 @@ If it fails on the budget filter, the error names the offending property path �
 - [ ] **Step 8: Preview the change against the live stack**
 
 Run: `./infra/deploy.sh dev --what-if`
-Expected: exactly three creates — the `Microsoft.CognitiveServices/accounts` account, the `layout-cache` container, the role assignment. **No modifies and no deletes.** A modify on the storage account or the OpenAI account means this task changed a property it should not have; stop and diff before continuing.
+
+Expected, against a stack that already has the rest deployed:
+
+```
+  + Microsoft.CognitiveServices/accounts/di-fleet-copilot-dev-<suffix>
+  + Microsoft.Storage/.../blobServices/default/containers/layout-cache
+Resource changes: 2 to create, 10 to modify, 4 no change, 5 unsupported, 1 to ignore.
+```
+
+Two things about that line are counter-intuitive and neither is a problem.
+
+**The role assignment is not one of the creates.** It appears in the *unsupported* count, which rises from 4 to 5. What-if cannot compute a role assignment's resource id ahead of time because the `guid()` depends on a `reference()` to the identity's principal id, so it declines to analyse it and says so in the diagnostics. The four existing assignments are already in the baseline 4.
+
+**The 10 modifies are pre-existing noise, not yours.** What-if reports read-only and defaulted properties that the deployed resource has and the template does not declare — `properties.endpoint` on Search, `deleteRetentionPolicy` on blob services, `defaultEncryptionScope` on the `raw-docs` container. Do not try to silence them.
+
+Verify that rather than trusting it. Stash the change and run the same command against the unmodified template:
+
+```bash
+git stash push -- infra/ && ./infra/deploy.sh dev --what-if | grep "^Resource changes:"
+git stash pop
+```
+
+The baseline should read `10 to modify, 4 no change, 4 unsupported, 1 to ignore` — same modifies, two fewer creates, one fewer unsupported. **If the modify count rises above the baseline, that is yours and worth stopping for.**
+
+> **`git stash` will corrupt `deploy.sh` on Windows.** The file contains one intentional bare CR — `tr -d '<CR>'`, which strips the carriage return `az -o tsv` adds — and the stash round-trip normalises it to LF, turning the command into `tr -d '<LF>'`. That collapses all eleven output values onto one line and trips the count check in `print_app_env`. After any stash round-trip, check it:
+>
+> ```bash
+> python -c "d=open('infra/deploy.sh','rb').read(); print('bare CR:', d.count(b'\r')-d.count(b'\r\n'))"
+> ```
+>
+> It must print `1`. If it prints `0`, run `git checkout HEAD -- infra/deploy.sh` and re-apply Step 6 with `write_bytes`, not `write_text` — `pathlib.write_text` translates `\n` to `\r\n` on Windows and is how the CR gets destroyed.
 
 - [ ] **Step 9: Document it in `infra/README.md`**
 

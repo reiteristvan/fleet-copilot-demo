@@ -151,7 +151,9 @@ print_app_env() {
     AZURE_SEARCH_ENDPOINT
     AZURE_STORAGE_BLOB_ENDPOINT
     AZURE_STORAGE_CONTAINER
+    AZURE_LAYOUT_CACHE_CONTAINER
     AZURE_KEY_VAULT_URI
+    AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT
     APPLICATIONINSIGHTS_CONNECTION_STRING
   )
 
@@ -166,7 +168,9 @@ print_app_env() {
       properties.outputs.searchEndpoint.value,
       properties.outputs.storageBlobEndpoint.value,
       properties.outputs.storageContainerName.value,
+      properties.outputs.storageLayoutCacheContainer.value,
       properties.outputs.keyVaultUri.value,
+      properties.outputs.documentIntelligenceEndpoint.value,
       properties.outputs.appInsightsConnectionString.value
     ]" | tr -d ''
   )

@@ -9,6 +9,9 @@ param tags object = {}
 @description('Container that raw source documents are uploaded to.')
 param containerName string = 'raw-docs'
 
+@description('Container holding cached Document Intelligence layout JSON.')
+param layoutCacheContainerName string = 'layout-cache'
+
 resource storage 'Microsoft.Storage/storageAccounts@2025-08-01' = {
   name: name
   location: location
@@ -43,7 +46,19 @@ resource rawDocs 'Microsoft.Storage/storageAccounts/blobServices/containers@2025
   }
 }
 
+// A second container rather than a prefix inside raw-docs: the corpus upload
+// lists raw-docs and compares every blob's sha256 metadata, and cache entries
+// carry no such metadata. They would read as corpus documents that had drifted.
+resource layoutCache 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-08-01' = {
+  parent: blobService
+  name: layoutCacheContainerName
+  properties: {
+    publicAccess: 'None'
+  }
+}
+
 output id string = storage.id
 output name string = storage.name
 output blobEndpoint string = storage.properties.primaryEndpoints.blob
 output containerName string = rawDocs.name
+output layoutCacheContainerName string = layoutCache.name

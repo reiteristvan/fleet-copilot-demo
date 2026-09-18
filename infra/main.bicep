@@ -92,6 +92,16 @@ module search 'modules/search.bicep' = {
   }
 }
 
+module documentIntelligence 'modules/docintel.bicep' = {
+  scope: rg
+  name: 'docintel'
+  params: {
+    name: 'di-${workload}-${environmentName}-${suffix}'
+    location: location
+    tags: tags
+  }
+}
+
 module keyVault 'modules/keyvault.bicep' = {
   scope: rg
   name: 'keyvault'
@@ -122,6 +132,7 @@ module rbac 'modules/rbac.bicep' = {
     openAiAccountName: openAi.outputs.name
     searchServiceName: search.outputs.name
     appInsightsName: monitoring.outputs.appInsightsName
+    documentIntelligenceAccountName: documentIntelligence.outputs.name
   }
 }
 
@@ -134,6 +145,8 @@ output openAiEmbeddingDeployment string = openAi.outputs.embeddingDeploymentName
 output searchEndpoint string = search.outputs.endpoint
 output storageBlobEndpoint string = storage.outputs.blobEndpoint
 output storageContainerName string = storage.outputs.containerName
+output storageLayoutCacheContainer string = storage.outputs.layoutCacheContainerName
 output keyVaultUri string = keyVault.outputs.uri
+output documentIntelligenceEndpoint string = documentIntelligence.outputs.endpoint
 output containerAppsEnvironmentId string = containerApps.outputs.id
 output appInsightsConnectionString string = monitoring.outputs.appInsightsConnectionString

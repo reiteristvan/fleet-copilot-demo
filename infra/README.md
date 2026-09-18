@@ -12,9 +12,10 @@ module per concern.
 | --- | --- |
 | `identity.bicep` | User-assigned managed identity — the only principal the app uses |
 | `monitoring.bicep` | Log Analytics workspace + Application Insights |
-| `storage.bicep` | Storage account with a `raw-docs` container |
+| `storage.bicep` | Storage account with a `raw-docs` and a `layout-cache` container |
 | `openai.bicep` | Azure OpenAI with a `chat` and an `embeddings` deployment |
 | `search.bicep` | Azure AI Search, Basic tier, semantic ranker enabled |
+| `docintel.bicep` | Azure AI Document Intelligence, S0, for `prebuilt-layout` |
 | `keyvault.bicep` | Key Vault, RBAC-authorised |
 | `containerapps.bicep` | Container Apps managed environment |
 | `rbac.bicep` | Every role assignment, in one place |
@@ -115,7 +116,8 @@ $ az group delete -n rg-fleet-copilot-dev --yes
 Two things survive it on purpose:
 
 - **The budget.** It is subscription-scoped, so it keeps watching. Remove it
-  with `az consumption budget delete --budget-name budget-fleet-copilot`.
+  with `az consumption budget delete --budget-name budget-fleet-copilot`,
+  and the resource-scoped one with `--budget-name budget-fleet-copilot-docintel`.
 - **The soft-deleted Key Vault.** Retention is set to the 7-day minimum, but
   the name stays reserved until then, so a redeploy inside that window fails.
   Purge it first:
