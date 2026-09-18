@@ -55,6 +55,10 @@ corpus-check:
 corpus-upload *args:
     uv run python scripts/upload_corpus.py {{args}}
 
+# Dry-run the corpus parse: `just corpus-parse --apply` calls the service.
+corpus-parse *args:
+    uv run python scripts/parse_corpus.py {{args}}
+
 # Apply every database migration. Needs the stack up (`just up`).
 db-migrate:
     uv run alembic upgrade head

@@ -11,6 +11,8 @@ importable without azure-ai-documentintelligence.
 
 from __future__ import annotations
 
+import hashlib
+import io
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Any, Final
@@ -169,3 +171,63 @@ def layout_from_analyze_result(
         pages=tuple(pages),
         parsed_at=datetime.now(UTC),
     )
+
+
+class AzureLayoutParser:
+    """Calls prebuilt-layout. Implements :class:`DocumentParser`.
+
+    Holds no client: one is built per call inside an ``async with`` so the
+    credential's connection pool is closed rather than left to a finaliser.
+    Parsing is a batch of twenty-five documents, not a request path, so a client
+    per call costs nothing worth optimising away.
+    """
+
+    def __init__(self, endpoint: str, *, api_version: str) -> None:
+        self._endpoint = endpoint
+        self._api_version = api_version
+
+    async def analyse(self, data: bytes) -> Mapping[str, Any]:
+        """Return the raw AnalyzeResult payload -- exactly what the cache stores."""
+        from azure.ai.documentintelligence.aio import DocumentIntelligenceClient
+        from azure.ai.documentintelligence.models import (
+            AnalyzeResult,
+            DocumentContentFormat,
+            StringIndexType,
+        )
+
+        from fleet_copilot.credentials import get_async_credential
+
+        credential = get_async_credential()
+        async with (
+            credential,
+            DocumentIntelligenceClient(
+                self._endpoint, credential, api_version=self._api_version
+            ) as client,
+        ):
+            poller = await client.begin_analyze_document(
+                MODEL_ID,
+                # A stream, not the bytes themselves: the SDK accepts both at
+                # runtime but only types the IO[bytes] overload, and wrapping is
+                # cheaper than suppressing the error it would otherwise raise.
+                body=io.BytesIO(data),
+                output_content_format=DocumentContentFormat.MARKDOWN,
+                # Not the SDK default of textElements, which counts grapheme
+                # clusters. Python indexes strings by code point, and where the
+                # two diverge every offset after the divergence is wrong.
+                string_index_type=StringIndexType.UNICODE_CODE_POINT,
+            )
+            result: AnalyzeResult = await poller.result()
+        payload: Mapping[str, Any] = result.as_dict()
+        return payload
+
+    async def parse(self, data: bytes, *, doc_id: str, content_type: str) -> ParsedDocument:
+        """Analyse ``data`` and map the result.
+
+        ``content_type`` is unused: the service sniffs the format itself and
+        rejects what it cannot read. It is in the signature because
+        DocumentParser requires it and the other two parsers need it.
+        """
+        payload = await self.analyse(data)
+        return layout_from_analyze_result(
+            payload, doc_id=doc_id, source_sha256=hashlib.sha256(data).hexdigest()
+        )
