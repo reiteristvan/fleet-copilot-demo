@@ -7,6 +7,17 @@ param searchServiceName string
 param appInsightsName string
 param documentIntelligenceAccountName string
 
+@description('Object id of a human principal that also needs data-plane access. Empty disables it.')
+param developerPrincipalId string = ''
+
+@description('What developerPrincipalId is. A user object id assigned as ServicePrincipal never resolves.')
+@allowed([
+  'User'
+  'Group'
+  'ServicePrincipal'
+])
+param developerPrincipalType string = 'User'
+
 // Built-in role definition ids. Resolved with `az role definition list -n <name>`;
 // they are stable across tenants, unlike role display names.
 var cognitiveServicesOpenAiUser = '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
@@ -16,6 +27,7 @@ var monitoringMetricsPublisher = '3913510d-42f4-4e42-8a64-420c390055eb'
 // Cognitive Services User, not Cognitive Services OpenAI User: the
 // OpenAI-specific role carries no Document Intelligence data actions.
 var cognitiveServicesUser = 'a97b65f3-24c7-4388-baec-2e87135dc908'
+var storageBlobDataContributor = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
 
 resource storage 'Microsoft.Storage/storageAccounts@2025-08-01' existing = {
   name: storageAccountName
@@ -105,3 +117,38 @@ resource documentIntelligenceUser 'Microsoft.Authorization/roleAssignments@2022-
     principalType: 'ServicePrincipal'
   }
 }
+
+// Subscription Owner is a management-plane role and carries no data actions, so
+// a developer who can create these resources still gets a 403 from the first
+// request against one. These two assignments are what let the offline steps --
+// capturing layout fixtures, writing the layout cache -- run from a laptop.
+// Empty in CI, which never calls Azure.
+resource developerDocumentIntelligence 'Microsoft.Authorization/roleAssignments@2022-04-01' =
+  if (!empty(developerPrincipalId)) {
+    scope: documentIntelligence
+    name: guid(documentIntelligence.id, developerPrincipalId, cognitiveServicesUser)
+    properties: {
+      roleDefinitionId: subscriptionResourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        cognitiveServicesUser
+      )
+      principalId: developerPrincipalId
+      principalType: developerPrincipalType
+    }
+  }
+
+// Contributor, not Reader: the managed identity only reads the cache, but the
+// developer who populates it has to write.
+resource developerStorage 'Microsoft.Authorization/roleAssignments@2022-04-01' =
+  if (!empty(developerPrincipalId)) {
+    scope: storage
+    name: guid(storage.id, developerPrincipalId, storageBlobDataContributor)
+    properties: {
+      roleDefinitionId: subscriptionResourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        storageBlobDataContributor
+      )
+      principalId: developerPrincipalId
+      principalType: developerPrincipalType
+    }
+  }

@@ -19,6 +19,12 @@ param embeddingModelCapacity int = 50
 @description('Azure AI Search tier.')
 param searchSku string = 'basic'
 
+@description('Object id of a developer or group needing data-plane access. Empty in CI.')
+param developerPrincipalId string = ''
+
+@description('What developerPrincipalId is: User, Group or ServicePrincipal.')
+param developerPrincipalType string = 'User'
+
 var workload = 'fleet-copilot'
 
 // Storage, Key Vault, OpenAI and Search names must be globally unique. Deriving
@@ -133,6 +139,8 @@ module rbac 'modules/rbac.bicep' = {
     searchServiceName: search.outputs.name
     appInsightsName: monitoring.outputs.appInsightsName
     documentIntelligenceAccountName: documentIntelligence.outputs.name
+    developerPrincipalId: developerPrincipalId
+    developerPrincipalType: developerPrincipalType
   }
 }
 
