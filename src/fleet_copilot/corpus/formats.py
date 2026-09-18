@@ -31,6 +31,7 @@ from typing import Final
 from docx import Document as DocxDocument
 from docx.shared import Pt
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 from PIL import Image, ImageDraw, ImageFont
 
 from fleet_copilot.corpus.document import (
@@ -181,23 +182,28 @@ def render_pdf(plan: DocumentPlan) -> bytes:
     pdf.add_page()
     width = _PAGE_WIDTH_MM - 2 * _MARGIN_MM
 
+    # Every multi_cell passes new_x/new_y explicitly. fpdf2 defaults new_x to
+    # XPos.RIGHT, which leaves the cursor at the right margin so the next cell
+    # renders off the page and is clipped. The PDF stays valid and stays
+    # byte-reproducible, so the corpus tests pass while two thirds of every
+    # long document goes missing.
     pdf.set_font("Helvetica", style="B", size=16)
-    pdf.multi_cell(width, 8, _latin1(plan.title))
+    pdf.multi_cell(width, 8, _latin1(plan.title), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.ln(2)
 
     pdf.set_font("Helvetica", size=8)
     for line in _info_lines(plan.front_matter):
-        pdf.multi_cell(width, 4, _latin1(line))
+        pdf.multi_cell(width, 4, _latin1(line), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.ln(4)
 
     for section in plan.sections:
         pdf.set_font("Helvetica", style="B", size=12)
-        pdf.multi_cell(width, 6, _latin1(section.heading))
+        pdf.multi_cell(width, 6, _latin1(section.heading), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.ln(1)
         pdf.set_font("Helvetica", size=10)
         for line in _block_lines(section.blocks):
             if line:
-                pdf.multi_cell(width, 5, _latin1(line))
+                pdf.multi_cell(width, 5, _latin1(line), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             else:
                 pdf.ln(3)
     return bytes(pdf.output())
