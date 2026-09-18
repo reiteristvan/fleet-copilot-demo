@@ -1,0 +1,2673 @@
+{
+  "apiVersion": "2024-11-30",
+  "content": "# Single-disc machine SDM-43 - service manual\n\nDocument sdm-43-service-manual \u00b7 revision 3 \u00b7 effective 2026-03-09\n\nMachine type\n\n\n## Scope\n\nFor service technicians working on the Single-disc machine SDM-43. Every torque figure in this document is\nfor clean, dry threads unless stated otherwise.\n\n\n## Service intervals Interval Task\n\nDaily Rins\n\n\n## Diagnostics\n\n1\\. Verify the float shut-off operates freely before investigating a vacuum complaint.\n\n2\\. Read an\n\n\n### Parts and consumables\n\n\\- Order consumables against the item number, since two variants of one machine type differ.\n\n\\- Filter seal\n\n\n# Safety\n\n\\- Wear eye protection when working near a charging battery.\n\n\\- The eme\nisolator is h\n",
+  "contentFormat": "markdown",
+  "modelId": "prebuilt-layout",
+  "pages": [
+    {
+      "angle": 0.08438000082969666,
+      "height": 11.6806,
+      "lines": [
+        {
+          "content": "Single-disc machine SDM-43 - service manual",
+          "polygon": [
+            0.741,
+            0.7407,
+            5.5829,
+            0.7425,
+            5.5829,
+            0.9865,
+            0.7409,
+            0.9847
+          ],
+          "spans": [
+            {
+              "length": 43,
+              "offset": 2
+            }
+          ]
+        },
+        {
+          "content": "Document sdm-43-service-manual \u00b7 revision 3 \u00b7 effective 2026-03-09",
+          "polygon": [
+            0.7385,
+            1.1133,
+            4.1248,
+            1.1091,
+            4.125,
+            1.2367,
+            0.7386,
+            1.2409
+          ],
+          "spans": [
+            {
+              "length": 66,
+              "offset": 47
+            }
+          ]
+        },
+        {
+          "content": "Machine type",
+          "polygon": [
+            7.5843,
+            1.2668,
+            8.2582,
+            1.2763,
+            8.2582,
+            1.4006,
+            7.5826,
+            1.3911
+          ],
+          "spans": [
+            {
+              "length": 12,
+              "offset": 115
+            }
+          ]
+        },
+        {
+          "content": "Scope",
+          "polygon": [
+            0.7386,
+            1.7645,
+            1.2556,
+            1.7713,
+            1.2534,
+            1.9379,
+            0.7364,
+            1.9311
+          ],
+          "spans": [
+            {
+              "length": 5,
+              "offset": 133
+            }
+          ]
+        },
+        {
+          "content": "For service technicians working on the Single-disc machine SDM-43. Every torque figure in this document is",
+          "polygon": [
+            0.7392,
+            2.0208,
+            7.5215,
+            2.0165,
+            7.5216,
+            2.1815,
+            0.7393,
+            2.1844
+          ],
+          "spans": [
+            {
+              "length": 106,
+              "offset": 140
+            }
+          ]
+        },
+        {
+          "content": "for clean, dry threads unless stated otherwise.",
+          "polygon": [
+            0.7307,
+            2.2215,
+            3.5782,
+            2.2186,
+            3.5784,
+            2.3769,
+            0.7309,
+            2.3809
+          ],
+          "spans": [
+            {
+              "length": 47,
+              "offset": 247
+            }
+          ]
+        },
+        {
+          "content": "Service intervals",
+          "polygon": [
+            0.7389,
+            2.5456,
+            2.0756,
+            2.546,
+            2.0755,
+            2.7129,
+            0.7388,
+            2.7125
+          ],
+          "spans": [
+            {
+              "length": 17,
+              "offset": 300
+            }
+          ]
+        },
+        {
+          "content": "Interval Task",
+          "polygon": [
+            0.7385,
+            2.8103,
+            1.5924,
+            2.8108,
+            1.5923,
+            2.9546,
+            0.7384,
+            2.9541
+          ],
+          "spans": [
+            {
+              "length": 13,
+              "offset": 318
+            }
+          ]
+        },
+        {
+          "content": "Daily Rins",
+          "polygon": [
+            7.5884,
+            3.0083,
+            8.2582,
+            3.0124,
+            8.2578,
+            3.1654,
+            7.5875,
+            3.163
+          ],
+          "spans": [
+            {
+              "length": 10,
+              "offset": 333
+            }
+          ]
+        },
+        {
+          "content": "Diagnostics",
+          "polygon": [
+            0.7399,
+            4.118,
+            1.6946,
+            4.1195,
+            1.6942,
+            4.3036,
+            0.7396,
+            4.302
+          ],
+          "spans": [
+            {
+              "length": 11,
+              "offset": 349
+            }
+          ]
+        },
+        {
+          "content": "1. Verify the float shut-off operates freely before investigating a vacuum complaint.",
+          "polygon": [
+            0.7461,
+            4.377,
+            5.8009,
+            4.3824,
+            5.8008,
+            4.5507,
+            0.7459,
+            4.5453
+          ],
+          "spans": [
+            {
+              "length": 86,
+              "offset": 362
+            }
+          ]
+        },
+        {
+          "content": "2. Read an",
+          "polygon": [
+            7.5809,
+            4.5763,
+            8.2582,
+            4.5842,
+            8.2581,
+            4.7224,
+            7.5792,
+            4.7178
+          ],
+          "spans": [
+            {
+              "length": 11,
+              "offset": 450
+            }
+          ]
+        },
+        {
+          "content": "Parts and consumables",
+          "polygon": [
+            0.7387,
+            5.6897,
+            2.6208,
+            5.6906,
+            2.6207,
+            5.8574,
+            0.7387,
+            5.8568
+          ],
+          "spans": [
+            {
+              "length": 21,
+              "offset": 468
+            }
+          ]
+        },
+        {
+          "content": "- Order consumables against the item number, since two variants of one machine type differ.",
+          "polygon": [
+            0.7407,
+            5.9593,
+            6.4231,
+            5.96,
+            6.4231,
+            6.115,
+            0.7407,
+            6.1143
+          ],
+          "spans": [
+            {
+              "length": 92,
+              "offset": 491
+            }
+          ]
+        },
+        {
+          "content": "- Filter seal",
+          "polygon": [
+            7.5859,
+            6.1562,
+            8.2582,
+            6.1669,
+            8.2582,
+            6.298,
+            7.5847,
+            6.2873
+          ],
+          "spans": [
+            {
+              "length": 14,
+              "offset": 585
+            }
+          ]
+        },
+        {
+          "content": "Safety",
+          "polygon": [
+            0.7413,
+            7.2551,
+            1.2535,
+            7.2682,
+            1.2488,
+            7.451,
+            0.7366,
+            7.4378
+          ],
+          "spans": [
+            {
+              "length": 6,
+              "offset": 604
+            }
+          ]
+        },
+        {
+          "content": "- Wear eye protection when working near a charging battery.",
+          "polygon": [
+            0.741,
+            7.5326,
+            4.4668,
+            7.5381,
+            4.4665,
+            7.6964,
+            0.7408,
+            7.6909
+          ],
+          "spans": [
+            {
+              "length": 60,
+              "offset": 612
+            }
+          ]
+        },
+        {
+          "content": "- The eme",
+          "polygon": [
+            7.592,
+            7.7263,
+            8.2582,
+            7.7399,
+            8.2581,
+            7.8707,
+            7.5905,
+            7.8606
+          ],
+          "spans": [
+            {
+              "length": 10,
+              "offset": 674
+            }
+          ]
+        },
+        {
+          "content": "isolator is h",
+          "polygon": [
+            7.5852,
+            7.9305,
+            8.2582,
+            7.9337,
+            8.2582,
+            8.069,
+            7.5847,
+            8.0658
+          ],
+          "spans": [
+            {
+              "length": 13,
+              "offset": 685
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "spans": [
+        {
+          "length": 699,
+          "offset": 0
+        }
+      ],
+      "unit": "inch",
+      "width": 8.2639,
+      "words": [
+        {
+          "confidence": 0.992,
+          "content": "Single-disc",
+          "polygon": [
+            0.7413,
+            0.7432,
+            1.929,
+            0.7448,
+            1.9287,
+            0.9791,
+            0.7409,
+            0.9867
+          ],
+          "span": {
+            "length": 11,
+            "offset": 2
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "machine",
+          "polygon": [
+            2.0015,
+            0.7451,
+            2.8875,
+            0.7438,
+            2.8872,
+            0.9736,
+            2.0012,
+            0.9785
+          ],
+          "span": {
+            "length": 7,
+            "offset": 14
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "SDM-43",
+          "polygon": [
+            2.9639,
+            0.7434,
+            3.762,
+            0.7444,
+            3.7616,
+            0.9727,
+            2.9636,
+            0.9736
+          ],
+          "span": {
+            "length": 6,
+            "offset": 22
+          }
+        },
+        {
+          "confidence": 0.973,
+          "content": "-",
+          "polygon": [
+            3.8422,
+            0.7452,
+            3.9109,
+            0.7453,
+            3.9105,
+            0.9726,
+            3.8418,
+            0.9728
+          ],
+          "span": {
+            "length": 1,
+            "offset": 29
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "service",
+          "polygon": [
+            3.972,
+            0.7453,
+            4.7281,
+            0.7427,
+            4.7278,
+            0.9724,
+            3.9715,
+            0.9723
+          ],
+          "span": {
+            "length": 7,
+            "offset": 31
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "manual",
+          "polygon": [
+            4.8045,
+            0.7427,
+            5.5873,
+            0.7427,
+            5.5873,
+            0.9676,
+            4.8042,
+            0.9724
+          ],
+          "span": {
+            "length": 6,
+            "offset": 39
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "Document",
+          "polygon": [
+            0.7385,
+            1.1133,
+            1.2523,
+            1.1134,
+            1.2524,
+            1.2411,
+            0.7387,
+            1.2419
+          ],
+          "span": {
+            "length": 8,
+            "offset": 47
+          }
+        },
+        {
+          "confidence": 0.989,
+          "content": "sdm-43-service-manual",
+          "polygon": [
+            1.2838,
+            1.1134,
+            2.4373,
+            1.1133,
+            2.4373,
+            1.24,
+            1.2839,
+            1.2411
+          ],
+          "span": {
+            "length": 21,
+            "offset": 56
+          }
+        },
+        {
+          "confidence": 0.364,
+          "content": "\u00b7",
+          "polygon": [
+            2.4793,
+            1.1131,
+            2.5002,
+            1.1131,
+            2.5002,
+            1.24,
+            2.4792,
+            1.24
+          ],
+          "span": {
+            "length": 1,
+            "offset": 78
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "revision",
+          "polygon": [
+            2.5359,
+            1.113,
+            2.9134,
+            1.1122,
+            2.9133,
+            1.2388,
+            2.5358,
+            1.24
+          ],
+          "span": {
+            "length": 8,
+            "offset": 80
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "3",
+          "polygon": [
+            2.9512,
+            1.1121,
+            3.0078,
+            1.1119,
+            3.0076,
+            1.2393,
+            2.951,
+            1.239
+          ],
+          "span": {
+            "length": 1,
+            "offset": 89
+          }
+        },
+        {
+          "confidence": 0.447,
+          "content": "\u00b7",
+          "polygon": [
+            3.0455,
+            1.1118,
+            3.0644,
+            1.1118,
+            3.0642,
+            1.2396,
+            3.0453,
+            1.2395
+          ],
+          "span": {
+            "length": 1,
+            "offset": 91
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "effective",
+          "polygon": [
+            3.1022,
+            1.1117,
+            3.5154,
+            1.1113,
+            3.5151,
+            1.239,
+            3.1019,
+            1.2397
+          ],
+          "span": {
+            "length": 9,
+            "offset": 93
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "2026-03-09",
+          "polygon": [
+            3.5468,
+            1.1112,
+            4.1262,
+            1.1092,
+            4.1262,
+            1.237,
+            3.5465,
+            1.2389
+          ],
+          "span": {
+            "length": 10,
+            "offset": 103
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "Machine",
+          "polygon": [
+            7.5843,
+            1.2678,
+            8.0111,
+            1.2742,
+            8.011,
+            1.3981,
+            7.5843,
+            1.3923
+          ],
+          "span": {
+            "length": 7,
+            "offset": 115
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "type",
+          "polygon": [
+            8.0437,
+            1.275,
+            8.2582,
+            1.278,
+            8.2582,
+            1.4018,
+            8.0437,
+            1.3983
+          ],
+          "span": {
+            "length": 4,
+            "offset": 123
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "Scope",
+          "polygon": [
+            0.7386,
+            1.7652,
+            1.2556,
+            1.7713,
+            1.2556,
+            1.9392,
+            0.7374,
+            1.9324
+          ],
+          "span": {
+            "length": 5,
+            "offset": 133
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "For",
+          "polygon": [
+            0.7393,
+            2.0223,
+            0.9576,
+            2.0219,
+            0.9576,
+            2.1812,
+            0.7393,
+            2.1801
+          ],
+          "span": {
+            "length": 3,
+            "offset": 140
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "service",
+          "polygon": [
+            1.0034,
+            2.0219,
+            1.4373,
+            2.0218,
+            1.4372,
+            2.1833,
+            1.0035,
+            2.1814
+          ],
+          "span": {
+            "length": 7,
+            "offset": 144
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "technicians",
+          "polygon": [
+            1.4885,
+            2.0218,
+            2.181,
+            2.0222,
+            2.1808,
+            2.1844,
+            1.4884,
+            2.1835
+          ],
+          "span": {
+            "length": 11,
+            "offset": 152
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "working",
+          "polygon": [
+            2.2295,
+            2.022,
+            2.7038,
+            2.0197,
+            2.7037,
+            2.1844,
+            2.2293,
+            2.1844
+          ],
+          "span": {
+            "length": 7,
+            "offset": 164
+          }
+        },
+        {
+          "confidence": 0.999,
+          "content": "on",
+          "polygon": [
+            2.7577,
+            2.0198,
+            2.9059,
+            2.0201,
+            2.9058,
+            2.1844,
+            2.7576,
+            2.1844
+          ],
+          "span": {
+            "length": 2,
+            "offset": 172
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "the",
+          "polygon": [
+            2.9598,
+            2.0202,
+            3.1511,
+            2.0205,
+            3.151,
+            2.1844,
+            2.9597,
+            2.1844
+          ],
+          "span": {
+            "length": 3,
+            "offset": 175
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "Single-disc",
+          "polygon": [
+            3.205,
+            2.0204,
+            3.8814,
+            2.0191,
+            3.8812,
+            2.1844,
+            3.2049,
+            2.1844
+          ],
+          "span": {
+            "length": 11,
+            "offset": 179
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "machine",
+          "polygon": [
+            3.9353,
+            2.0191,
+            4.45,
+            2.0195,
+            4.4498,
+            2.1842,
+            3.9351,
+            2.1844
+          ],
+          "span": {
+            "length": 7,
+            "offset": 191
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "SDM-43.",
+          "polygon": [
+            4.5066,
+            2.0195,
+            5.0402,
+            2.0182,
+            5.0398,
+            2.1844,
+            4.5064,
+            2.1841
+          ],
+          "span": {
+            "length": 7,
+            "offset": 199
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "Every",
+          "polygon": [
+            5.1048,
+            2.0181,
+            5.4525,
+            2.0187,
+            5.452,
+            2.1844,
+            5.1045,
+            2.1844
+          ],
+          "span": {
+            "length": 5,
+            "offset": 207
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "torque",
+          "polygon": [
+            5.4983,
+            2.0188,
+            5.889,
+            2.0186,
+            5.8887,
+            2.1844,
+            5.4978,
+            2.1844
+          ],
+          "span": {
+            "length": 6,
+            "offset": 213
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "figure",
+          "polygon": [
+            5.9402,
+            2.0186,
+            6.2798,
+            2.0186,
+            6.2794,
+            2.1842,
+            5.9399,
+            2.1844
+          ],
+          "span": {
+            "length": 6,
+            "offset": 220
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "in",
+          "polygon": [
+            6.3121,
+            2.0186,
+            6.4387,
+            2.0187,
+            6.4384,
+            2.1838,
+            6.3118,
+            2.1841
+          ],
+          "span": {
+            "length": 2,
+            "offset": 227
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "this",
+          "polygon": [
+            6.4899,
+            2.0187,
+            6.7055,
+            2.019,
+            6.7051,
+            2.1831,
+            6.4896,
+            2.1837
+          ],
+          "span": {
+            "length": 4,
+            "offset": 230
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "document",
+          "polygon": [
+            6.7567,
+            2.0191,
+            7.3577,
+            2.0189,
+            7.3573,
+            2.1826,
+            6.7563,
+            2.183
+          ],
+          "span": {
+            "length": 8,
+            "offset": 235
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "is",
+          "polygon": [
+            7.39,
+            2.0189,
+            7.522,
+            2.0186,
+            7.522,
+            2.1828,
+            7.3897,
+            2.1827
+          ],
+          "span": {
+            "length": 2,
+            "offset": 244
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "for",
+          "polygon": [
+            0.731,
+            2.223,
+            0.9113,
+            2.2226,
+            0.9113,
+            2.3813,
+            0.7309,
+            2.381
+          ],
+          "span": {
+            "length": 3,
+            "offset": 247
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "clean,",
+          "polygon": [
+            0.9479,
+            2.2226,
+            1.3061,
+            2.2213,
+            1.3062,
+            2.381,
+            0.9479,
+            2.3814
+          ],
+          "span": {
+            "length": 6,
+            "offset": 251
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "dry",
+          "polygon": [
+            1.3558,
+            2.2211,
+            1.5492,
+            2.2214,
+            1.5492,
+            2.3814,
+            1.3559,
+            2.381
+          ],
+          "span": {
+            "length": 3,
+            "offset": 258
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "threads",
+          "polygon": [
+            1.5858,
+            2.2212,
+            2.046,
+            2.2204,
+            2.046,
+            2.3811,
+            1.5859,
+            2.3815
+          ],
+          "span": {
+            "length": 7,
+            "offset": 262
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "unless",
+          "polygon": [
+            2.093,
+            2.2208,
+            2.4878,
+            2.2206,
+            2.4877,
+            2.3809,
+            2.093,
+            2.3809
+          ],
+          "span": {
+            "length": 6,
+            "offset": 270
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "stated",
+          "polygon": [
+            2.5296,
+            2.2208,
+            2.9009,
+            2.2215,
+            2.9006,
+            2.3804,
+            2.5296,
+            2.3808
+          ],
+          "span": {
+            "length": 6,
+            "offset": 277
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "otherwise.",
+          "polygon": [
+            2.9479,
+            2.2217,
+            3.5784,
+            2.2201,
+            3.5784,
+            2.3782,
+            2.9477,
+            2.3804
+          ],
+          "span": {
+            "length": 10,
+            "offset": 284
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "Service",
+          "polygon": [
+            0.7389,
+            2.5456,
+            1.3336,
+            2.5478,
+            1.3337,
+            2.7148,
+            0.7398,
+            2.714
+          ],
+          "span": {
+            "length": 7,
+            "offset": 300
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "intervals",
+          "polygon": [
+            1.3912,
+            2.5483,
+            2.0774,
+            2.546,
+            2.0774,
+            2.7144,
+            1.3913,
+            2.7146
+          ],
+          "span": {
+            "length": 9,
+            "offset": 308
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "Interval",
+          "polygon": [
+            0.7385,
+            2.8103,
+            1.1934,
+            2.8123,
+            1.1936,
+            2.956,
+            0.7392,
+            2.9565
+          ],
+          "span": {
+            "length": 8,
+            "offset": 318
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "Task",
+          "polygon": [
+            1.2763,
+            2.8125,
+            1.598,
+            2.8111,
+            1.598,
+            2.9571,
+            1.2763,
+            2.956
+          ],
+          "span": {
+            "length": 4,
+            "offset": 327
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "Daily",
+          "polygon": [
+            7.5884,
+            3.0104,
+            7.9028,
+            3.0157,
+            7.9029,
+            3.1646,
+            7.5886,
+            3.1654
+          ],
+          "span": {
+            "length": 5,
+            "offset": 333
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "Rins",
+          "polygon": [
+            7.987,
+            3.0157,
+            8.2582,
+            3.0166,
+            8.2582,
+            3.165,
+            7.987,
+            3.1643
+          ],
+          "span": {
+            "length": 4,
+            "offset": 339
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "Diagnostics",
+          "polygon": [
+            0.7399,
+            4.118,
+            1.695,
+            4.1211,
+            1.695,
+            4.3025,
+            0.7397,
+            4.3051
+          ],
+          "span": {
+            "length": 11,
+            "offset": 349
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "1.",
+          "polygon": [
+            0.7462,
+            4.3778,
+            0.8535,
+            4.3779,
+            0.8533,
+            4.5461,
+            0.7459,
+            4.5452
+          ],
+          "span": {
+            "length": 3,
+            "offset": 362
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "Verify",
+          "polygon": [
+            0.8975,
+            4.3779,
+            1.255,
+            4.379,
+            1.255,
+            4.548,
+            0.8973,
+            4.5464
+          ],
+          "span": {
+            "length": 6,
+            "offset": 366
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "the",
+          "polygon": [
+            1.2907,
+            4.3793,
+            1.4832,
+            4.3805,
+            1.4832,
+            4.5478,
+            1.2907,
+            4.5479
+          ],
+          "span": {
+            "length": 3,
+            "offset": 373
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "float",
+          "polygon": [
+            1.5217,
+            4.3802,
+            1.7885,
+            4.3785,
+            1.7884,
+            4.547,
+            1.5217,
+            4.5477
+          ],
+          "span": {
+            "length": 5,
+            "offset": 377
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "shut-off",
+          "polygon": [
+            1.827,
+            4.3782,
+            2.2862,
+            4.38,
+            2.2861,
+            4.5487,
+            1.8268,
+            4.5469
+          ],
+          "span": {
+            "length": 8,
+            "offset": 383
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "operates",
+          "polygon": [
+            2.3192,
+            4.38,
+            2.8473,
+            4.3806,
+            2.847,
+            4.5499,
+            2.3191,
+            4.5488
+          ],
+          "span": {
+            "length": 8,
+            "offset": 392
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "freely",
+          "polygon": [
+            2.8803,
+            4.3807,
+            3.2323,
+            4.3807,
+            3.232,
+            4.5491,
+            2.88,
+            4.5499
+          ],
+          "span": {
+            "length": 6,
+            "offset": 401
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "before",
+          "polygon": [
+            3.2653,
+            4.3808,
+            3.6613,
+            4.3814,
+            3.6611,
+            4.5512,
+            3.265,
+            4.5491
+          ],
+          "span": {
+            "length": 6,
+            "offset": 408
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "investigating",
+          "polygon": [
+            3.6943,
+            4.3814,
+            4.4808,
+            4.3811,
+            4.4803,
+            4.5497,
+            3.6941,
+            4.5511
+          ],
+          "span": {
+            "length": 13,
+            "offset": 415
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "a",
+          "polygon": [
+            4.5276,
+            4.3812,
+            4.5991,
+            4.3814,
+            4.5986,
+            4.5494,
+            4.5271,
+            4.5495
+          ],
+          "span": {
+            "length": 1,
+            "offset": 429
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "vacuum",
+          "polygon": [
+            4.6431,
+            4.3814,
+            5.1243,
+            4.3833,
+            5.124,
+            4.5475,
+            4.6426,
+            4.5492
+          ],
+          "span": {
+            "length": 6,
+            "offset": 431
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "complaint.",
+          "polygon": [
+            5.1683,
+            4.3835,
+            5.8041,
+            4.3831,
+            5.8041,
+            4.5473,
+            5.168,
+            4.5474
+          ],
+          "span": {
+            "length": 10,
+            "offset": 438
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "2.",
+          "polygon": [
+            7.5809,
+            4.5775,
+            7.6993,
+            4.5788,
+            7.6996,
+            4.7212,
+            7.5811,
+            4.7195
+          ],
+          "span": {
+            "length": 3,
+            "offset": 450
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "Read",
+          "polygon": [
+            7.754,
+            4.5792,
+            8.073,
+            4.5835,
+            8.073,
+            4.7195,
+            7.7542,
+            4.7209
+          ],
+          "span": {
+            "length": 4,
+            "offset": 454
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "an",
+          "polygon": [
+            8.1186,
+            4.5842,
+            8.2582,
+            4.5902,
+            8.2582,
+            4.7224,
+            8.1185,
+            4.72
+          ],
+          "span": {
+            "length": 2,
+            "offset": 459
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "Parts",
+          "polygon": [
+            0.7388,
+            5.6897,
+            1.1564,
+            5.6909,
+            1.1563,
+            5.8574,
+            0.7387,
+            5.8568
+          ],
+          "span": {
+            "length": 5,
+            "offset": 468
+          }
+        },
+        {
+          "confidence": 0.999,
+          "content": "and",
+          "polygon": [
+            1.2114,
+            5.6908,
+            1.4971,
+            5.6922,
+            1.4969,
+            5.8574,
+            1.2112,
+            5.8574
+          ],
+          "span": {
+            "length": 3,
+            "offset": 474
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "consumables",
+          "polygon": [
+            1.5548,
+            5.6924,
+            2.6253,
+            5.6906,
+            2.6253,
+            5.8574,
+            1.5546,
+            5.8574
+          ],
+          "span": {
+            "length": 11,
+            "offset": 478
+          }
+        },
+        {
+          "confidence": 0.984,
+          "content": "-",
+          "polygon": [
+            0.7407,
+            5.9614,
+            0.794,
+            5.9616,
+            0.7941,
+            6.1126,
+            0.7409,
+            6.1125
+          ],
+          "span": {
+            "length": 2,
+            "offset": 491
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "Order",
+          "polygon": [
+            0.832,
+            5.9617,
+            1.1873,
+            5.9628,
+            1.1873,
+            6.1135,
+            0.8322,
+            6.1127
+          ],
+          "span": {
+            "length": 5,
+            "offset": 494
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "consumables",
+          "polygon": [
+            1.2254,
+            5.9629,
+            2.0375,
+            5.9614,
+            2.0373,
+            6.115,
+            1.2253,
+            6.1136
+          ],
+          "span": {
+            "length": 11,
+            "offset": 500
+          }
+        },
+        {
+          "confidence": 0.994,
+          "content": "against",
+          "polygon": [
+            2.0807,
+            5.9613,
+            2.5273,
+            5.9611,
+            2.527,
+            6.1156,
+            2.0804,
+            6.1151
+          ],
+          "span": {
+            "length": 7,
+            "offset": 512
+          }
+        },
+        {
+          "confidence": 0.999,
+          "content": "the",
+          "polygon": [
+            2.5654,
+            5.9611,
+            2.7405,
+            5.9614,
+            2.7402,
+            6.1154,
+            2.5651,
+            6.1155
+          ],
+          "span": {
+            "length": 3,
+            "offset": 520
+          }
+        },
+        {
+          "confidence": 0.989,
+          "content": "item",
+          "polygon": [
+            2.771,
+            5.9615,
+            3.0527,
+            5.9624,
+            3.0524,
+            6.1166,
+            2.7707,
+            6.1154
+          ],
+          "span": {
+            "length": 4,
+            "offset": 524
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "number,",
+          "polygon": [
+            3.106,
+            5.9625,
+            3.6008,
+            5.9607,
+            3.6005,
+            6.1164,
+            3.1057,
+            6.1169
+          ],
+          "span": {
+            "length": 7,
+            "offset": 529
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "since",
+          "polygon": [
+            3.6465,
+            5.9606,
+            3.9663,
+            5.9599,
+            3.9662,
+            6.1162,
+            3.6463,
+            6.1164
+          ],
+          "span": {
+            "length": 5,
+            "offset": 537
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "two",
+          "polygon": [
+            4.0094,
+            5.9598,
+            4.2226,
+            5.96,
+            4.2224,
+            6.116,
+            4.0093,
+            6.1161
+          ],
+          "span": {
+            "length": 3,
+            "offset": 543
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "variants",
+          "polygon": [
+            4.2632,
+            5.96,
+            4.748,
+            5.9599,
+            4.7474,
+            6.1167,
+            4.263,
+            6.116
+          ],
+          "span": {
+            "length": 8,
+            "offset": 547
+          }
+        },
+        {
+          "confidence": 0.997,
+          "content": "of",
+          "polygon": [
+            4.7911,
+            5.9598,
+            4.9104,
+            5.9598,
+            4.9097,
+            6.1169,
+            4.7905,
+            6.1168
+          ],
+          "span": {
+            "length": 2,
+            "offset": 556
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "one",
+          "polygon": [
+            4.9459,
+            5.9599,
+            5.1718,
+            5.9599,
+            5.1709,
+            6.1168,
+            4.9452,
+            6.1168
+          ],
+          "span": {
+            "length": 3,
+            "offset": 559
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "machine",
+          "polygon": [
+            5.22,
+            5.9599,
+            5.7352,
+            5.9605,
+            5.7347,
+            6.1171,
+            5.2191,
+            6.1168
+          ],
+          "span": {
+            "length": 7,
+            "offset": 563
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "type",
+          "polygon": [
+            5.7758,
+            5.9605,
+            6.0346,
+            5.9609,
+            6.0343,
+            6.1171,
+            5.7753,
+            6.1171
+          ],
+          "span": {
+            "length": 4,
+            "offset": 571
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "differ.",
+          "polygon": [
+            6.0778,
+            5.9609,
+            6.4262,
+            5.9609,
+            6.4262,
+            6.1176,
+            6.0775,
+            6.1171
+          ],
+          "span": {
+            "length": 7,
+            "offset": 576
+          }
+        },
+        {
+          "confidence": 0.988,
+          "content": "-",
+          "polygon": [
+            7.5859,
+            6.157,
+            7.6368,
+            6.1571,
+            7.637,
+            6.2882,
+            7.5862,
+            6.2871
+          ],
+          "span": {
+            "length": 2,
+            "offset": 585
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "Filter",
+          "polygon": [
+            7.6835,
+            6.158,
+            7.9892,
+            6.1645,
+            7.9894,
+            6.2935,
+            7.6836,
+            6.2908
+          ],
+          "span": {
+            "length": 6,
+            "offset": 588
+          }
+        },
+        {
+          "confidence": 0.974,
+          "content": "seal",
+          "polygon": [
+            8.0252,
+            6.1657,
+            8.2582,
+            6.1749,
+            8.2582,
+            6.3001,
+            8.0256,
+            6.2938
+          ],
+          "span": {
+            "length": 4,
+            "offset": 595
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "Safety",
+          "polygon": [
+            0.7412,
+            7.2573,
+            1.2556,
+            7.2702,
+            1.2536,
+            7.4543,
+            0.7389,
+            7.4409
+          ],
+          "span": {
+            "length": 6,
+            "offset": 604
+          }
+        },
+        {
+          "confidence": 0.989,
+          "content": "-",
+          "polygon": [
+            0.7412,
+            7.5336,
+            0.7931,
+            7.5341,
+            0.7927,
+            7.6897,
+            0.7408,
+            7.6889
+          ],
+          "span": {
+            "length": 2,
+            "offset": 612
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "Wear",
+          "polygon": [
+            0.8294,
+            7.5344,
+            1.164,
+            7.5369,
+            1.1636,
+            7.6936,
+            0.829,
+            7.6902
+          ],
+          "span": {
+            "length": 4,
+            "offset": 615
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "eye",
+          "polygon": [
+            1.203,
+            7.5371,
+            1.4209,
+            7.5373,
+            1.4205,
+            7.6936,
+            1.2025,
+            7.6938
+          ],
+          "span": {
+            "length": 3,
+            "offset": 620
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "protection",
+          "polygon": [
+            1.4701,
+            7.5373,
+            2.0668,
+            7.5365,
+            2.0664,
+            7.6946,
+            1.4698,
+            7.6934
+          ],
+          "span": {
+            "length": 10,
+            "offset": 624
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "when",
+          "polygon": [
+            2.1083,
+            7.5365,
+            2.4377,
+            7.5369,
+            2.4368,
+            7.6956,
+            2.1078,
+            7.6948
+          ],
+          "span": {
+            "length": 4,
+            "offset": 635
+          }
+        },
+        {
+          "confidence": 0.998,
+          "content": "working",
+          "polygon": [
+            2.4792,
+            7.5368,
+            2.9539,
+            7.5377,
+            2.953,
+            7.6961,
+            2.4784,
+            7.6955
+          ],
+          "span": {
+            "length": 7,
+            "offset": 640
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "near",
+          "polygon": [
+            3.0058,
+            7.5376,
+            3.2807,
+            7.5373,
+            3.28,
+            7.6965,
+            3.0049,
+            7.6961
+          ],
+          "span": {
+            "length": 4,
+            "offset": 648
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "a",
+          "polygon": [
+            3.317,
+            7.5373,
+            3.3871,
+            7.5372,
+            3.3863,
+            7.6969,
+            3.3163,
+            7.6967
+          ],
+          "span": {
+            "length": 1,
+            "offset": 653
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "charging",
+          "polygon": [
+            3.4338,
+            7.5373,
+            3.9552,
+            7.5374,
+            3.9545,
+            7.6974,
+            3.433,
+            7.697
+          ],
+          "span": {
+            "length": 8,
+            "offset": 655
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "battery.",
+          "polygon": [
+            4.007,
+            7.5376,
+            4.4687,
+            7.5382,
+            4.4687,
+            7.6992,
+            4.0064,
+            7.6973
+          ],
+          "span": {
+            "length": 8,
+            "offset": 664
+          }
+        },
+        {
+          "confidence": 0.992,
+          "content": "-",
+          "polygon": [
+            7.592,
+            7.7279,
+            7.6396,
+            7.7273,
+            7.6396,
+            7.8634,
+            7.5919,
+            7.863
+          ],
+          "span": {
+            "length": 2,
+            "offset": 674
+          }
+        },
+        {
+          "confidence": 0.996,
+          "content": "The",
+          "polygon": [
+            7.6893,
+            7.7286,
+            7.927,
+            7.736,
+            7.9272,
+            7.8676,
+            7.6893,
+            7.8649
+          ],
+          "span": {
+            "length": 3,
+            "offset": 677
+          }
+        },
+        {
+          "confidence": 0.973,
+          "content": "eme",
+          "polygon": [
+            7.9811,
+            7.7373,
+            8.2582,
+            7.744,
+            8.2582,
+            7.8707,
+            7.9813,
+            7.8673
+          ],
+          "span": {
+            "length": 3,
+            "offset": 681
+          }
+        },
+        {
+          "confidence": 0.993,
+          "content": "isolator",
+          "polygon": [
+            7.5852,
+            7.9312,
+            8.0331,
+            7.9331,
+            8.0334,
+            8.0657,
+            7.5853,
+            8.0667
+          ],
+          "span": {
+            "length": 8,
+            "offset": 685
+          }
+        },
+        {
+          "confidence": 0.995,
+          "content": "is",
+          "polygon": [
+            8.0594,
+            7.9337,
+            8.1758,
+            7.9346,
+            8.1762,
+            8.0658,
+            8.0598,
+            8.0656
+          ],
+          "span": {
+            "length": 2,
+            "offset": 694
+          }
+        },
+        {
+          "confidence": 0.139,
+          "content": "h",
+          "polygon": [
+            8.2197,
+            7.9355,
+            8.2582,
+            7.9386,
+            8.2582,
+            8.069,
+            8.2201,
+            8.0652
+          ],
+          "span": {
+            "length": 1,
+            "offset": 697
+          }
+        }
+      ]
+    }
+  ],
+  "paragraphs": [
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.741,
+            0.7407,
+            5.5829,
+            0.7425,
+            5.5829,
+            0.9865,
+            0.7409,
+            0.9847
+          ]
+        }
+      ],
+      "content": "Single-disc machine SDM-43 - service manual",
+      "role": "title",
+      "spans": [
+        {
+          "length": 45,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7385,
+            1.1133,
+            4.1248,
+            1.1091,
+            4.125,
+            1.2367,
+            0.7386,
+            1.2409
+          ]
+        }
+      ],
+      "content": "Document sdm-43-service-manual \u00b7 revision 3 \u00b7 effective 2026-03-09",
+      "spans": [
+        {
+          "length": 66,
+          "offset": 47
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            7.5843,
+            1.2668,
+            8.2477,
+            1.2763,
+            8.2477,
+            1.4006,
+            7.5826,
+            1.3911
+          ]
+        }
+      ],
+      "content": "Machine type",
+      "spans": [
+        {
+          "length": 12,
+          "offset": 115
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7386,
+            1.7645,
+            1.2556,
+            1.7713,
+            1.2534,
+            1.9379,
+            0.7364,
+            1.9311
+          ]
+        }
+      ],
+      "content": "Scope",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 8,
+          "offset": 130
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7305,
+            2.0208,
+            7.5215,
+            2.0165,
+            7.5217,
+            2.3766,
+            0.7308,
+            2.3809
+          ]
+        }
+      ],
+      "content": "For service technicians working on the Single-disc machine SDM-43. Every torque figure in this document is for clean, dry threads unless stated otherwise.",
+      "spans": [
+        {
+          "length": 154,
+          "offset": 140
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7385,
+            2.5456,
+            2.0756,
+            2.546,
+            2.0755,
+            2.9547,
+            0.7384,
+            2.9543
+          ]
+        }
+      ],
+      "content": "Service intervals Interval Task",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 34,
+          "offset": 297
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            7.5884,
+            3.0083,
+            8.2477,
+            3.0124,
+            8.2477,
+            3.1671,
+            7.5875,
+            3.163
+          ]
+        }
+      ],
+      "content": "Daily Rins",
+      "spans": [
+        {
+          "length": 10,
+          "offset": 333
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7399,
+            4.118,
+            1.6946,
+            4.1195,
+            1.6942,
+            4.3036,
+            0.7396,
+            4.302
+          ]
+        }
+      ],
+      "content": "Diagnostics",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 14,
+          "offset": 346
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7461,
+            4.377,
+            5.8009,
+            4.3824,
+            5.8008,
+            4.5507,
+            0.7459,
+            4.5453
+          ]
+        }
+      ],
+      "content": "1. Verify the float shut-off operates freely before investigating a vacuum complaint.",
+      "spans": [
+        {
+          "length": 86,
+          "offset": 362
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            7.5802,
+            4.5763,
+            8.2477,
+            4.5809,
+            8.2477,
+            4.7224,
+            7.5792,
+            4.7178
+          ]
+        }
+      ],
+      "content": "2. Read an",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 450
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7387,
+            5.6897,
+            2.6208,
+            5.6906,
+            2.6207,
+            5.8577,
+            0.7387,
+            5.8568
+          ]
+        }
+      ],
+      "content": "Parts and consumables",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 25,
+          "offset": 464
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7407,
+            5.9593,
+            6.4231,
+            5.96,
+            6.4231,
+            6.115,
+            0.7407,
+            6.1143
+          ]
+        }
+      ],
+      "content": "- Order consumables against the item number, since two variants of one machine type differ.",
+      "spans": [
+        {
+          "length": 92,
+          "offset": 491
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            7.5859,
+            6.1562,
+            8.2477,
+            6.1669,
+            8.2477,
+            6.298,
+            7.5838,
+            6.2873
+          ]
+        }
+      ],
+      "content": "- Filter seal",
+      "spans": [
+        {
+          "length": 14,
+          "offset": 585
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.7413,
+            7.2551,
+            1.2535,
+            7.2682,
+            1.2488,
+            7.451,
+            0.7366,
+            7.4378
+          ]
+        }
+      ],
+      "content": "Safety",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 8,
+          "offset": 602
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            0.741,
+            7.5326,
+            4.4668,
+            7.5381,
+            4.4665,
+            7.6964,
+            0.7408,
+            7.6909
+          ]
+        }
+      ],
+      "content": "- Wear eye protection when working near a charging battery.",
+      "spans": [
+        {
+          "length": 60,
+          "offset": 612
+        }
+      ]
+    },
+    {
+      "boundingRegions": [
+        {
+          "pageNumber": 1,
+          "polygon": [
+            7.5861,
+            7.7263,
+            8.2477,
+            7.7295,
+            8.2477,
+            8.069,
+            7.5845,
+            8.0658
+          ]
+        }
+      ],
+      "content": "- The eme isolator is h",
+      "spans": [
+        {
+          "length": 24,
+          "offset": 674
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "elements": [
+        "/sections/1",
+        "/sections/6"
+      ],
+      "spans": [
+        {
+          "length": 698,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/0",
+        "/paragraphs/1",
+        "/paragraphs/2",
+        "/sections/2",
+        "/sections/3",
+        "/sections/4"
+      ],
+      "spans": [
+        {
+          "length": 599,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/3",
+        "/paragraphs/4"
+      ],
+      "spans": [
+        {
+          "length": 164,
+          "offset": 130
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/5",
+        "/paragraphs/6"
+      ],
+      "spans": [
+        {
+          "length": 46,
+          "offset": 297
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/7",
+        "/paragraphs/8",
+        "/paragraphs/9",
+        "/sections/5"
+      ],
+      "spans": [
+        {
+          "length": 253,
+          "offset": 346
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/10",
+        "/paragraphs/11",
+        "/paragraphs/12"
+      ],
+      "spans": [
+        {
+          "length": 135,
+          "offset": 464
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/13",
+        "/paragraphs/14",
+        "/paragraphs/15"
+      ],
+      "spans": [
+        {
+          "length": 96,
+          "offset": 602
+        }
+      ]
+    }
+  ],
+  "stringIndexType": "unicodeCodePoint"
+}

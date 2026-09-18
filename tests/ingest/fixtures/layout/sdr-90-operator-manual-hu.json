@@ -1,0 +1,3970 @@
+{
+  "apiVersion": "2024-11-30",
+  "content": "# SDR-90 vezet\u0151\u00fcl\u00e9ses s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p \u2014 kezel\u00e9si k\u00e9zik\u00f6nyv\n\nDocument sdr-90-operator-manual-hu \u00b7 revision 2 \u00b7 effective 2026-02-02\n\nMachine types: SDR-90\n\nItem numbers: 1.534-210.0, 1.534-211.0, 1.534-212.0\n\n\n## Rendeltet\u00e9sszer\u0171 haszn\u00e1lat\n\nEz a k\u00e9zik\u00f6nyv a SDR-90 vezet\u0151\u00fcl\u00e9ses s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p t\u00edpusra vonatkozik, 1.534-211.0 cikksz\u00e1mmal. A g\u00e9p ipari, belt\u00e9ri haszn\u00e1latra k\u00e9sz\u00fclt bevonatos padl\u00f3kon. Minden m\u00e1s haszn\u00e1lat a j\u00f3v\u00e1hagy\u00e1son k\u00edv\u00fcl esik.\n\n\n## \u00c9rintett kivitelek\n\n\n<table>\n<tr>\n<th>Cikksz\u00e1m</th>\n<th>Akkumul\u00e1tor</th>\n<th>T\u00e1rcsa</th>\n<th>Kapacit\u00e1s</th>\n</tr>\n<tr>\n<td>1.534-210.0</td>\n<td>AGM</td>\n<td>brush</td>\n<td>110 l oldat / 120 l szennyv\u00edz</td>\n</tr>\n<tr>\n<td>1.534-211.0</td>\n<td>lithium-ion</td>\n<td>brush</td>\n<td>110 l oldat / 120 l szennyv\u00edz</td>\n</tr>\n<tr>\n<td>1.534-212.0</td>\n<td>lithium-ion</td>\n<td>pad</td>\n<td>150 l oldat / 160 l szennyv\u00edz</td>\n</tr>\n</table>\n\n\n## Kezel\u0151szervek\n\nA kefet\u00e1rcsa karja emeli \u00e9s s\u00fcllyeszti a t\u00e1rcs\u00e1t. Tolat\u00e1s el\u0151tt emelje fel.\n\nAz akkumul\u00e1tor kijelz\u0151 a lithium-ion csomag t\u00f6lt\u00f6tts\u00e9gi szintj\u00e9t mutatja.\n\nA v\u00e9szle\u00e1ll\u00edt\u00f3 megszak\u00edtja a hajt\u00e1st \u00e9s a kefemeghajt\u00e1st, de nem v\u00e1lasztja le az akkumul\u00e1tort.\n\nAz \u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3 r\u00f6gz\u00edti a m\u0171k\u00f6d\u00e9si id\u0151t, \u00e9s minden szervizciklus alapja.\n\nA kulcsos kapcsol\u00f3 a teljes g\u00e9pet lev\u00e1lasztja. \u0150rizetlen\u00fcl hagyott g\u00e9pb\u0151l vegye ki a kulcsot.\n\n\n## Napi \u00fczemeltet\u00e9s\n\nS\u00fcllyessze le a kefet\u00e1rcs\u00e1t \u00e9s nyissa ki az oldatcsapot.\n\nIndul\u00e1s el\u0151tt j\u00e1rja be a ter\u00fcletet, \u00e9s t\u00e1vol\u00edtsa el a laza t\u00f6rmel\u00e9ket \u00e9s az akad\u00e1lyokat.\n\nEllen\u0151rizze, hogy az akkumul\u00e1tor t\u00f6lt\u00f6tts\u00e9ge elegend\u0151 a teljes menethez.\n\nMeg\u00e1ll\u00e1s vagy tolat\u00e1s el\u0151tt emelje fel a t\u00e1rcs\u00e1t \u00e9s z\u00e1rja el a csapot.\n\nMinden s\u00e1vot k\u00f6r\u00fclbel\u00fcl a t\u00e1rcsasz\u00e9less\u00e9g tized\u00e9vel fedjen \u00e1t.\n\nOlyan sebess\u00e9get v\u00e1lasszon, amelyn\u00e9l a leh\u00faz\u00f3gumi tiszt\u00e1n felszed; a gyorsabb nem tiszt\u00e1bb.\n\n\n## Felt\u00f6lt\u00e9s \u00e9s \u00fcr\u00edt\u00e9s\n\nMinden m\u0171szak v\u00e9g\u00e9n \u00f6bl\u00edtse ki a szennyv\u00edztart\u00e1lyt, \u00e9s a fedelet hagyja nyitva sz\u00e1radni.\n\nA szennyv\u00edztart\u00e1lyt a megtel\u00e9s el\u0151tt \u00fcr\u00edtse, ne a lez\u00e1r\u00f3 szelep m\u0171k\u00f6d\u00e9se ut\u00e1n.\n\nT\u00f6ltse fel az oldattart\u00e1lyt 110 literig 50 C alatti tiszta v\u00edzzel. A forr\u00f3bb v\u00edz nem tiszt\u00edt jobban, viszont r\u00f6vid\u00edti a tart\u00e1ly \u00e9s a t\u00f6m\u00edt\u00e9sek \u00e9lettartam\u00e1t.\n\nA tiszt\u00edt\u00f3szert a c\u00edmk\u00e9n megadott h\u00edg\u00edt\u00e1sban, mindig v\u00edzbe adagolja, soha ford\u00edtva.\n\n\n## Haszn\u00e1lat ut\u00e1n\n\nJegyezze fel az \u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3 \u00e1ll\u00e1s\u00e1t \u00e9s minden szokatlan jelens\u00e9get a g\u00e9pnapl\u00f3ba.\n\nEmelje el a leh\u00faz\u00f3gumit a padl\u00f3t\u00f3l, hogy a gumik ne deform\u00e1l\u00f3djanak \u00e9jszak\u00e1ra.\n\nT\u00f6r\u00f6lje le a leh\u00faz\u00f3gumikat \u00e9s ellen\u0151rizze s\u00e9r\u00fcl\u00e9smentess\u00e9g\u00fcket.\n\nVegye ki a kef\u00e9t vagy a p\u00e1dtart\u00f3t \u00e9s \u00f6bl\u00edtse le.\n\n\u00dcr\u00edtse le \u00e9s \u00f6bl\u00edtse ki mindk\u00e9t tart\u00e1lyt.\n\n\n## Figyelmeztet\u00e9sek\n\nCser\u00e9lje a leh\u00faz\u00f3gumit, ha a leh\u00faz\u00f3\u00e9l 3 mm-n\u00e9l jobban elkopott. Az elkopott gumi nedves padl\u00f3t hagy, ami cs\u00fasz\u00e1svesz\u00e9ly, nem sz\u00e9ps\u00e9ghiba.\n\nNe mossa le a g\u00e9pet v\u00edzsug\u00e1rral. Az elektromos t\u00e9rbe jut\u00f3 v\u00edz okozta k\u00e1r nem t\u00e9r\u00fcl meg.\n\nA kef\u00e9ket 12 mm s\u00f6rtehosszn\u00e1l vagy az alatt cser\u00e9lje. Ezen t\u00fal a kefet\u00e1rcsa viseli azt a terhel\u00e9st, amit a s\u00f6rt\u00e9nek kellene.\n\nSoha ne nyissa ki az akkumul\u00e1tortart\u00f3t csatlakoztatott t\u00f6lt\u0151 mellett.\n",
+  "contentFormat": "markdown",
+  "modelId": "prebuilt-layout",
+  "pages": [
+    {
+      "pageNumber": 1,
+      "spans": [
+        {
+          "length": 3031,
+          "offset": 0
+        }
+      ],
+      "words": [
+        {
+          "confidence": 1,
+          "content": "SDR-90",
+          "span": {
+            "length": 6,
+            "offset": 2
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vezet\u0151\u00fcl\u00e9ses",
+          "span": {
+            "length": 12,
+            "offset": 9
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p",
+          "span": {
+            "length": 17,
+            "offset": 22
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u2014",
+          "span": {
+            "length": 1,
+            "offset": 40
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kezel\u00e9si",
+          "span": {
+            "length": 8,
+            "offset": 42
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00e9zik\u00f6nyv",
+          "span": {
+            "length": 9,
+            "offset": 51
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Document",
+          "span": {
+            "length": 8,
+            "offset": 62
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "sdr-90-operator-manual-hu",
+          "span": {
+            "length": 25,
+            "offset": 71
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00b7",
+          "span": {
+            "length": 1,
+            "offset": 97
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "revision",
+          "span": {
+            "length": 8,
+            "offset": 99
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "2",
+          "span": {
+            "length": 1,
+            "offset": 108
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00b7",
+          "span": {
+            "length": 1,
+            "offset": 110
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "effective",
+          "span": {
+            "length": 9,
+            "offset": 112
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "2026-02-02",
+          "span": {
+            "length": 10,
+            "offset": 122
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Machine",
+          "span": {
+            "length": 7,
+            "offset": 134
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "types:",
+          "span": {
+            "length": 6,
+            "offset": 142
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "SDR-90",
+          "span": {
+            "length": 6,
+            "offset": 149
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Item",
+          "span": {
+            "length": 4,
+            "offset": 157
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "numbers:",
+          "span": {
+            "length": 8,
+            "offset": 162
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-210.0,",
+          "span": {
+            "length": 12,
+            "offset": 171
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-211.0,",
+          "span": {
+            "length": 12,
+            "offset": 184
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-212.0",
+          "span": {
+            "length": 11,
+            "offset": 197
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Rendeltet\u00e9sszer\u0171",
+          "span": {
+            "length": 16,
+            "offset": 214
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "haszn\u00e1lat",
+          "span": {
+            "length": 9,
+            "offset": 231
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Ez",
+          "span": {
+            "length": 2,
+            "offset": 242
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 245
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00e9zik\u00f6nyv",
+          "span": {
+            "length": 9,
+            "offset": 247
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 257
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "SDR-90",
+          "span": {
+            "length": 6,
+            "offset": 259
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vezet\u0151\u00fcl\u00e9ses",
+          "span": {
+            "length": 12,
+            "offset": 266
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p",
+          "span": {
+            "length": 17,
+            "offset": 279
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00edpusra",
+          "span": {
+            "length": 7,
+            "offset": 297
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vonatkozik,",
+          "span": {
+            "length": 11,
+            "offset": 305
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-211.0",
+          "span": {
+            "length": 11,
+            "offset": 317
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "cikksz\u00e1mmal.",
+          "span": {
+            "length": 12,
+            "offset": 329
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 342
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "g\u00e9p",
+          "span": {
+            "length": 3,
+            "offset": 344
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ipari,",
+          "span": {
+            "length": 6,
+            "offset": 348
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "belt\u00e9ri",
+          "span": {
+            "length": 7,
+            "offset": 355
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "haszn\u00e1latra",
+          "span": {
+            "length": 11,
+            "offset": 363
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00e9sz\u00fclt",
+          "span": {
+            "length": 7,
+            "offset": 375
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "bevonatos",
+          "span": {
+            "length": 9,
+            "offset": 383
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "padl\u00f3kon.",
+          "span": {
+            "length": 9,
+            "offset": 393
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Minden",
+          "span": {
+            "length": 6,
+            "offset": 403
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "m\u00e1s",
+          "span": {
+            "length": 3,
+            "offset": 410
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "haszn\u00e1lat",
+          "span": {
+            "length": 9,
+            "offset": 414
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 424
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "j\u00f3v\u00e1hagy\u00e1son",
+          "span": {
+            "length": 12,
+            "offset": 426
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00edv\u00fcl",
+          "span": {
+            "length": 5,
+            "offset": 439
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "esik.",
+          "span": {
+            "length": 5,
+            "offset": 445
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00c9rintett",
+          "span": {
+            "length": 8,
+            "offset": 456
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kivitelek",
+          "span": {
+            "length": 9,
+            "offset": 465
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Cikksz\u00e1m",
+          "span": {
+            "length": 8,
+            "offset": 494
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Akkumul\u00e1tor",
+          "span": {
+            "length": 11,
+            "offset": 512
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "T\u00e1rcsa",
+          "span": {
+            "length": 6,
+            "offset": 533
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Kapacit\u00e1s",
+          "span": {
+            "length": 9,
+            "offset": 549
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-210.0",
+          "span": {
+            "length": 11,
+            "offset": 579
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "AGM",
+          "span": {
+            "length": 3,
+            "offset": 600
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "brush",
+          "span": {
+            "length": 5,
+            "offset": 613
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "110",
+          "span": {
+            "length": 3,
+            "offset": 628
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 632
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "oldat",
+          "span": {
+            "length": 5,
+            "offset": 634
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "/",
+          "span": {
+            "length": 1,
+            "offset": 640
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "120",
+          "span": {
+            "length": 3,
+            "offset": 642
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 646
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szennyv\u00edz",
+          "span": {
+            "length": 9,
+            "offset": 648
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-211.0",
+          "span": {
+            "length": 11,
+            "offset": 678
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "lithium-ion",
+          "span": {
+            "length": 11,
+            "offset": 699
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "brush",
+          "span": {
+            "length": 5,
+            "offset": 720
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "110",
+          "span": {
+            "length": 3,
+            "offset": 735
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 739
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "oldat",
+          "span": {
+            "length": 5,
+            "offset": 741
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "/",
+          "span": {
+            "length": 1,
+            "offset": 747
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "120",
+          "span": {
+            "length": 3,
+            "offset": 749
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 753
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szennyv\u00edz",
+          "span": {
+            "length": 9,
+            "offset": 755
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "1.534-212.0",
+          "span": {
+            "length": 11,
+            "offset": 785
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "lithium-ion",
+          "span": {
+            "length": 11,
+            "offset": 806
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "pad",
+          "span": {
+            "length": 3,
+            "offset": 827
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "150",
+          "span": {
+            "length": 3,
+            "offset": 840
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 844
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "oldat",
+          "span": {
+            "length": 5,
+            "offset": 846
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "/",
+          "span": {
+            "length": 1,
+            "offset": 852
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "160",
+          "span": {
+            "length": 3,
+            "offset": 854
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "l",
+          "span": {
+            "length": 1,
+            "offset": 858
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szennyv\u00edz",
+          "span": {
+            "length": 9,
+            "offset": 860
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Kezel\u0151szervek",
+          "span": {
+            "length": 13,
+            "offset": 895
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 910
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kefet\u00e1rcsa",
+          "span": {
+            "length": 10,
+            "offset": 912
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "karja",
+          "span": {
+            "length": 5,
+            "offset": 923
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "emeli",
+          "span": {
+            "length": 5,
+            "offset": 929
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 935
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00fcllyeszti",
+          "span": {
+            "length": 10,
+            "offset": 938
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 949
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e1rcs\u00e1t.",
+          "span": {
+            "length": 8,
+            "offset": 951
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Tolat\u00e1s",
+          "span": {
+            "length": 7,
+            "offset": 960
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el\u0151tt",
+          "span": {
+            "length": 5,
+            "offset": 968
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "emelje",
+          "span": {
+            "length": 6,
+            "offset": 974
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fel.",
+          "span": {
+            "length": 4,
+            "offset": 981
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Az",
+          "span": {
+            "length": 2,
+            "offset": 987
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "akkumul\u00e1tor",
+          "span": {
+            "length": 11,
+            "offset": 990
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kijelz\u0151",
+          "span": {
+            "length": 7,
+            "offset": 1002
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1010
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "lithium-ion",
+          "span": {
+            "length": 11,
+            "offset": 1012
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "csomag",
+          "span": {
+            "length": 6,
+            "offset": 1024
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00f6lt\u00f6tts\u00e9gi",
+          "span": {
+            "length": 11,
+            "offset": 1031
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szintj\u00e9t",
+          "span": {
+            "length": 8,
+            "offset": 1043
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mutatja.",
+          "span": {
+            "length": 8,
+            "offset": 1052
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 1062
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00e9szle\u00e1ll\u00edt\u00f3",
+          "span": {
+            "length": 12,
+            "offset": 1064
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "megszak\u00edtja",
+          "span": {
+            "length": 11,
+            "offset": 1077
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1089
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hajt\u00e1st",
+          "span": {
+            "length": 7,
+            "offset": 1091
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1099
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1102
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kefemeghajt\u00e1st,",
+          "span": {
+            "length": 15,
+            "offset": 1104
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "de",
+          "span": {
+            "length": 2,
+            "offset": 1120
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nem",
+          "span": {
+            "length": 3,
+            "offset": 1123
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00e1lasztja",
+          "span": {
+            "length": 9,
+            "offset": 1127
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le",
+          "span": {
+            "length": 2,
+            "offset": 1137
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 1140
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "akkumul\u00e1tort.",
+          "span": {
+            "length": 13,
+            "offset": 1143
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Az",
+          "span": {
+            "length": 2,
+            "offset": 1158
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3",
+          "span": {
+            "length": 15,
+            "offset": 1161
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "r\u00f6gz\u00edti",
+          "span": {
+            "length": 7,
+            "offset": 1177
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1185
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "m\u0171k\u00f6d\u00e9si",
+          "span": {
+            "length": 8,
+            "offset": 1187
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "id\u0151t,",
+          "span": {
+            "length": 5,
+            "offset": 1196
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1202
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "minden",
+          "span": {
+            "length": 6,
+            "offset": 1205
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szervizciklus",
+          "span": {
+            "length": 13,
+            "offset": 1212
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "alapja.",
+          "span": {
+            "length": 7,
+            "offset": 1226
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 1235
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kulcsos",
+          "span": {
+            "length": 7,
+            "offset": 1237
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kapcsol\u00f3",
+          "span": {
+            "length": 8,
+            "offset": 1245
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1254
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "teljes",
+          "span": {
+            "length": 6,
+            "offset": 1256
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "g\u00e9pet",
+          "span": {
+            "length": 5,
+            "offset": 1263
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "lev\u00e1lasztja.",
+          "span": {
+            "length": 12,
+            "offset": 1269
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u0150rizetlen\u00fcl",
+          "span": {
+            "length": 11,
+            "offset": 1282
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hagyott",
+          "span": {
+            "length": 7,
+            "offset": 1294
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "g\u00e9pb\u0151l",
+          "span": {
+            "length": 6,
+            "offset": 1302
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vegye",
+          "span": {
+            "length": 5,
+            "offset": 1309
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 1315
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1318
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kulcsot.",
+          "span": {
+            "length": 8,
+            "offset": 1320
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Napi",
+          "span": {
+            "length": 4,
+            "offset": 1334
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00fczemeltet\u00e9s",
+          "span": {
+            "length": 11,
+            "offset": 1339
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "S\u00fcllyessze",
+          "span": {
+            "length": 10,
+            "offset": 1352
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le",
+          "span": {
+            "length": 2,
+            "offset": 1363
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1366
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kefet\u00e1rcs\u00e1t",
+          "span": {
+            "length": 11,
+            "offset": 1368
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1380
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nyissa",
+          "span": {
+            "length": 6,
+            "offset": 1383
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 1390
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 1393
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "oldatcsapot.",
+          "span": {
+            "length": 12,
+            "offset": 1396
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Indul\u00e1s",
+          "span": {
+            "length": 7,
+            "offset": 1410
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el\u0151tt",
+          "span": {
+            "length": 5,
+            "offset": 1418
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "j\u00e1rja",
+          "span": {
+            "length": 5,
+            "offset": 1424
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "be",
+          "span": {
+            "length": 2,
+            "offset": 1430
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1433
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ter\u00fcletet,",
+          "span": {
+            "length": 10,
+            "offset": 1435
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1446
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e1vol\u00edtsa",
+          "span": {
+            "length": 9,
+            "offset": 1449
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el",
+          "span": {
+            "length": 2,
+            "offset": 1459
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1462
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "laza",
+          "span": {
+            "length": 4,
+            "offset": 1464
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00f6rmel\u00e9ket",
+          "span": {
+            "length": 10,
+            "offset": 1469
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1480
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 1483
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "akad\u00e1lyokat.",
+          "span": {
+            "length": 12,
+            "offset": 1486
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Ellen\u0151rizze,",
+          "span": {
+            "length": 12,
+            "offset": 1500
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hogy",
+          "span": {
+            "length": 4,
+            "offset": 1513
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 1518
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "akkumul\u00e1tor",
+          "span": {
+            "length": 11,
+            "offset": 1521
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00f6lt\u00f6tts\u00e9ge",
+          "span": {
+            "length": 11,
+            "offset": 1533
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "elegend\u0151",
+          "span": {
+            "length": 8,
+            "offset": 1545
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1554
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "teljes",
+          "span": {
+            "length": 6,
+            "offset": 1556
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "menethez.",
+          "span": {
+            "length": 9,
+            "offset": 1563
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Meg\u00e1ll\u00e1s",
+          "span": {
+            "length": 8,
+            "offset": 1574
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vagy",
+          "span": {
+            "length": 4,
+            "offset": 1583
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tolat\u00e1s",
+          "span": {
+            "length": 7,
+            "offset": 1588
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el\u0151tt",
+          "span": {
+            "length": 5,
+            "offset": 1596
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "emelje",
+          "span": {
+            "length": 6,
+            "offset": 1602
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fel",
+          "span": {
+            "length": 3,
+            "offset": 1609
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1613
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e1rcs\u00e1t",
+          "span": {
+            "length": 7,
+            "offset": 1615
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1623
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "z\u00e1rja",
+          "span": {
+            "length": 5,
+            "offset": 1626
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el",
+          "span": {
+            "length": 2,
+            "offset": 1632
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1635
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "csapot.",
+          "span": {
+            "length": 7,
+            "offset": 1637
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Minden",
+          "span": {
+            "length": 6,
+            "offset": 1646
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00e1vot",
+          "span": {
+            "length": 5,
+            "offset": 1653
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00f6r\u00fclbel\u00fcl",
+          "span": {
+            "length": 10,
+            "offset": 1659
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1670
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e1rcsasz\u00e9less\u00e9g",
+          "span": {
+            "length": 15,
+            "offset": 1672
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tized\u00e9vel",
+          "span": {
+            "length": 9,
+            "offset": 1688
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fedjen",
+          "span": {
+            "length": 6,
+            "offset": 1698
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e1t.",
+          "span": {
+            "length": 3,
+            "offset": 1705
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Olyan",
+          "span": {
+            "length": 5,
+            "offset": 1710
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "sebess\u00e9get",
+          "span": {
+            "length": 10,
+            "offset": 1716
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00e1lasszon,",
+          "span": {
+            "length": 10,
+            "offset": 1727
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "amelyn\u00e9l",
+          "span": {
+            "length": 8,
+            "offset": 1738
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1747
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "leh\u00faz\u00f3gumi",
+          "span": {
+            "length": 10,
+            "offset": 1749
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tiszt\u00e1n",
+          "span": {
+            "length": 7,
+            "offset": 1760
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "felszed;",
+          "span": {
+            "length": 8,
+            "offset": 1768
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1777
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "gyorsabb",
+          "span": {
+            "length": 8,
+            "offset": 1779
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nem",
+          "span": {
+            "length": 3,
+            "offset": 1788
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tiszt\u00e1bb.",
+          "span": {
+            "length": 9,
+            "offset": 1792
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Felt\u00f6lt\u00e9s",
+          "span": {
+            "length": 9,
+            "offset": 1807
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1817
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00fcr\u00edt\u00e9s",
+          "span": {
+            "length": 6,
+            "offset": 1820
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Minden",
+          "span": {
+            "length": 6,
+            "offset": 1828
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "m\u0171szak",
+          "span": {
+            "length": 6,
+            "offset": 1835
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00e9g\u00e9n",
+          "span": {
+            "length": 5,
+            "offset": 1842
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00f6bl\u00edtse",
+          "span": {
+            "length": 7,
+            "offset": 1848
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 1856
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1859
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szennyv\u00edztart\u00e1lyt,",
+          "span": {
+            "length": 18,
+            "offset": 1861
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 1880
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1883
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fedelet",
+          "span": {
+            "length": 7,
+            "offset": 1885
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hagyja",
+          "span": {
+            "length": 6,
+            "offset": 1893
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nyitva",
+          "span": {
+            "length": 6,
+            "offset": 1900
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "sz\u00e1radni.",
+          "span": {
+            "length": 9,
+            "offset": 1907
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 1918
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szennyv\u00edztart\u00e1lyt",
+          "span": {
+            "length": 17,
+            "offset": 1920
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1938
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "megtel\u00e9s",
+          "span": {
+            "length": 8,
+            "offset": 1940
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el\u0151tt",
+          "span": {
+            "length": 5,
+            "offset": 1949
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00fcr\u00edtse,",
+          "span": {
+            "length": 7,
+            "offset": 1955
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ne",
+          "span": {
+            "length": 2,
+            "offset": 1963
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 1966
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "lez\u00e1r\u00f3",
+          "span": {
+            "length": 6,
+            "offset": 1968
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szelep",
+          "span": {
+            "length": 6,
+            "offset": 1975
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "m\u0171k\u00f6d\u00e9se",
+          "span": {
+            "length": 8,
+            "offset": 1982
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ut\u00e1n.",
+          "span": {
+            "length": 5,
+            "offset": 1991
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "T\u00f6ltse",
+          "span": {
+            "length": 6,
+            "offset": 1998
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fel",
+          "span": {
+            "length": 3,
+            "offset": 2005
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 2009
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "oldattart\u00e1lyt",
+          "span": {
+            "length": 13,
+            "offset": 2012
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "110",
+          "span": {
+            "length": 3,
+            "offset": 2026
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "literig",
+          "span": {
+            "length": 7,
+            "offset": 2030
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "50",
+          "span": {
+            "length": 2,
+            "offset": 2038
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "C",
+          "span": {
+            "length": 1,
+            "offset": 2041
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "alatti",
+          "span": {
+            "length": 6,
+            "offset": 2043
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tiszta",
+          "span": {
+            "length": 6,
+            "offset": 2050
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00edzzel.",
+          "span": {
+            "length": 7,
+            "offset": 2057
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 2065
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "forr\u00f3bb",
+          "span": {
+            "length": 7,
+            "offset": 2067
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00edz",
+          "span": {
+            "length": 3,
+            "offset": 2075
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nem",
+          "span": {
+            "length": 3,
+            "offset": 2079
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tiszt\u00edt",
+          "span": {
+            "length": 7,
+            "offset": 2083
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "jobban,",
+          "span": {
+            "length": 7,
+            "offset": 2091
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "viszont",
+          "span": {
+            "length": 7,
+            "offset": 2099
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "r\u00f6vid\u00edti",
+          "span": {
+            "length": 8,
+            "offset": 2107
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2116
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tart\u00e1ly",
+          "span": {
+            "length": 7,
+            "offset": 2118
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 2126
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2129
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00f6m\u00edt\u00e9sek",
+          "span": {
+            "length": 9,
+            "offset": 2131
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9lettartam\u00e1t.",
+          "span": {
+            "length": 13,
+            "offset": 2141
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 2156
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tiszt\u00edt\u00f3szert",
+          "span": {
+            "length": 13,
+            "offset": 2158
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2172
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "c\u00edmk\u00e9n",
+          "span": {
+            "length": 6,
+            "offset": 2174
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "megadott",
+          "span": {
+            "length": 8,
+            "offset": 2181
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "h\u00edg\u00edt\u00e1sban,",
+          "span": {
+            "length": 11,
+            "offset": 2190
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mindig",
+          "span": {
+            "length": 6,
+            "offset": 2202
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00edzbe",
+          "span": {
+            "length": 5,
+            "offset": 2209
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "adagolja,",
+          "span": {
+            "length": 9,
+            "offset": 2215
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "soha",
+          "span": {
+            "length": 4,
+            "offset": 2225
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ford\u00edtva.",
+          "span": {
+            "length": 9,
+            "offset": 2230
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Haszn\u00e1lat",
+          "span": {
+            "length": 9,
+            "offset": 2245
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ut\u00e1n",
+          "span": {
+            "length": 4,
+            "offset": 2255
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Jegyezze",
+          "span": {
+            "length": 8,
+            "offset": 2261
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "fel",
+          "span": {
+            "length": 3,
+            "offset": 2270
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 2274
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3",
+          "span": {
+            "length": 15,
+            "offset": 2277
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e1ll\u00e1s\u00e1t",
+          "span": {
+            "length": 7,
+            "offset": 2293
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 2301
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "minden",
+          "span": {
+            "length": 6,
+            "offset": 2304
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "szokatlan",
+          "span": {
+            "length": 9,
+            "offset": 2311
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "jelens\u00e9get",
+          "span": {
+            "length": 10,
+            "offset": 2321
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2332
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "g\u00e9pnapl\u00f3ba.",
+          "span": {
+            "length": 11,
+            "offset": 2334
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Emelje",
+          "span": {
+            "length": 6,
+            "offset": 2347
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "el",
+          "span": {
+            "length": 2,
+            "offset": 2354
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2357
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "leh\u00faz\u00f3gumit",
+          "span": {
+            "length": 11,
+            "offset": 2359
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2371
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "padl\u00f3t\u00f3l,",
+          "span": {
+            "length": 9,
+            "offset": 2373
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hogy",
+          "span": {
+            "length": 4,
+            "offset": 2383
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2388
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "gumik",
+          "span": {
+            "length": 5,
+            "offset": 2390
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ne",
+          "span": {
+            "length": 2,
+            "offset": 2396
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "deform\u00e1l\u00f3djanak",
+          "span": {
+            "length": 15,
+            "offset": 2399
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9jszak\u00e1ra.",
+          "span": {
+            "length": 10,
+            "offset": 2415
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "T\u00f6r\u00f6lje",
+          "span": {
+            "length": 7,
+            "offset": 2427
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le",
+          "span": {
+            "length": 2,
+            "offset": 2435
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2438
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "leh\u00faz\u00f3gumikat",
+          "span": {
+            "length": 13,
+            "offset": 2440
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 2454
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ellen\u0151rizze",
+          "span": {
+            "length": 11,
+            "offset": 2457
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00e9r\u00fcl\u00e9smentess\u00e9g\u00fcket.",
+          "span": {
+            "length": 21,
+            "offset": 2469
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Vegye",
+          "span": {
+            "length": 5,
+            "offset": 2492
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 2498
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2501
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kef\u00e9t",
+          "span": {
+            "length": 5,
+            "offset": 2503
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vagy",
+          "span": {
+            "length": 4,
+            "offset": 2509
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2514
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "p\u00e1dtart\u00f3t",
+          "span": {
+            "length": 9,
+            "offset": 2516
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 2526
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00f6bl\u00edtse",
+          "span": {
+            "length": 7,
+            "offset": 2529
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le.",
+          "span": {
+            "length": 3,
+            "offset": 2537
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00dcr\u00edtse",
+          "span": {
+            "length": 6,
+            "offset": 2542
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le",
+          "span": {
+            "length": 2,
+            "offset": 2549
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00e9s",
+          "span": {
+            "length": 2,
+            "offset": 2552
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "\u00f6bl\u00edtse",
+          "span": {
+            "length": 7,
+            "offset": 2555
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 2563
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mindk\u00e9t",
+          "span": {
+            "length": 7,
+            "offset": 2566
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "tart\u00e1lyt.",
+          "span": {
+            "length": 9,
+            "offset": 2574
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Figyelmeztet\u00e9sek",
+          "span": {
+            "length": 16,
+            "offset": 2589
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Cser\u00e9lje",
+          "span": {
+            "length": 8,
+            "offset": 2607
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2616
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "leh\u00faz\u00f3gumit,",
+          "span": {
+            "length": 12,
+            "offset": 2618
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ha",
+          "span": {
+            "length": 2,
+            "offset": 2631
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2634
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "leh\u00faz\u00f3\u00e9l",
+          "span": {
+            "length": 8,
+            "offset": 2636
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "3",
+          "span": {
+            "length": 1,
+            "offset": 2645
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mm-n\u00e9l",
+          "span": {
+            "length": 6,
+            "offset": 2647
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "jobban",
+          "span": {
+            "length": 6,
+            "offset": 2654
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "elkopott.",
+          "span": {
+            "length": 9,
+            "offset": 2661
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Az",
+          "span": {
+            "length": 2,
+            "offset": 2671
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "elkopott",
+          "span": {
+            "length": 8,
+            "offset": 2674
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "gumi",
+          "span": {
+            "length": 4,
+            "offset": 2683
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nedves",
+          "span": {
+            "length": 6,
+            "offset": 2688
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "padl\u00f3t",
+          "span": {
+            "length": 6,
+            "offset": 2695
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "hagy,",
+          "span": {
+            "length": 5,
+            "offset": 2702
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ami",
+          "span": {
+            "length": 3,
+            "offset": 2708
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "cs\u00fasz\u00e1svesz\u00e9ly,",
+          "span": {
+            "length": 15,
+            "offset": 2712
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nem",
+          "span": {
+            "length": 3,
+            "offset": 2728
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "sz\u00e9ps\u00e9ghiba.",
+          "span": {
+            "length": 12,
+            "offset": 2732
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Ne",
+          "span": {
+            "length": 2,
+            "offset": 2746
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mossa",
+          "span": {
+            "length": 5,
+            "offset": 2749
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "le",
+          "span": {
+            "length": 2,
+            "offset": 2755
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2758
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "g\u00e9pet",
+          "span": {
+            "length": 5,
+            "offset": 2760
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00edzsug\u00e1rral.",
+          "span": {
+            "length": 12,
+            "offset": 2766
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Az",
+          "span": {
+            "length": 2,
+            "offset": 2779
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "elektromos",
+          "span": {
+            "length": 10,
+            "offset": 2782
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e9rbe",
+          "span": {
+            "length": 5,
+            "offset": 2793
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "jut\u00f3",
+          "span": {
+            "length": 4,
+            "offset": 2799
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "v\u00edz",
+          "span": {
+            "length": 3,
+            "offset": 2804
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "okozta",
+          "span": {
+            "length": 6,
+            "offset": 2808
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "k\u00e1r",
+          "span": {
+            "length": 3,
+            "offset": 2815
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nem",
+          "span": {
+            "length": 3,
+            "offset": 2819
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00e9r\u00fcl",
+          "span": {
+            "length": 5,
+            "offset": 2823
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "meg.",
+          "span": {
+            "length": 4,
+            "offset": 2829
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "A",
+          "span": {
+            "length": 1,
+            "offset": 2835
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kef\u00e9ket",
+          "span": {
+            "length": 7,
+            "offset": 2837
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "12",
+          "span": {
+            "length": 2,
+            "offset": 2845
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mm",
+          "span": {
+            "length": 2,
+            "offset": 2848
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00f6rtehosszn\u00e1l",
+          "span": {
+            "length": 13,
+            "offset": 2851
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "vagy",
+          "span": {
+            "length": 4,
+            "offset": 2865
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 2870
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "alatt",
+          "span": {
+            "length": 5,
+            "offset": 2873
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "cser\u00e9lje.",
+          "span": {
+            "length": 9,
+            "offset": 2879
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Ezen",
+          "span": {
+            "length": 4,
+            "offset": 2889
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00fal",
+          "span": {
+            "length": 3,
+            "offset": 2894
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2898
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kefet\u00e1rcsa",
+          "span": {
+            "length": 10,
+            "offset": 2900
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "viseli",
+          "span": {
+            "length": 6,
+            "offset": 2911
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "azt",
+          "span": {
+            "length": 3,
+            "offset": 2918
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2922
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "terhel\u00e9st,",
+          "span": {
+            "length": 10,
+            "offset": 2924
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "amit",
+          "span": {
+            "length": 4,
+            "offset": 2935
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "a",
+          "span": {
+            "length": 1,
+            "offset": 2940
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "s\u00f6rt\u00e9nek",
+          "span": {
+            "length": 8,
+            "offset": 2942
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "kellene.",
+          "span": {
+            "length": 8,
+            "offset": 2951
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "Soha",
+          "span": {
+            "length": 4,
+            "offset": 2961
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ne",
+          "span": {
+            "length": 2,
+            "offset": 2966
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "nyissa",
+          "span": {
+            "length": 6,
+            "offset": 2969
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "ki",
+          "span": {
+            "length": 2,
+            "offset": 2976
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "az",
+          "span": {
+            "length": 2,
+            "offset": 2979
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "akkumul\u00e1tortart\u00f3t",
+          "span": {
+            "length": 17,
+            "offset": 2982
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "csatlakoztatott",
+          "span": {
+            "length": 15,
+            "offset": 3000
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "t\u00f6lt\u0151",
+          "span": {
+            "length": 5,
+            "offset": 3016
+          }
+        },
+        {
+          "confidence": 1,
+          "content": "mellett.",
+          "span": {
+            "length": 8,
+            "offset": 3022
+          }
+        }
+      ]
+    }
+  ],
+  "paragraphs": [
+    {
+      "content": "SDR-90 vezet\u0151\u00fcl\u00e9ses s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p \u2014 kezel\u00e9si k\u00e9zik\u00f6nyv",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 60,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "content": "Document sdr-90-operator-manual-hu \u00b7 revision 2 \u00b7 effective 2026-02-02",
+      "spans": [
+        {
+          "length": 70,
+          "offset": 62
+        }
+      ]
+    },
+    {
+      "content": "Machine types: SDR-90",
+      "spans": [
+        {
+          "length": 21,
+          "offset": 134
+        }
+      ]
+    },
+    {
+      "content": "Item numbers: 1.534-210.0, 1.534-211.0, 1.534-212.0",
+      "spans": [
+        {
+          "length": 51,
+          "offset": 157
+        }
+      ]
+    },
+    {
+      "content": "Rendeltet\u00e9sszer\u0171 haszn\u00e1lat",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 29,
+          "offset": 211
+        }
+      ]
+    },
+    {
+      "content": "Ez a k\u00e9zik\u00f6nyv a SDR-90 vezet\u0151\u00fcl\u00e9ses s\u00farol\u00f3-sz\u00e1r\u00edt\u00f3g\u00e9p t\u00edpusra vonatkozik, 1.534-211.0 cikksz\u00e1mmal. A g\u00e9p ipari, belt\u00e9ri haszn\u00e1latra k\u00e9sz\u00fclt bevonatos padl\u00f3kon. Minden m\u00e1s haszn\u00e1lat a j\u00f3v\u00e1hagy\u00e1son k\u00edv\u00fcl esik.",
+      "spans": [
+        {
+          "length": 208,
+          "offset": 242
+        }
+      ]
+    },
+    {
+      "content": "\u00c9rintett kivitelek",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 21,
+          "offset": 453
+        }
+      ]
+    },
+    {
+      "content": "Cikksz\u00e1m",
+      "spans": [
+        {
+          "length": 8,
+          "offset": 494
+        }
+      ]
+    },
+    {
+      "content": "Akkumul\u00e1tor",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 512
+        }
+      ]
+    },
+    {
+      "content": "T\u00e1rcsa",
+      "spans": [
+        {
+          "length": 6,
+          "offset": 533
+        }
+      ]
+    },
+    {
+      "content": "Kapacit\u00e1s",
+      "spans": [
+        {
+          "length": 9,
+          "offset": 549
+        }
+      ]
+    },
+    {
+      "content": "1.534-210.0",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 579
+        }
+      ]
+    },
+    {
+      "content": "AGM",
+      "spans": [
+        {
+          "length": 3,
+          "offset": 600
+        }
+      ]
+    },
+    {
+      "content": "brush",
+      "spans": [
+        {
+          "length": 5,
+          "offset": 613
+        }
+      ]
+    },
+    {
+      "content": "110 l oldat / 120 l szennyv\u00edz",
+      "spans": [
+        {
+          "length": 29,
+          "offset": 628
+        }
+      ]
+    },
+    {
+      "content": "1.534-211.0",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 678
+        }
+      ]
+    },
+    {
+      "content": "lithium-ion",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 699
+        }
+      ]
+    },
+    {
+      "content": "brush",
+      "spans": [
+        {
+          "length": 5,
+          "offset": 720
+        }
+      ]
+    },
+    {
+      "content": "110 l oldat / 120 l szennyv\u00edz",
+      "spans": [
+        {
+          "length": 29,
+          "offset": 735
+        }
+      ]
+    },
+    {
+      "content": "1.534-212.0",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 785
+        }
+      ]
+    },
+    {
+      "content": "lithium-ion",
+      "spans": [
+        {
+          "length": 11,
+          "offset": 806
+        }
+      ]
+    },
+    {
+      "content": "pad",
+      "spans": [
+        {
+          "length": 3,
+          "offset": 827
+        }
+      ]
+    },
+    {
+      "content": "150 l oldat / 160 l szennyv\u00edz",
+      "spans": [
+        {
+          "length": 29,
+          "offset": 840
+        }
+      ]
+    },
+    {
+      "content": "Kezel\u0151szervek",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 16,
+          "offset": 892
+        }
+      ]
+    },
+    {
+      "content": "A kefet\u00e1rcsa karja emeli \u00e9s s\u00fcllyeszti a t\u00e1rcs\u00e1t. Tolat\u00e1s el\u0151tt emelje fel.",
+      "spans": [
+        {
+          "length": 75,
+          "offset": 910
+        }
+      ]
+    },
+    {
+      "content": "Az akkumul\u00e1tor kijelz\u0151 a lithium-ion csomag t\u00f6lt\u00f6tts\u00e9gi szintj\u00e9t mutatja.",
+      "spans": [
+        {
+          "length": 73,
+          "offset": 987
+        }
+      ]
+    },
+    {
+      "content": "A v\u00e9szle\u00e1ll\u00edt\u00f3 megszak\u00edtja a hajt\u00e1st \u00e9s a kefemeghajt\u00e1st, de nem v\u00e1lasztja le az akkumul\u00e1tort.",
+      "spans": [
+        {
+          "length": 94,
+          "offset": 1062
+        }
+      ]
+    },
+    {
+      "content": "Az \u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3 r\u00f6gz\u00edti a m\u0171k\u00f6d\u00e9si id\u0151t, \u00e9s minden szervizciklus alapja.",
+      "spans": [
+        {
+          "length": 75,
+          "offset": 1158
+        }
+      ]
+    },
+    {
+      "content": "A kulcsos kapcsol\u00f3 a teljes g\u00e9pet lev\u00e1lasztja. \u0150rizetlen\u00fcl hagyott g\u00e9pb\u0151l vegye ki a kulcsot.",
+      "spans": [
+        {
+          "length": 93,
+          "offset": 1235
+        }
+      ]
+    },
+    {
+      "content": "Napi \u00fczemeltet\u00e9s",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 19,
+          "offset": 1331
+        }
+      ]
+    },
+    {
+      "content": "S\u00fcllyessze le a kefet\u00e1rcs\u00e1t \u00e9s nyissa ki az oldatcsapot.",
+      "spans": [
+        {
+          "length": 56,
+          "offset": 1352
+        }
+      ]
+    },
+    {
+      "content": "Indul\u00e1s el\u0151tt j\u00e1rja be a ter\u00fcletet, \u00e9s t\u00e1vol\u00edtsa el a laza t\u00f6rmel\u00e9ket \u00e9s az akad\u00e1lyokat.",
+      "spans": [
+        {
+          "length": 88,
+          "offset": 1410
+        }
+      ]
+    },
+    {
+      "content": "Ellen\u0151rizze, hogy az akkumul\u00e1tor t\u00f6lt\u00f6tts\u00e9ge elegend\u0151 a teljes menethez.",
+      "spans": [
+        {
+          "length": 72,
+          "offset": 1500
+        }
+      ]
+    },
+    {
+      "content": "Meg\u00e1ll\u00e1s vagy tolat\u00e1s el\u0151tt emelje fel a t\u00e1rcs\u00e1t \u00e9s z\u00e1rja el a csapot.",
+      "spans": [
+        {
+          "length": 70,
+          "offset": 1574
+        }
+      ]
+    },
+    {
+      "content": "Minden s\u00e1vot k\u00f6r\u00fclbel\u00fcl a t\u00e1rcsasz\u00e9less\u00e9g tized\u00e9vel fedjen \u00e1t.",
+      "spans": [
+        {
+          "length": 62,
+          "offset": 1646
+        }
+      ]
+    },
+    {
+      "content": "Olyan sebess\u00e9get v\u00e1lasszon, amelyn\u00e9l a leh\u00faz\u00f3gumi tiszt\u00e1n felszed; a gyorsabb nem tiszt\u00e1bb.",
+      "spans": [
+        {
+          "length": 91,
+          "offset": 1710
+        }
+      ]
+    },
+    {
+      "content": "Felt\u00f6lt\u00e9s \u00e9s \u00fcr\u00edt\u00e9s",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 22,
+          "offset": 1804
+        }
+      ]
+    },
+    {
+      "content": "Minden m\u0171szak v\u00e9g\u00e9n \u00f6bl\u00edtse ki a szennyv\u00edztart\u00e1lyt, \u00e9s a fedelet hagyja nyitva sz\u00e1radni.",
+      "spans": [
+        {
+          "length": 88,
+          "offset": 1828
+        }
+      ]
+    },
+    {
+      "content": "A szennyv\u00edztart\u00e1lyt a megtel\u00e9s el\u0151tt \u00fcr\u00edtse, ne a lez\u00e1r\u00f3 szelep m\u0171k\u00f6d\u00e9se ut\u00e1n.",
+      "spans": [
+        {
+          "length": 78,
+          "offset": 1918
+        }
+      ]
+    },
+    {
+      "content": "T\u00f6ltse fel az oldattart\u00e1lyt 110 literig 50 C alatti tiszta v\u00edzzel. A forr\u00f3bb v\u00edz nem tiszt\u00edt jobban, viszont r\u00f6vid\u00edti a tart\u00e1ly \u00e9s a t\u00f6m\u00edt\u00e9sek \u00e9lettartam\u00e1t.",
+      "spans": [
+        {
+          "length": 156,
+          "offset": 1998
+        }
+      ]
+    },
+    {
+      "content": "A tiszt\u00edt\u00f3szert a c\u00edmk\u00e9n megadott h\u00edg\u00edt\u00e1sban, mindig v\u00edzbe adagolja, soha ford\u00edtva.",
+      "spans": [
+        {
+          "length": 83,
+          "offset": 2156
+        }
+      ]
+    },
+    {
+      "content": "Haszn\u00e1lat ut\u00e1n",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 17,
+          "offset": 2242
+        }
+      ]
+    },
+    {
+      "content": "Jegyezze fel az \u00fczem\u00f3rasz\u00e1ml\u00e1l\u00f3 \u00e1ll\u00e1s\u00e1t \u00e9s minden szokatlan jelens\u00e9get a g\u00e9pnapl\u00f3ba.",
+      "spans": [
+        {
+          "length": 84,
+          "offset": 2261
+        }
+      ]
+    },
+    {
+      "content": "Emelje el a leh\u00faz\u00f3gumit a padl\u00f3t\u00f3l, hogy a gumik ne deform\u00e1l\u00f3djanak \u00e9jszak\u00e1ra.",
+      "spans": [
+        {
+          "length": 78,
+          "offset": 2347
+        }
+      ]
+    },
+    {
+      "content": "T\u00f6r\u00f6lje le a leh\u00faz\u00f3gumikat \u00e9s ellen\u0151rizze s\u00e9r\u00fcl\u00e9smentess\u00e9g\u00fcket.",
+      "spans": [
+        {
+          "length": 63,
+          "offset": 2427
+        }
+      ]
+    },
+    {
+      "content": "Vegye ki a kef\u00e9t vagy a p\u00e1dtart\u00f3t \u00e9s \u00f6bl\u00edtse le.",
+      "spans": [
+        {
+          "length": 48,
+          "offset": 2492
+        }
+      ]
+    },
+    {
+      "content": "\u00dcr\u00edtse le \u00e9s \u00f6bl\u00edtse ki mindk\u00e9t tart\u00e1lyt.",
+      "spans": [
+        {
+          "length": 41,
+          "offset": 2542
+        }
+      ]
+    },
+    {
+      "content": "Figyelmeztet\u00e9sek",
+      "role": "sectionHeading",
+      "spans": [
+        {
+          "length": 19,
+          "offset": 2586
+        }
+      ]
+    },
+    {
+      "content": "Cser\u00e9lje a leh\u00faz\u00f3gumit, ha a leh\u00faz\u00f3\u00e9l 3 mm-n\u00e9l jobban elkopott. Az elkopott gumi nedves padl\u00f3t hagy, ami cs\u00fasz\u00e1svesz\u00e9ly, nem sz\u00e9ps\u00e9ghiba.",
+      "spans": [
+        {
+          "length": 137,
+          "offset": 2607
+        }
+      ]
+    },
+    {
+      "content": "Ne mossa le a g\u00e9pet v\u00edzsug\u00e1rral. Az elektromos t\u00e9rbe jut\u00f3 v\u00edz okozta k\u00e1r nem t\u00e9r\u00fcl meg.",
+      "spans": [
+        {
+          "length": 87,
+          "offset": 2746
+        }
+      ]
+    },
+    {
+      "content": "A kef\u00e9ket 12 mm s\u00f6rtehosszn\u00e1l vagy az alatt cser\u00e9lje. Ezen t\u00fal a kefet\u00e1rcsa viseli azt a terhel\u00e9st, amit a s\u00f6rt\u00e9nek kellene.",
+      "spans": [
+        {
+          "length": 124,
+          "offset": 2835
+        }
+      ]
+    },
+    {
+      "content": "Soha ne nyissa ki az akkumul\u00e1tortart\u00f3t csatlakoztatott t\u00f6lt\u0151 mellett.",
+      "spans": [
+        {
+          "length": 69,
+          "offset": 2961
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "elements": [
+        "/paragraphs/0",
+        "/paragraphs/1",
+        "/paragraphs/2",
+        "/paragraphs/3",
+        "/sections/1",
+        "/sections/2",
+        "/sections/3",
+        "/sections/4",
+        "/sections/5",
+        "/sections/6",
+        "/sections/7"
+      ],
+      "spans": [
+        {
+          "length": 3030,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/4",
+        "/paragraphs/5"
+      ],
+      "spans": [
+        {
+          "length": 239,
+          "offset": 211
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/6",
+        "/tables/0"
+      ],
+      "spans": [
+        {
+          "length": 436,
+          "offset": 453
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/23",
+        "/paragraphs/24",
+        "/paragraphs/25",
+        "/paragraphs/26",
+        "/paragraphs/27",
+        "/paragraphs/28"
+      ],
+      "spans": [
+        {
+          "length": 436,
+          "offset": 892
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/29",
+        "/paragraphs/30",
+        "/paragraphs/31",
+        "/paragraphs/32",
+        "/paragraphs/33",
+        "/paragraphs/34",
+        "/paragraphs/35"
+      ],
+      "spans": [
+        {
+          "length": 470,
+          "offset": 1331
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/36",
+        "/paragraphs/37",
+        "/paragraphs/38",
+        "/paragraphs/39",
+        "/paragraphs/40"
+      ],
+      "spans": [
+        {
+          "length": 435,
+          "offset": 1804
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/41",
+        "/paragraphs/42",
+        "/paragraphs/43",
+        "/paragraphs/44",
+        "/paragraphs/45",
+        "/paragraphs/46"
+      ],
+      "spans": [
+        {
+          "length": 341,
+          "offset": 2242
+        }
+      ]
+    },
+    {
+      "elements": [
+        "/paragraphs/47",
+        "/paragraphs/48",
+        "/paragraphs/49",
+        "/paragraphs/50",
+        "/paragraphs/51"
+      ],
+      "spans": [
+        {
+          "length": 444,
+          "offset": 2586
+        }
+      ]
+    }
+  ],
+  "stringIndexType": "unicodeCodePoint",
+  "tables": [
+    {
+      "cells": [
+        {
+          "columnIndex": 0,
+          "content": "Cikksz\u00e1m",
+          "kind": "columnHeader",
+          "rowIndex": 0,
+          "spans": [
+            {
+              "length": 8,
+              "offset": 494
+            }
+          ]
+        },
+        {
+          "columnIndex": 1,
+          "content": "Akkumul\u00e1tor",
+          "kind": "columnHeader",
+          "rowIndex": 0,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 512
+            }
+          ]
+        },
+        {
+          "columnIndex": 2,
+          "content": "T\u00e1rcsa",
+          "kind": "columnHeader",
+          "rowIndex": 0,
+          "spans": [
+            {
+              "length": 6,
+              "offset": 533
+            }
+          ]
+        },
+        {
+          "columnIndex": 3,
+          "content": "Kapacit\u00e1s",
+          "kind": "columnHeader",
+          "rowIndex": 0,
+          "spans": [
+            {
+              "length": 9,
+              "offset": 549
+            }
+          ]
+        },
+        {
+          "columnIndex": 0,
+          "content": "1.534-210.0",
+          "rowIndex": 1,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 579
+            }
+          ]
+        },
+        {
+          "columnIndex": 1,
+          "content": "AGM",
+          "rowIndex": 1,
+          "spans": [
+            {
+              "length": 3,
+              "offset": 600
+            }
+          ]
+        },
+        {
+          "columnIndex": 2,
+          "content": "brush",
+          "rowIndex": 1,
+          "spans": [
+            {
+              "length": 5,
+              "offset": 613
+            }
+          ]
+        },
+        {
+          "columnIndex": 3,
+          "content": "110 l oldat / 120 l szennyv\u00edz",
+          "rowIndex": 1,
+          "spans": [
+            {
+              "length": 29,
+              "offset": 628
+            }
+          ]
+        },
+        {
+          "columnIndex": 0,
+          "content": "1.534-211.0",
+          "rowIndex": 2,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 678
+            }
+          ]
+        },
+        {
+          "columnIndex": 1,
+          "content": "lithium-ion",
+          "rowIndex": 2,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 699
+            }
+          ]
+        },
+        {
+          "columnIndex": 2,
+          "content": "brush",
+          "rowIndex": 2,
+          "spans": [
+            {
+              "length": 5,
+              "offset": 720
+            }
+          ]
+        },
+        {
+          "columnIndex": 3,
+          "content": "110 l oldat / 120 l szennyv\u00edz",
+          "rowIndex": 2,
+          "spans": [
+            {
+              "length": 29,
+              "offset": 735
+            }
+          ]
+        },
+        {
+          "columnIndex": 0,
+          "content": "1.534-212.0",
+          "rowIndex": 3,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 785
+            }
+          ]
+        },
+        {
+          "columnIndex": 1,
+          "content": "lithium-ion",
+          "rowIndex": 3,
+          "spans": [
+            {
+              "length": 11,
+              "offset": 806
+            }
+          ]
+        },
+        {
+          "columnIndex": 2,
+          "content": "pad",
+          "rowIndex": 3,
+          "spans": [
+            {
+              "length": 3,
+              "offset": 827
+            }
+          ]
+        },
+        {
+          "columnIndex": 3,
+          "content": "150 l oldat / 160 l szennyv\u00edz",
+          "rowIndex": 3,
+          "spans": [
+            {
+              "length": 29,
+              "offset": 840
+            }
+          ]
+        }
+      ],
+      "columnCount": 4,
+      "rowCount": 4,
+      "spans": [
+        {
+          "length": 412,
+          "offset": 477
+        }
+      ]
+    }
+  ]
+}
