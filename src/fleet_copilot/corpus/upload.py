@@ -96,6 +96,14 @@ def plan_uploads(manifest: Manifest, corpus_root: Path) -> tuple[BlobUpload, ...
                     "type": entry.type.value,
                     "language": entry.language.value,
                     "format": entry.format.value,
+                    # Blob metadata is sent as HTTP headers, so these must be
+                    # ASCII scalars. Machine codes and item numbers already are;
+                    # the lists are comma-joined and the date is ISO-8601, which
+                    # keeps the whole set far inside the 8 KB header budget.
+                    "machine_types": ",".join(entry.machine_types),
+                    "item_numbers": ",".join(entry.item_numbers),
+                    "revision": str(entry.revision),
+                    "effective_date": entry.effective_date.isoformat(),
                 },
             )
         )

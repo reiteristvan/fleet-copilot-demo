@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import date
 from pathlib import Path
 from typing import Annotated, Final, Self
 
@@ -22,11 +23,12 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_valida
 from fleet_copilot.corpus.models import DocumentType, Language, OutputFormat, PlantedKind
 from fleet_copilot.corpus.seed import CorpusDataError
 
-MANIFEST_VERSION: Final = 1
+MANIFEST_VERSION: Final = 2
 """Schema version of ``data/manifest.json``.
 
 Bumped when the entry shape changes, so a reader can tell an old manifest from
-a corrupt one.
+a corrupt one. Version 2 added the four front-matter keys that rendering strips
+out of a published PDF (ADR 0006).
 """
 
 
@@ -47,6 +49,18 @@ class ManifestEntry(BaseModel):
     path: Annotated[str, Field(min_length=1)]
     sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
     bytes: Annotated[int, Field(gt=0)]
+
+    machine_types: tuple[str, ...] = ()
+    item_numbers: tuple[str, ...] = ()
+    revision: Annotated[int, Field(ge=1)]
+    effective_date: date
+    """The four front-matter keys a chunk needs and a rendered document loses.
+
+    Not a convenience copy. The PDF and DOCX renderers drop the front matter, so
+    for the 25 converted documents this manifest and the blob metadata beside it
+    are the only places these values exist outside the Markdown source that ADR
+    0003 deliberately does not upload.
+    """
     planted: bool = False
     planted_kind: PlantedKind | None = None
     planted_id: str | None = None

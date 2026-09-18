@@ -37,6 +37,8 @@ def entry(doc_id: str, path: str, **overrides: Any) -> dict[str, Any]:
         "path": path,
         "sha256": sha256_of(BODY + doc_id.encode()),
         "bytes": len(BODY),
+        "revision": 4,
+        "effective_date": "2026-02-11",
     }
     return data | overrides
 
@@ -190,3 +192,29 @@ class TestUploadReport:
         """It is printed to a console that may be cp1252."""
         report = UploadReport(container="raw-docs", planned=1, uploaded=1, skipped=0, dry_run=True)
         report.describe().encode("ascii")
+
+
+def test_blob_metadata_carries_the_four_stripped_keys(tmp_path: Path) -> None:
+    """An ingest reading only the container must reach the same metadata.
+
+    Reading it from the local Markdown copy instead would work on a laptop and
+    fail wherever those copies are not present, which is everywhere else.
+    """
+    rows = manifest(
+        entry(
+            "sdm-43-service-manual",
+            "published/sdm-43-service-manual.pdf",
+            format="pdf",
+            machine_types=["SDM-43"],
+            item_numbers=["1.291-101.0"],
+            revision=3,
+            effective_date="2026-03-09",
+        )
+    )
+
+    upload = plan_uploads(rows, tmp_path)[0]
+
+    assert upload.metadata["machine_types"] == "SDM-43"
+    assert upload.metadata["item_numbers"] == "1.291-101.0"
+    assert upload.metadata["revision"] == "3"
+    assert upload.metadata["effective_date"] == "2026-03-09"

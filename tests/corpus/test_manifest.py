@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,8 @@ def entry_data(**overrides: Any) -> dict[str, Any]:
         "path": "markdown/sd-50b-maint-battery-care-rev4.md",
         "sha256": sha256_of(BODY),
         "bytes": len(BODY),
+        "revision": 4,
+        "effective_date": "2026-02-11",
     }
     return data | overrides
 
@@ -199,3 +202,33 @@ class TestVerify:
         manifest = Manifest.model_validate(manifest_data(total=2, documents=[entry_data(), second]))
         problems = verify_manifest(manifest, tmp_path)
         assert len(problems) == 2
+
+
+def test_an_entry_carries_the_metadata_rendering_strips() -> None:
+    """Front matter does not survive into a PDF, so the manifest carries it.
+
+    Decompressing a published PDF's text streams finds the prose and none of the
+    YAML keys, so a chunk built from one cannot recover its own machine types or
+    effective date from what was parsed (ADR 0006).
+    """
+    entry = ManifestEntry.model_validate(
+        entry_data(
+            format="pdf",
+            path="published/sdm-43-service-manual.pdf",
+            machine_types=["SDM-43"],
+            item_numbers=["1.291-101.0"],
+            revision=3,
+            effective_date="2026-03-09",
+        )
+    )
+
+    assert entry.machine_types == ("SDM-43",)
+    assert entry.item_numbers == ("1.291-101.0",)
+    assert entry.revision == 3
+    assert entry.effective_date == date(2026, 3, 9)
+
+
+def test_the_manifest_version_is_two() -> None:
+    """Bumped with the four new keys so a reader can tell an old manifest from a
+    corrupt one -- which is the only reason the field exists."""
+    assert MANIFEST_VERSION == 2
