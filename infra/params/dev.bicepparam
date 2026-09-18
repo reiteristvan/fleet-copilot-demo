@@ -6,10 +6,13 @@ param chatModelCapacity = 30
 param embeddingModelCapacity = 50
 param searchSku = 'basic'
 
-// The object id of the developer working on this environment, from
-// `az ad signed-in-user show --query id -o tsv`. Not a secret and not a service
-// account -- it names an Entra principal that already exists. For a team, point
-// this at a security group instead and set the type to 'Group', so adding a
-// developer is a membership change rather than a redeploy.
-param developerPrincipalId = '00000000-0000-0000-0000-000000000000'
+// Resolved at deploy time by deploy.sh, never committed. An object id is not a
+// credential, but it names a person, and a parameter file in a public repository
+// is the wrong place to name one -- it also pins the environment to a single
+// developer, so nobody else could deploy without editing this file.
+//
+// For a team, export the object id of an Entra security group instead and set
+// the type to 'Group': adding a developer then becomes a membership change
+// rather than a redeploy.
+param developerPrincipalId = readEnvironmentVariable('AZURE_DEVELOPER_PRINCIPAL_ID', '')
 param developerPrincipalType = 'User'

@@ -81,6 +81,7 @@ main() {
   printf 'location     : %s\n' "$location"
   printf 'mode         : %s\n\n' "$mode"
 
+  resolve_developer_principal
   register_providers
 
   local deployment_name="${WORKLOAD}-${environment}-$(date -u +%Y%m%d%H%M%S)"
@@ -126,6 +127,27 @@ build = json.load(sys.stdin)
 parameters = json.loads(build["parametersJson"])["parameters"]
 print(parameters["location"]["value"])
 '
+}
+
+# Data-plane roles go to whoever is deploying. Resolved here rather than
+# committed to a parameter file: an object id is not a credential, but it names
+# a person, and it would also pin the environment to one developer.
+# Empty is valid -- dev.bicepparam defaults to it and the assignments are
+# conditional -- so CI and a service principal deploy without one.
+resolve_developer_principal() {
+  AZURE_DEVELOPER_PRINCIPAL_ID="$(az ad signed-in-user show --query id -o tsv 2>/dev/null | tr -d '')"
+  export AZURE_DEVELOPER_PRINCIPAL_ID
+  if [[ -n "$AZURE_DEVELOPER_PRINCIPAL_ID" ]]; then
+    # The id itself is not printed: it names a person, and this output is
+    # pasted into issues and captured by CI.
+    printf 'developer    : resolved from the signed-in session
+
+'
+  else
+    printf 'developer    : none; data-plane roles will not be granted
+
+'
+  fi
 }
 
 register_providers() {

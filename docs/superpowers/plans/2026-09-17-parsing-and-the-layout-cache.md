@@ -34,7 +34,7 @@ From `CLAUDE.md` and the two ADRs. Every task's requirements implicitly include 
 - **Never introduce key-based auth to an Azure data plane.** Use `get_credential()` / `get_async_credential()`. `tests/test_no_key_based_auth.py` enforces this.
 - **Pin Azure API versions to values already checked:** ARM `2026-03-01` for `Microsoft.CognitiveServices/accounts`, `2025-08-01` for storage, `2024-08-01` for budgets, `2022-04-01` for role assignments; data-plane `2024-11-30` (the SDK default, v4.0 GA).
 - **Commits are atomic and semantic.** One concern per commit; the body says *why*.
-- **Subscription:** `00000000-0000-0000-0000-000000000000` ("Azure subscription 1"), tenant `00000000-0000-0000-0000-000000000000`, region `swedencentral`, resource group `rg-fleet-copilot-dev`.
+- **Subscription and tenant:** whatever `az account show` reports for the signed-in session. Deliberately not written down here: neither is a credential, but this repository is public, and a tenant id plus a subscription id plus a resource group name is a complete targeting profile for a phishing or illicit-consent attempt. Region `swedencentral`, resource group `rg-fleet-copilot-dev`.
 - **Role definition id for Cognitive Services User:** `a97b65f3-24c7-4388-baec-2e87135dc908`.
 - **Spans are `unicodeCodePoint`**, never the SDK's `textElements` default, and `ParsedBlock.text` is always `content[start:end]` — derived, never copied from `paragraph.content`.
 - **`MANIFEST_VERSION` goes to 2** in this plan. Document bytes and their SHA-256s do not change; only `data/manifest.json` gains four keys.
