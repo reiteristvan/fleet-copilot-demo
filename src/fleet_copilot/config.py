@@ -42,6 +42,15 @@ class Settings(BaseSettings):
     azure_search_endpoint: str | None = None
     azure_storage_blob_endpoint: str | None = None
     azure_storage_container: str = "raw-docs"
+    azure_layout_cache_container: str = "layout-cache"
+
+    azure_document_intelligence_endpoint: str | None = None
+
+    # v4.0 GA, and the SDK's own default. Restated here because the cached
+    # layout JSON is keyed by it: a version bump must invalidate the cache
+    # rather than be absorbed silently.
+    azure_document_intelligence_api_version: str = "2024-11-30"
+
     azure_key_vault_uri: str | None = None
 
     # Container Apps sets this to the user-assigned identity and a laptop leaves
