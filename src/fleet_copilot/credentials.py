@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from azure.identity import DefaultAzureCredential
+from azure.identity.aio import DefaultAzureCredential as AsyncDefaultAzureCredential
 
 
 def get_credential() -> DefaultAzureCredential:
@@ -19,3 +20,15 @@ def get_credential() -> DefaultAzureCredential:
     fresh one re-authenticates.
     """
     return DefaultAzureCredential()
+
+
+def get_async_credential() -> AsyncDefaultAzureCredential:
+    """Return the same chain as :func:`get_credential`, for the aio clients.
+
+    A second function rather than a branch: the two are different types with
+    different close semantics, and an aio client handed the synchronous one
+    accepts it and fails on the first request instead of at construction. The
+    caller closes this one -- ``async with credential:`` -- because its
+    transport holds a connection pool.
+    """
+    return AsyncDefaultAzureCredential()

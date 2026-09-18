@@ -694,15 +694,25 @@ def get_async_credential() -> AsyncDefaultAzureCredential:
     return AsyncDefaultAzureCredential()
 ```
 
-- [ ] **Step 4: Run it and watch it pass**
+- [ ] **Step 4: Add the async transport**
 
-Run: `uv run pytest tests/test_credentials.py -v`
-Expected: all pass.
-
-- [ ] **Step 5: Commit**
+The test will still fail, with `ImportError: aiohttp package is not installed`. `azure.identity.aio` needs an async HTTP transport and `azure-identity` does not pull one in. The module *imports* fine without it — the failure is at construction — which is why nothing catches this until the credential is actually built.
 
 ```bash
-git add src/fleet_copilot/credentials.py tests/test_credentials.py
+uv add "azure-core[aio]>=1.30"
+```
+
+A **main** dependency, not a dev one. The parsing SDKs are dev-only because parsing is offline, but `get_async_credential()` lives in `src/fleet_copilot/credentials.py` and is part of the package's surface; a function that a consumer can import should not need a dev extra to work. It costs `aiohttp` and six small transitive packages in the API image.
+
+- [ ] **Step 5: Run it and watch it pass**
+
+Run: `uv run pytest tests/test_credentials.py -v && uv run mypy`
+Expected: 4 passed, mypy clean.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add src/fleet_copilot/credentials.py tests/test_credentials.py pyproject.toml uv.lock
 git commit -m "feat(credentials): add the async credential the aio clients need
 
 A separate function rather than a branch on environment. An aio client handed

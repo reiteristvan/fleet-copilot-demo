@@ -28,3 +28,16 @@ def test_same_call_shape_with_and_without_a_managed_identity(
         monkeypatch.setenv("AZURE_CLIENT_ID", client_id)
 
     assert isinstance(get_credential(), DefaultAzureCredential)
+
+
+def test_async_credential_is_the_async_default_chain() -> None:
+    """The aio SDK clients do not reject a synchronous credential at construction.
+
+    They accept it and fail on the first request, inside a poller, where the
+    traceback points at the SDK rather than at the credential that was wrong.
+    """
+    from azure.identity.aio import DefaultAzureCredential as AsyncDefaultAzureCredential
+
+    from fleet_copilot.credentials import get_async_credential
+
+    assert isinstance(get_async_credential(), AsyncDefaultAzureCredential)
