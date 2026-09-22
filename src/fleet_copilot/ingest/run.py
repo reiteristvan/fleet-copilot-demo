@@ -21,8 +21,11 @@ from fleet_copilot.corpus.models import OutputFormat
 from fleet_copilot.corpus.seed import CorpusDataError
 from fleet_copilot.corpus.upload import content_type_for
 from fleet_copilot.ingest.cache import BlobLayoutCache, LayoutCache, cache_key
+from fleet_copilot.ingest.chunking import DocumentContext
+from fleet_copilot.ingest.chunking.base import chunkers
 from fleet_copilot.ingest.layout import MODEL_ID, AzureLayoutParser, layout_from_analyze_result
 from fleet_copilot.ingest.markdown import MarkdownParser
+from fleet_copilot.ingest.models import Chunk, StrategyId
 from fleet_copilot.ingest.parse import ParsedDocument
 
 
@@ -192,3 +195,66 @@ async def run(
         cached=cached,
         dry_run=dry_run,
     )
+
+
+async def chunk_markdown_corpus(
+    manifest: Manifest, corpus_root: Path
+) -> dict[StrategyId, list[Chunk]]:
+    """Chunk every Markdown document under all three strategies.
+
+    Needs no Azure account, which is why it is what the test suite exercises:
+    the 95 Markdown documents are 79% of the corpus and cover both languages,
+    every document type and every structure the chunkers care about.
+    """
+    parser = MarkdownParser()
+    strategies = chunkers()
+    by_strategy: dict[StrategyId, list[Chunk]] = {key: [] for key in strategies}
+
+    entries = {entry.doc_id: entry for entry in manifest.documents}
+    for target in native_targets(manifest):
+        data = await asyncio.to_thread((corpus_root / target.path).read_bytes)
+        document = await parser.parse(data, doc_id=target.doc_id, content_type=target.content_type)
+        context = DocumentContext.from_entry(entries[target.doc_id])
+        for key, chunker in strategies.items():
+            by_strategy[key].extend(chunker.chunk(document, context))
+
+    return by_strategy
+
+
+async def chunk_corpus(
+    manifest: Manifest, corpus_root: Path, settings: Settings
+) -> dict[StrategyId, list[Chunk]]:
+    """Chunk all 120 documents. The converted 25 come from the layout cache.
+
+    Raises if a converted document is not cached rather than analysing it:
+    chunking is not the place to spend money, and an uncached document means
+    `just corpus-parse --apply` has not been run.
+    """
+    by_strategy = await chunk_markdown_corpus(manifest, corpus_root)
+
+    di_endpoint, blob_endpoint, container = endpoints(settings)
+    api_version = settings.azure_document_intelligence_api_version
+    cache = BlobLayoutCache(blob_endpoint, container)
+    parser = CachedParser(
+        AzureLayoutParser(di_endpoint, api_version=api_version), cache, api_version=api_version
+    )
+    strategies = chunkers()
+    entries = {entry.doc_id: entry for entry in manifest.documents}
+
+    for target in analyse_targets(manifest):
+        data = await asyncio.to_thread((corpus_root / target.path).read_bytes)
+        key = parser.key_for(data)
+        payload = await cache.get(key)
+        if payload is None:
+            msg = f"{target.doc_id} is not in the layout cache; run `just corpus-parse --apply`"
+            raise CorpusDataError(msg)
+        document = layout_from_analyze_result(
+            payload,
+            doc_id=target.doc_id,
+            source_sha256=hashlib.sha256(data).hexdigest(),
+        )
+        context = DocumentContext.from_entry(entries[target.doc_id])
+        for strategy_id, chunker in strategies.items():
+            by_strategy[strategy_id].extend(chunker.chunk(document, context))
+
+    return by_strategy

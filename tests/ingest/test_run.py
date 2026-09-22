@@ -13,8 +13,14 @@ import pytest
 from fleet_copilot.corpus.build import corpus_root, manifest_path
 from fleet_copilot.corpus.manifest import load_manifest
 from fleet_copilot.ingest.cache import LocalLayoutCache, cache_key
+from fleet_copilot.ingest.models import StrategyId
 from fleet_copilot.ingest.parse import ParsedDocument
-from fleet_copilot.ingest.run import CachedParser, analyse_targets, native_targets
+from fleet_copilot.ingest.run import (
+    CachedParser,
+    analyse_targets,
+    chunk_markdown_corpus,
+    native_targets,
+)
 
 FIXTURE = Path(__file__).parent / "fixtures" / "layout" / "sdm-43-service-manual.json"
 
@@ -96,3 +102,22 @@ def test_every_target_carries_the_content_type_its_parser_needs() -> None:
         "application/pdf",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     }
+
+
+@pytest.mark.asyncio
+async def test_every_strategy_chunks_every_document() -> None:
+    """The story's first acceptance criterion, over the Markdown corpus.
+
+    The 25 converted documents need the layout cache, so this covers the 95 that
+    parse offline -- enough to prove no strategy drops a document, which is the
+    failure a stats table would hide behind an average.
+    """
+    manifest = load_manifest(manifest_path(None))
+
+    by_strategy = await chunk_markdown_corpus(manifest, corpus_root(None))
+
+    assert set(by_strategy) == set(StrategyId)
+    for strategy, chunks in by_strategy.items():
+        covered = {chunk.doc_id for chunk in chunks}
+        assert len(covered) == 95, f"{strategy.value} lost a document"
+        assert all(chunk.text.strip() for chunk in chunks)
