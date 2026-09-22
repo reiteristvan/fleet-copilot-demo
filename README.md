@@ -134,6 +134,26 @@ $ just chunk-stats --all    # all 120, reading the layout cache
 The published distribution and the reasoning: [docs/chunking.md](docs/chunking.md),
 with the chunk contract in [ADR 0006](docs/adr/0006-the-chunk-contract.md).
 
+## Embedding
+
+Every chunk goes to `text-embedding-3-large` at its native 3072 dimensions and
+lands in a Postgres cache keyed by `content_hash` — the SHA-256 of what is
+actually sent, not of the chunk text (ADR 0007).
+
+| | |
+| --- | --- |
+| Distinct vectors, all three strategies | 1,476 over 127,333 tokens, about $0.017 |
+| Requests | 17, batched by a token budget rather than a count |
+| A second run | **0 calls** — the acceptance criterion, and a statement about determinism |
+
+```console
+$ just embed-corpus          # report what would be sent
+$ just embed-corpus --apply  # send it
+```
+
+The numbers and the reasoning: [docs/chunking.md](docs/chunking.md), with the
+store in [ADR 0007](docs/adr/0007-the-embedding-store.md).
+
 ## The fleet database
 
 The operational half: what the machines in those documents actually did. Forty

@@ -23,6 +23,10 @@ from fleet_copilot.corpus.upload import content_type_for
 from fleet_copilot.ingest.cache import BlobLayoutCache, LayoutCache, cache_key
 from fleet_copilot.ingest.chunking import DocumentContext
 from fleet_copilot.ingest.chunking.base import chunkers
+from fleet_copilot.ingest.embedding.client import AzureEmbedder
+from fleet_copilot.ingest.embedding.models import EmbedReport
+from fleet_copilot.ingest.embedding.run import embed_chunks
+from fleet_copilot.ingest.embedding.store import EmbeddingStore
 from fleet_copilot.ingest.layout import MODEL_ID, AzureLayoutParser, layout_from_analyze_result
 from fleet_copilot.ingest.markdown import MarkdownParser
 from fleet_copilot.ingest.models import Chunk, StrategyId
@@ -258,3 +262,33 @@ async def chunk_corpus(
             by_strategy[strategy_id].extend(chunker.chunk(document, context))
 
     return by_strategy
+
+
+async def embed_corpus(
+    manifest: Manifest,
+    corpus_root: Path,
+    settings: Settings,
+    *,
+    dry_run: bool = True,
+) -> dict[StrategyId, EmbedReport]:
+    """Chunk the corpus and embed every strategy's chunks, cache-first.
+
+    One store and one embedder across all three strategies: they share the cache
+    by design, so embedding all three costs the union of their content hashes
+    rather than three separate runs.
+    """
+    by_strategy = await chunk_corpus(manifest, corpus_root, settings)
+    store = EmbeddingStore(settings.database_url)
+    embedder = AzureEmbedder(settings)
+
+    reports: dict[StrategyId, EmbedReport] = {}
+    for strategy, chunks in by_strategy.items():
+        reports[strategy] = await embed_chunks(
+            chunks,
+            store,
+            embedder,
+            dimensions=settings.azure_openai_embedding_dimensions,
+            budget_tokens=settings.embedding_batch_tokens,
+            dry_run=dry_run,
+        )
+    return reports

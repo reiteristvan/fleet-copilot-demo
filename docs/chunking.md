@@ -121,6 +121,55 @@ that refused to split.
 The heuristic and the exact counter disagree by a few percent at the median and
 by more at the extremes, in the direction the 15% bound predicts.
 
+## Embedding
+
+Every chunk is embedded with `text-embedding-3-large` at its native 3072
+dimensions and cached in Postgres by `content_hash` — the SHA-256 of
+`embed_text`, which is what is actually sent (ADR 0007).
+
+```
+just embed-corpus            # report what would be sent
+just embed-corpus --apply    # send it
+```
+
+| Strategy | Chunks | Distinct | Tokens | Requests |
+| --- | ---: | ---: | ---: | ---: |
+| fixed | 227 | 227 | 39,581 | 6 |
+| structural | 692 | 560 | 30,642 | 4 |
+| contextual | 692 | 689 | 57,110 | 7 |
+| **union** | 1,611 | **1,476** | **127,333** | 17 |
+
+At $0.13 per million tokens that is **$0.017** for the whole corpus across all
+three strategies. The cache is not justified by that number — it is justified by
+the acceptance criterion, which says a clean re-run must make *zero* calls. That
+is a statement about determinism: three strategies are about to be compared, and
+the inputs must not move between runs.
+
+**The second `--apply` embeds nothing.** That is the externally visible proof
+that `content_hash` describes what was actually sent:
+
+```
+fixed        227 chunks, 227 distinct, 227 already cached, embedded 0 in 0 requests
+structural   692 chunks, 560 distinct, 560 already cached, embedded 0 in 0 requests
+contextual   692 chunks, 689 distinct, 689 already cached, embedded 0 in 0 requests
+```
+
+**Two numbers worth reading.** `structural` collapses 692 chunks into 560
+distinct vectors: 132 are text that repeats across documents — shared safety
+boilerplate and identical headings — and the cache pays for each once. The three
+strategies, by contrast, share nothing at all: 227 + 560 + 689 is exactly the
+1,476 rows in the table. `fixed` cuts in different places, and `contextual`
+differs from `structural` by a prepended header on every chunk, so no hash is
+common to two strategies. That disjointness is the point rather than a waste —
+it is what lets story 3.3 score each strategy on its own vectors.
+
+Batches are bounded by tokens, not by a count. Azure accepts up to 2048 inputs
+per request, but the throttle is tokens per minute; with chunks from 40 to over
+1,000 tokens, a fixed-count batch would send an unpredictable amount and the
+request that finally trips the limit would have nothing to do with anything
+visible. The budget is 8,000 tokens against a 50,000-per-minute deployment, four
+requests in flight.
+
 ## What story 3.3 compares
 
 - `fixed` against `structural` isolates **boundary placement**: same target

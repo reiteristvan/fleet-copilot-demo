@@ -63,6 +63,10 @@ corpus-parse *args:
 chunk-stats *args:
     uv run python scripts/chunk_stats.py {{args}}
 
+# Dry-run the embedding pass: `just embed-corpus --apply` calls the model.
+embed-corpus *args:
+    uv run python scripts/embed_corpus.py {{args}}
+
 # Apply every database migration. Needs the stack up (`just up`).
 db-migrate:
     uv run alembic upgrade head

@@ -8,7 +8,9 @@ from pydantic import ValidationError
 from fleet_copilot.ingest.embedding.models import EmbeddingRecord
 from fleet_copilot.ingest.embedding.store import EmbeddingStore
 
-MODEL = "embeddings"
+MODEL = "test-embeddings"
+"""Deliberately not the real deployment name. These rows are committed, so a
+test using the live model id leaves fakes in the cache the corpus run reads."""
 DIMENSIONS = 3072
 
 
