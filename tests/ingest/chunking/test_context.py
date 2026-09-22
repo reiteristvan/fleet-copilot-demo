@@ -14,6 +14,8 @@ from fleet_copilot.ingest.chunking.context import (
 from fleet_copilot.ingest.parse import BlockRole, ParsedBlock, ParsedDocument, ParsedPage, ParserId
 
 CONTENT = (
+    "Preamble, before any heading.\n"
+    "\n"
     "# Single-disc machine SDM-43 - service manual\n"
     "\n"
     "## Scope\n"
@@ -58,6 +60,7 @@ def a_document() -> ParsedDocument:
         model_id="markdown",
         content=CONTENT,
         blocks=(
+            block(BlockRole.PARAGRAPH, "Preamble, before any heading."),
             block(BlockRole.TITLE, "# Single-disc machine SDM-43 - service manual"),
             block(BlockRole.SECTION_HEADING, "## Scope"),
             block(BlockRole.PARAGRAPH, "For service technicians."),
@@ -101,7 +104,21 @@ def test_a_later_heading_replaces_an_earlier_one_at_the_same_level() -> None:
 
 
 def test_an_offset_before_any_heading_has_an_empty_path() -> None:
-    assert section_path_at(a_document(), 0) == ()
+    """Preamble text belongs to no section, and must not borrow the title's."""
+    assert section_path_at(a_document(), CONTENT.index("Preamble")) == ()
+
+
+def test_a_heading_starting_exactly_at_the_offset_is_in_its_own_path() -> None:
+    """Every structural chunk begins at the heading that opened it.
+
+    Excluding a heading that starts at the offset would give each chunk the
+    breadcrumb of the section above the one its own text is in, so the chunk
+    would contradict its own metadata.
+    """
+    assert section_path_at(a_document(), CONTENT.index("## Safety")) == (
+        "Single-disc machine SDM-43 - service manual",
+        "Safety",
+    )
 
 
 def test_the_context_carries_every_metadata_field_a_chunk_needs() -> None:

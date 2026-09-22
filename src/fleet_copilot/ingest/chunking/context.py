@@ -43,10 +43,15 @@ def section_path_at(document: ParsedDocument, offset: int) -> tuple[str, ...]:
     Levels replace rather than accumulate: two sibling sections at the same
     depth are alternatives, and a chunk inside the second one that still claimed
     the first would be retrieved for queries about a section it is not in.
+
+    A heading starting exactly at ``offset`` counts. The structural chunker
+    flushes on a heading, so every chunk it emits begins at one; excluding it
+    would hand each chunk the breadcrumb of the section above the one it is
+    actually in, and the text would contradict its own metadata.
     """
     path: dict[int, str] = {}
     for block in document.blocks:
-        if block.start >= offset:
+        if block.start > offset:
             break
         if block.role not in HEADING_ROLES:
             continue
