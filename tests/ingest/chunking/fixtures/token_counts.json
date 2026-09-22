@@ -1,0 +1,725 @@
+{
+  "encoding": "cl100k_base",
+  "samples": [
+    {
+      "characters": 1232,
+      "doc_id": "error-code-reference-hu",
+      "language": "hu",
+      "tokens": 576
+    },
+    {
+      "characters": 1234,
+      "doc_id": "error-code-reference",
+      "language": "en",
+      "tokens": 397
+    },
+    {
+      "characters": 425,
+      "doc_id": "fault-report-sd50b-2026-10279-12",
+      "language": "en",
+      "tokens": 106
+    },
+    {
+      "characters": 336,
+      "doc_id": "fault-report-sd50b-2026-10416-10",
+      "language": "en",
+      "tokens": 87
+    },
+    {
+      "characters": 331,
+      "doc_id": "fault-report-sdm43-2026-10142-05",
+      "language": "en",
+      "tokens": 93
+    },
+    {
+      "characters": 329,
+      "doc_id": "fault-report-sdm43-2026-10142-11",
+      "language": "en",
+      "tokens": 94
+    },
+    {
+      "characters": 374,
+      "doc_id": "fault-report-sdm43-2026-10279-08",
+      "language": "en",
+      "tokens": 94
+    },
+    {
+      "characters": 354,
+      "doc_id": "fault-report-sdm43-2026-10416-00",
+      "language": "en",
+      "tokens": 90
+    },
+    {
+      "characters": 327,
+      "doc_id": "fault-report-sdr90-2026-10142-01",
+      "language": "en",
+      "tokens": 94
+    },
+    {
+      "characters": 349,
+      "doc_id": "fault-report-sdr90-2026-10279-13",
+      "language": "en",
+      "tokens": 92
+    },
+    {
+      "characters": 349,
+      "doc_id": "fault-report-swr120-2026-10006-03",
+      "language": "en",
+      "tokens": 88
+    },
+    {
+      "characters": 383,
+      "doc_id": "fault-report-swr120-2026-10006-06",
+      "language": "en",
+      "tokens": 98
+    },
+    {
+      "characters": 350,
+      "doc_id": "fault-report-swr120-2026-10417-07",
+      "language": "en",
+      "tokens": 87
+    },
+    {
+      "characters": 346,
+      "doc_id": "fault-report-swr120-2026-10417-09",
+      "language": "en",
+      "tokens": 93
+    },
+    {
+      "characters": 339,
+      "doc_id": "fault-report-vs75-2026-10141-02",
+      "language": "en",
+      "tokens": 84
+    },
+    {
+      "characters": 411,
+      "doc_id": "fault-report-vs75-2026-10278-04",
+      "language": "en",
+      "tokens": 103
+    },
+    {
+      "characters": 1729,
+      "doc_id": "glossary-hu",
+      "language": "hu",
+      "tokens": 768
+    },
+    {
+      "characters": 1786,
+      "doc_id": "glossary",
+      "language": "en",
+      "tokens": 381
+    },
+    {
+      "characters": 818,
+      "doc_id": "handover-budapest-raktar-2026-02-06-00-hu",
+      "language": "hu",
+      "tokens": 358
+    },
+    {
+      "characters": 772,
+      "doc_id": "handover-city-hospital-2026-01-09-31",
+      "language": "en",
+      "tokens": 181
+    },
+    {
+      "characters": 767,
+      "doc_id": "handover-city-hospital-2026-04-04-21",
+      "language": "en",
+      "tokens": 184
+    },
+    {
+      "characters": 672,
+      "doc_id": "handover-city-hospital-2026-07-09-14",
+      "language": "en",
+      "tokens": 166
+    },
+    {
+      "characters": 768,
+      "doc_id": "handover-debrecen-uzem-2026-06-30-02-hu",
+      "language": "hu",
+      "tokens": 342
+    },
+    {
+      "characters": 854,
+      "doc_id": "handover-depot-north-2026-02-28-19",
+      "language": "en",
+      "tokens": 201
+    },
+    {
+      "characters": 730,
+      "doc_id": "handover-depot-north-2026-03-02-05",
+      "language": "en",
+      "tokens": 180
+    },
+    {
+      "characters": 775,
+      "doc_id": "handover-depot-north-2026-03-20-00",
+      "language": "en",
+      "tokens": 186
+    },
+    {
+      "characters": 789,
+      "doc_id": "handover-depot-north-2026-05-18-37",
+      "language": "en",
+      "tokens": 195
+    },
+    {
+      "characters": 759,
+      "doc_id": "handover-depot-north-2026-06-19-16",
+      "language": "en",
+      "tokens": 173
+    },
+    {
+      "characters": 744,
+      "doc_id": "handover-depot-north-2026-06-28-11",
+      "language": "en",
+      "tokens": 179
+    },
+    {
+      "characters": 703,
+      "doc_id": "handover-depot-north-2026-07-14-15",
+      "language": "en",
+      "tokens": 166
+    },
+    {
+      "characters": 815,
+      "doc_id": "handover-gyor-logisztika-2026-02-19-04-hu",
+      "language": "hu",
+      "tokens": 369
+    },
+    {
+      "characters": 800,
+      "doc_id": "handover-gyor-logisztika-2026-05-08-03-hu",
+      "language": "hu",
+      "tokens": 371
+    },
+    {
+      "characters": 817,
+      "doc_id": "handover-gyor-logisztika-2026-06-06-05-hu",
+      "language": "hu",
+      "tokens": 374
+    },
+    {
+      "characters": 774,
+      "doc_id": "handover-gyor-logisztika-2026-07-08-01-hu",
+      "language": "hu",
+      "tokens": 358
+    },
+    {
+      "characters": 659,
+      "doc_id": "handover-hangar-seven-2026-01-31-22",
+      "language": "en",
+      "tokens": 171
+    },
+    {
+      "characters": 694,
+      "doc_id": "handover-hangar-seven-2026-02-07-32",
+      "language": "en",
+      "tokens": 169
+    },
+    {
+      "characters": 713,
+      "doc_id": "handover-hangar-seven-2026-05-06-30",
+      "language": "en",
+      "tokens": 175
+    },
+    {
+      "characters": 655,
+      "doc_id": "handover-hangar-seven-2026-06-11-09",
+      "language": "en",
+      "tokens": 157
+    },
+    {
+      "characters": 755,
+      "doc_id": "handover-hangar-seven-2026-06-29-35",
+      "language": "en",
+      "tokens": 180
+    },
+    {
+      "characters": 914,
+      "doc_id": "handover-hangar-seven-2026-08-01-28",
+      "language": "en",
+      "tokens": 218
+    },
+    {
+      "characters": 683,
+      "doc_id": "handover-hangar-seven-2026-08-08-25",
+      "language": "en",
+      "tokens": 167
+    },
+    {
+      "characters": 669,
+      "doc_id": "handover-hangar-seven-2026-08-24-20",
+      "language": "en",
+      "tokens": 166
+    },
+    {
+      "characters": 736,
+      "doc_id": "handover-hangar-seven-2026-09-02-10",
+      "language": "en",
+      "tokens": 178
+    },
+    {
+      "characters": 759,
+      "doc_id": "handover-hangar-seven-2026-09-10-27",
+      "language": "en",
+      "tokens": 183
+    },
+    {
+      "characters": 712,
+      "doc_id": "handover-harbour-terminal-2026-04-11-12",
+      "language": "en",
+      "tokens": 168
+    },
+    {
+      "characters": 748,
+      "doc_id": "handover-harbour-terminal-2026-06-24-24",
+      "language": "en",
+      "tokens": 182
+    },
+    {
+      "characters": 744,
+      "doc_id": "handover-harbour-terminal-2026-07-15-33",
+      "language": "en",
+      "tokens": 177
+    },
+    {
+      "characters": 712,
+      "doc_id": "handover-harbour-terminal-2026-08-14-18",
+      "language": "en",
+      "tokens": 170
+    },
+    {
+      "characters": 697,
+      "doc_id": "handover-harbour-terminal-2026-08-17-36",
+      "language": "en",
+      "tokens": 163
+    },
+    {
+      "characters": 785,
+      "doc_id": "handover-metro-logistics-2026-01-16-23",
+      "language": "en",
+      "tokens": 184
+    },
+    {
+      "characters": 752,
+      "doc_id": "handover-metro-logistics-2026-01-31-26",
+      "language": "en",
+      "tokens": 177
+    },
+    {
+      "characters": 682,
+      "doc_id": "handover-metro-logistics-2026-04-10-13",
+      "language": "en",
+      "tokens": 169
+    },
+    {
+      "characters": 803,
+      "doc_id": "handover-metro-logistics-2026-08-04-06",
+      "language": "en",
+      "tokens": 178
+    },
+    {
+      "characters": 713,
+      "doc_id": "handover-riverside-mall-2026-01-06-08",
+      "language": "en",
+      "tokens": 170
+    },
+    {
+      "characters": 712,
+      "doc_id": "handover-riverside-mall-2026-01-25-07",
+      "language": "en",
+      "tokens": 174
+    },
+    {
+      "characters": 704,
+      "doc_id": "handover-riverside-mall-2026-02-05-17",
+      "language": "en",
+      "tokens": 168
+    },
+    {
+      "characters": 695,
+      "doc_id": "handover-riverside-mall-2026-03-09-34",
+      "language": "en",
+      "tokens": 174
+    },
+    {
+      "characters": 684,
+      "doc_id": "handover-riverside-mall-2026-04-08-04",
+      "language": "en",
+      "tokens": 165
+    },
+    {
+      "characters": 744,
+      "doc_id": "handover-riverside-mall-2026-05-10-29",
+      "language": "en",
+      "tokens": 186
+    },
+    {
+      "characters": 704,
+      "doc_id": "handover-riverside-mall-2026-05-20-01",
+      "language": "en",
+      "tokens": 164
+    },
+    {
+      "characters": 666,
+      "doc_id": "handover-riverside-mall-2026-08-03-03",
+      "language": "en",
+      "tokens": 162
+    },
+    {
+      "characters": 786,
+      "doc_id": "handover-riverside-mall-2026-09-02-02",
+      "language": "en",
+      "tokens": 190
+    },
+    {
+      "characters": 1389,
+      "doc_id": "safety-battery-charging-hu",
+      "language": "hu",
+      "tokens": 632
+    },
+    {
+      "characters": 1320,
+      "doc_id": "safety-battery-charging",
+      "language": "en",
+      "tokens": 264
+    },
+    {
+      "characters": 1329,
+      "doc_id": "safety-detergent-sds-acidic",
+      "language": "en",
+      "tokens": 275
+    },
+    {
+      "characters": 1432,
+      "doc_id": "safety-detergent-sds-alkaline",
+      "language": "en",
+      "tokens": 296
+    },
+    {
+      "characters": 1459,
+      "doc_id": "safety-detergent-sds-neutral",
+      "language": "en",
+      "tokens": 293
+    },
+    {
+      "characters": 1396,
+      "doc_id": "safety-lockout-and-isolation",
+      "language": "en",
+      "tokens": 285
+    },
+    {
+      "characters": 1371,
+      "doc_id": "safety-ppe-requirements",
+      "language": "en",
+      "tokens": 278
+    },
+    {
+      "characters": 1407,
+      "doc_id": "safety-ride-on-operation-hu",
+      "language": "hu",
+      "tokens": 640
+    },
+    {
+      "characters": 1314,
+      "doc_id": "safety-ride-on-operation",
+      "language": "en",
+      "tokens": 268
+    },
+    {
+      "characters": 1367,
+      "doc_id": "safety-spill-response",
+      "language": "en",
+      "tokens": 275
+    },
+    {
+      "characters": 1769,
+      "doc_id": "sd-50b-maint-battery-care-hu",
+      "language": "hu",
+      "tokens": 768
+    },
+    {
+      "characters": 1895,
+      "doc_id": "sd-50b-maint-battery-care-rev3",
+      "language": "en",
+      "tokens": 444
+    },
+    {
+      "characters": 1992,
+      "doc_id": "sd-50b-maint-battery-care-rev4",
+      "language": "en",
+      "tokens": 466
+    },
+    {
+      "characters": 1731,
+      "doc_id": "sd-50b-maint-brush-wear-limits",
+      "language": "en",
+      "tokens": 411
+    },
+    {
+      "characters": 1858,
+      "doc_id": "sd-50b-maint-squeegee-blade-change",
+      "language": "en",
+      "tokens": 448
+    },
+    {
+      "characters": 2758,
+      "doc_id": "sd-50b-operator-manual-hu",
+      "language": "hu",
+      "tokens": 1240
+    },
+    {
+      "characters": 2668,
+      "doc_id": "sd-50b-operator-manual",
+      "language": "en",
+      "tokens": 640
+    },
+    {
+      "characters": 2080,
+      "doc_id": "sd-50b-service-manual",
+      "language": "en",
+      "tokens": 444
+    },
+    {
+      "characters": 1908,
+      "doc_id": "sdm-43-maint-battery-care",
+      "language": "en",
+      "tokens": 430
+    },
+    {
+      "characters": 1784,
+      "doc_id": "sdm-43-maint-brush-wear-limits",
+      "language": "en",
+      "tokens": 406
+    },
+    {
+      "characters": 2395,
+      "doc_id": "sdm-43-operator-manual",
+      "language": "en",
+      "tokens": 550
+    },
+    {
+      "characters": 2041,
+      "doc_id": "sdm-43-service-manual",
+      "language": "en",
+      "tokens": 427
+    },
+    {
+      "characters": 1838,
+      "doc_id": "sdr-90-maint-battery-care",
+      "language": "en",
+      "tokens": 432
+    },
+    {
+      "characters": 1680,
+      "doc_id": "sdr-90-maint-brush-wear-limits",
+      "language": "en",
+      "tokens": 397
+    },
+    {
+      "characters": 1797,
+      "doc_id": "sdr-90-maint-squeegee-blade-change",
+      "language": "en",
+      "tokens": 439
+    },
+    {
+      "characters": 2780,
+      "doc_id": "sdr-90-operator-manual-hu",
+      "language": "hu",
+      "tokens": 1240
+    },
+    {
+      "characters": 2657,
+      "doc_id": "sdr-90-operator-manual",
+      "language": "en",
+      "tokens": 633
+    },
+    {
+      "characters": 1895,
+      "doc_id": "sdr-90-service-manual",
+      "language": "en",
+      "tokens": 405
+    },
+    {
+      "characters": 679,
+      "doc_id": "service-report-sd50b-2026-10005-05",
+      "language": "en",
+      "tokens": 172
+    },
+    {
+      "characters": 680,
+      "doc_id": "service-report-sd50b-2026-10005-06",
+      "language": "en",
+      "tokens": 166
+    },
+    {
+      "characters": 713,
+      "doc_id": "service-report-sd50b-2026-10005-10",
+      "language": "en",
+      "tokens": 174
+    },
+    {
+      "characters": 658,
+      "doc_id": "service-report-sd50b-2026-10142-11",
+      "language": "en",
+      "tokens": 156
+    },
+    {
+      "characters": 758,
+      "doc_id": "service-report-sd50b-2026-10142-13",
+      "language": "en",
+      "tokens": 178
+    },
+    {
+      "characters": 909,
+      "doc_id": "service-report-sd50b-2026-10142-17",
+      "language": "en",
+      "tokens": 201
+    },
+    {
+      "characters": 696,
+      "doc_id": "service-report-sd50b-2026-10416-01",
+      "language": "en",
+      "tokens": 172
+    },
+    {
+      "characters": 763,
+      "doc_id": "service-report-sd50b-2026-10416-02",
+      "language": "en",
+      "tokens": 186
+    },
+    {
+      "characters": 713,
+      "doc_id": "service-report-sd50b-2026-10416-09",
+      "language": "en",
+      "tokens": 172
+    },
+    {
+      "characters": 721,
+      "doc_id": "service-report-sdm43-2026-10005-16",
+      "language": "en",
+      "tokens": 179
+    },
+    {
+      "characters": 719,
+      "doc_id": "service-report-sdm43-2026-10142-00",
+      "language": "en",
+      "tokens": 179
+    },
+    {
+      "characters": 663,
+      "doc_id": "service-report-sdm43-2026-10142-19",
+      "language": "en",
+      "tokens": 159
+    },
+    {
+      "characters": 810,
+      "doc_id": "service-report-sdm43-2026-10279-12",
+      "language": "en",
+      "tokens": 191
+    },
+    {
+      "characters": 876,
+      "doc_id": "service-report-sdm43-2026-10279-15",
+      "language": "en",
+      "tokens": 193
+    },
+    {
+      "characters": 681,
+      "doc_id": "service-report-sdm43-2026-10416-03",
+      "language": "en",
+      "tokens": 171
+    },
+    {
+      "characters": 739,
+      "doc_id": "service-report-sdr90-2026-10142-18",
+      "language": "en",
+      "tokens": 173
+    },
+    {
+      "characters": 709,
+      "doc_id": "service-report-sdr90-2026-10416-07",
+      "language": "en",
+      "tokens": 175
+    },
+    {
+      "characters": 673,
+      "doc_id": "service-report-swr120-2026-10280-08",
+      "language": "en",
+      "tokens": 162
+    },
+    {
+      "characters": 652,
+      "doc_id": "service-report-swr120-2026-10280-14",
+      "language": "en",
+      "tokens": 156
+    },
+    {
+      "characters": 756,
+      "doc_id": "service-report-vs75-2026-10141-04",
+      "language": "en",
+      "tokens": 183
+    },
+    {
+      "characters": 1817,
+      "doc_id": "swr-120-maint-battery-care",
+      "language": "en",
+      "tokens": 425
+    },
+    {
+      "characters": 1806,
+      "doc_id": "swr-120-maint-brush-wear-limits",
+      "language": "en",
+      "tokens": 424
+    },
+    {
+      "characters": 1795,
+      "doc_id": "swr-120-maint-filter-cleaning",
+      "language": "en",
+      "tokens": 409
+    },
+    {
+      "characters": 2528,
+      "doc_id": "swr-120-operator-manual",
+      "language": "en",
+      "tokens": 613
+    },
+    {
+      "characters": 1969,
+      "doc_id": "swr-120-service-manual",
+      "language": "en",
+      "tokens": 421
+    },
+    {
+      "characters": 1960,
+      "doc_id": "vs-75-maint-battery-care",
+      "language": "en",
+      "tokens": 443
+    },
+    {
+      "characters": 1716,
+      "doc_id": "vs-75-maint-brush-wear-limits",
+      "language": "en",
+      "tokens": 403
+    },
+    {
+      "characters": 1844,
+      "doc_id": "vs-75-maint-filter-cleaning",
+      "language": "en",
+      "tokens": 432
+    },
+    {
+      "characters": 2375,
+      "doc_id": "vs-75-operator-manual",
+      "language": "en",
+      "tokens": 555
+    },
+    {
+      "characters": 2115,
+      "doc_id": "vs-75-service-manual",
+      "language": "en",
+      "tokens": 443
+    }
+  ]
+}

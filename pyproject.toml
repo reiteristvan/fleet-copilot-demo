@@ -49,6 +49,11 @@ dev = [
     "types-pyyaml>=6.0",
     "azure-ai-documentintelligence>=1.0.2",
     "pymupdf>=1.24",
+    # Exact cl100k_base counts, for reporting chunk sizes and recalibrating the
+    # offline ratios. Never decides a boundary: get_encoding() downloads its BPE
+    # table over HTTPS on first use, and a boundary that depends on a download
+    # is not a boundary. Imported lazily inside TiktokenCounter.__init__.
+    "tiktoken>=0.8",
 ]
 
 # --------------------------------------------------------------------------- #
