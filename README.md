@@ -39,6 +39,7 @@ migrations/    Alembic migrations, hand-written SQL
 tests/         mirrors the source layout
 infra/         Bicep templates, per-environment parameters and deploy.sh
 docs/data-model.md  ERD and the reasoning behind the schema
+docs/chunking.md    the three chunking strategies and their size distribution
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 ```
@@ -103,6 +104,35 @@ $ python -c "import json;m=json.load(open('data/manifest.json'));  print([d['pla
 ```
 
 Details and the reasoning: [ADR 0003](docs/adr/0003-synthetic-corpus-contract.md).
+
+## Chunking
+
+Three strategies split those parsed documents into the units the retriever will
+index. They exist to be compared, so everything they do not vary is held equal.
+
+| Strategy | Boundary | Header |
+| --- | --- | --- |
+| `fixed` | A 220-token window sliding over `content`, 40 tokens of overlap, structure ignored | none |
+| `structural` | Blocks packed under their heading; tables stand alone, step lists never split | none |
+| `contextual` | Identical to `structural` -- it wraps it | breadcrumb, prepended for embedding only |
+
+220 tokens rather than the conventional 512 because the median document is 183:
+at 512, 108 of 120 documents would be a single chunk and the comparison would
+measure nothing. The window is the same size for `fixed` and `structural`, or
+the result would confound size with boundary placement.
+
+Token budgets go through a per-language ratio measured against `cl100k_base` --
+4.17 characters per token in English against **2.21** in Hungarian. `tiktoken`
+never decides a boundary: it downloads its BPE table over HTTPS on first use,
+and a boundary that depends on whether a download succeeded is not a boundary.
+
+```console
+$ just chunk-stats          # 95 Markdown documents, offline
+$ just chunk-stats --all    # all 120, reading the layout cache
+```
+
+The published distribution and the reasoning: [docs/chunking.md](docs/chunking.md),
+with the chunk contract in [ADR 0006](docs/adr/0006-the-chunk-contract.md).
 
 ## The fleet database
 

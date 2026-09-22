@@ -29,7 +29,11 @@ was trained overwhelmingly on English, and an agglutinative language fragments
 into far more subword pieces. A single global ratio would let every Hungarian
 chunk run to nearly twice the token budget the chunker thought it had set.
 
-Regenerate with `just chunk-stats --calibrate` after any corpus change.
+Both are medians of per-document ratios, measured by
+`scripts/capture_token_counts.py` -- the script to re-run after a corpus change.
+`just chunk-stats --calibrate` is a cross-check rather than a regeneration: it
+measures chunks, not documents, so its numbers land near these without matching
+them.
 """
 
 DEFAULT_CHARS_PER_TOKEN: Final = 4.17

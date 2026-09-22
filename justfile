@@ -59,6 +59,10 @@ corpus-upload *args:
 corpus-parse *args:
     uv run python scripts/parse_corpus.py {{args}}
 
+# Chunk-size distribution per strategy: `just chunk-stats --all` includes PDFs.
+chunk-stats *args:
+    uv run python scripts/chunk_stats.py {{args}}
+
 # Apply every database migration. Needs the stack up (`just up`).
 db-migrate:
     uv run alembic upgrade head
