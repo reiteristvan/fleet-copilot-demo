@@ -11,6 +11,11 @@ dependencies = [
     "azure-identity>=1.19",
     "fastapi>=0.141.1",
     "httpx2>=2.13.0",
+    # A main dependency, unlike the Document Intelligence SDK next to it in
+    # the dev group: that one only ever runs during ingest, while the
+    # retrieval story embeds the query inside the request path, so the API
+    # image installed with --no-dev needs this one present.
+    "openai>=1.60",
     "psycopg[binary,pool]>=3.3.5",
     "pydantic>=2.9",
     "pydantic-settings>=2.6",

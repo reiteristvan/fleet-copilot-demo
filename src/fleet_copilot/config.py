@@ -39,6 +39,20 @@ class Settings(BaseSettings):
     # 404 rather than ignored, so this is not a value to guess at.
     azure_openai_api_version: str = "2024-10-21"
 
+    # text-embedding-3-large's native width. Not reduced with the `dimensions`
+    # parameter: shortening is one-way, and a full vector can be truncated later
+    # while a short one cannot be grown back (ADR 0007).
+    azure_openai_embedding_dimensions: int = 3072
+
+    # Well under the deployment's 50,000 tokens per minute, so a single batch
+    # cannot consume the whole minute's budget and stall everything behind it.
+    embedding_batch_tokens: int = 8000
+
+    # Raised from the SDK's default of 2. The SDK's own backoff reads the
+    # Retry-After header Azure sends on a 429; a hand-rolled one ignores it and
+    # retries early, which makes the throttling worse (ADR 0007).
+    embedding_max_retries: int = 6
+
     azure_search_endpoint: str | None = None
     azure_storage_blob_endpoint: str | None = None
     azure_storage_container: str = "raw-docs"
