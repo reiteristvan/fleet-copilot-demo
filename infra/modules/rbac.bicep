@@ -120,9 +120,9 @@ resource documentIntelligenceUser 'Microsoft.Authorization/roleAssignments@2022-
 
 // Subscription Owner is a management-plane role and carries no data actions, so
 // a developer who can create these resources still gets a 403 from the first
-// request against one. These two assignments are what let the offline steps --
-// capturing layout fixtures, writing the layout cache -- run from a laptop.
-// Empty in CI, which never calls Azure.
+// request against one. These three assignments are what let the offline steps --
+// capturing layout fixtures, writing the layout cache, embedding the corpus --
+// run from a laptop. Empty in CI, which never calls Azure.
 resource developerDocumentIntelligence 'Microsoft.Authorization/roleAssignments@2022-04-01' =
   if (!empty(developerPrincipalId)) {
     scope: documentIntelligence
@@ -131,6 +131,24 @@ resource developerDocumentIntelligence 'Microsoft.Authorization/roleAssignments@
       roleDefinitionId: subscriptionResourceId(
         'Microsoft.Authorization/roleDefinitions',
         cognitiveServicesUser
+      )
+      principalId: developerPrincipalId
+      principalType: developerPrincipalType
+    }
+  }
+
+// Cognitive Services OpenAI User, not the Cognitive Services User granted on
+// Document Intelligence above: the OpenAI data plane is gated by its own role,
+// and holding the other one produces a 401 naming a data action rather than a
+// role, which reads like a broken token instead of a missing assignment.
+resource developerOpenAi 'Microsoft.Authorization/roleAssignments@2022-04-01' =
+  if (!empty(developerPrincipalId)) {
+    scope: openAi
+    name: guid(openAi.id, developerPrincipalId, cognitiveServicesOpenAiUser)
+    properties: {
+      roleDefinitionId: subscriptionResourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        cognitiveServicesOpenAiUser
       )
       principalId: developerPrincipalId
       principalType: developerPrincipalType
