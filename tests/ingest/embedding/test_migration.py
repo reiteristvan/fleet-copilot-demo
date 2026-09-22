@@ -42,8 +42,13 @@ def test_the_same_hash_under_two_models_is_two_rows(connection: psycopg.Connecti
                 "(content_hash, model_id, dimensions, embedding) VALUES (%s, %s, %s, %s)",
                 ("a" * 64, model, DIMENSIONS, ZERO_VECTOR),
             )
+        # Scoped to the two models this test inserted. Other tests write
+        # committed rows under the same hash, and a bare count would make this
+        # assertion depend on the order the suite happened to run in.
         cursor.execute(
-            "SELECT count(*) FROM ingest.embedding_cache WHERE content_hash = %s", ("a" * 64,)
+            "SELECT count(*) FROM ingest.embedding_cache "
+            "WHERE content_hash = %s AND model_id = ANY(%s)",
+            ("a" * 64, ["model-a", "model-b"]),
         )
         row = cursor.fetchone()
         assert row is not None
