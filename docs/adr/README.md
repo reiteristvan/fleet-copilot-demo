@@ -20,3 +20,4 @@ Format: context, decision, consequences. Keep it to a page.
 | [0005](0005-document-parsing-and-the-layout-cache.md) | Layout parsing through Document Intelligence, and the cache in front of it | Accepted |
 | [0006](0006-the-chunk-contract.md) | The chunk contract, and where a chunk's metadata comes from | Accepted |
 | [0007](0007-the-embedding-store.md) | Where embeddings live, and who owns the backoff | Accepted |
+| [0008](0008-retiring-a-disclosed-endpoint.md) | Retiring a disclosed endpoint, without renaming the environment | Accepted |

@@ -3,6 +3,142 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-22 — Three chunking strategies, and an endpoint that had to be retired
+
+Chunking, under three strategies over the same 120 documents: a fixed window as
+the baseline, a heading-aware structural chunker, and a contextual one that is a
+*wrapper* around the structural chunker rather than a copy, so the two cannot
+drift and the A/B has one variable instead of two. Numbers and reasoning in
+`docs/chunking.md`; the contract is ADR 0006.
+
+The parameters came from the corpus rather than from convention. The median
+document is 183 tokens, so the usual 512-token window would have left 108 of 120
+documents as a single chunk and the three-way comparison would have measured
+nothing. 220 splits the long documents and leaves the short ones whole. The
+characters-per-token ratio is per language because the measurement demanded it:
+4.17 in English against **2.21** in Hungarian, and a single global ratio would
+have let every Hungarian chunk run to nearly twice its intended budget.
+
+**Every structural chunk was reporting the wrong section, and the test said so
+was correct.** `section_path_at` stopped at the first block at or *after* the
+offset, so a heading sitting exactly on it was excluded — and the structural
+chunker flushes on a heading, which means every chunk it emits begins at one.
+Each was handed the breadcrumb of the section above the one its own text was in.
+A chunk opening `## Safety` reported `Parts and consumables`. The module's own
+test had asserted the off-by-one rather than catching it, because it used offset
+0 of a document that starts with its title, where "before any heading" and "at
+the first heading" are the same position. It took a different module's test to
+see it. A test whose fixture cannot distinguish the two cases it is arbitrating
+is not evidence about either.
+
+Two smaller ones, both in tests. `zip(chunks, chunks[1:], strict=True)` always
+raises — the slice is one shorter, which is the entire point of the idiom, and
+`strict=True` was added to satisfy a lint rule rather than to say anything true.
+`itertools.pairwise` says it properly. And the `--calibrate` flag printed the
+aggregate characters-per-token while the constant it claimed to regenerate is a
+per-document median; following its own instructions would have moved the constant
+from 4.17 to 4.29. It now names which statistic it is reporting and which one the
+constant is.
+
+**The HTML-versus-pipe table disagreement came back, as a metric.** The previous
+entry recorded that Document Intelligence emits `<table>` where the Markdown
+parser emits pipe rows. The chunkers were never affected — they split on the
+block role and never read the text shape — but the stats column counted chunks
+beginning with `|`, so it reported the 25 converted documents as containing no
+tables at all, on the one construct ADR 0006 gives its own chunk type. Counting
+both dialects fixes the number. Normalising them is still undecided and still
+blocks a like-for-like table comparison across the two routes; exactly one
+document is affected, because the PDF renderer writes tables as spaced text and
+only the DOCX route produces a table at all.
+
+**A planning document had been carrying the real Document Intelligence endpoint
+as an "e.g." value, in a public repository.** Not a credential — every data plane
+here is keyless — but it names one specific deployment, and the privacy pass in
+September removed the subscription and tenant ids on exactly that reasoning while
+walking past this. History was rewritten and force-pushed, which stops it
+spreading and retracts nothing: the old commits stay reachable by SHA until
+GitHub collects them. So the account was rotated and deleted, and the hostname no
+longer resolves. Every name in `main.bicep` is derived from the subscription id
+and the environment name, which is what keeps a redeploy idempotent and also what
+would have handed the account its old name straight back, so Document
+Intelligence now carries its own rotation salt. ADR 0008.
+
+The cache made that nearly free, by an accident worth keeping. Layouts are keyed
+by `(source_sha256, model_id, api_version)` and not by the endpoint, so all 25
+survived the account swap — `just corpus-parse` still reports *"would analyse 0,
+25 already cached"*. Keyed by endpoint, rotating one would have cost a full
+re-analysis, which is an argument for that key nobody made when it was chosen.
+
+Open: the two table dialects are still unnormalised. Chunks are produced,
+measured and discarded — where they live is a retrieval-story decision. The
+unreachable commits are still on GitHub until support collects them. And the
+value got in as an illustrative example in prose, where nothing treats it as
+sensitive and no reviewer is looking for it; example endpoints should be written
+as placeholders from the start.
+
+## 2026-09-18 — parsing, and three things the corpus was hiding
+
+Added Azure AI Document Intelligence and the layout cache in front of it:
+Markdown parsed natively, PDF and DOCX through `prebuilt-layout`, all three
+producing the same `ParsedDocument` so a chunker cannot tell which route a
+document took. ADR 0005 and ADR 0006 carry the decisions.
+
+Three things turned up that had nothing to do with the feature.
+
+**The PDFs had been shredded since story 1.1, and every test passed.** fpdf2
+defaults `multi_cell`'s `new_x` to `XPos.RIGHT`, and the renderer assumed the
+cursor returned to the left margin. Every other line started at the right
+margin and ran off the page. The service manual reached the service as 699
+characters of fragments — `- The emer` / `isolator is h` where the safety
+bullet should be — and the two manuals kept 32% and 35% of their text. The
+corpus suite was green throughout, because the output was still a valid PDF and
+still byte-identical between runs. Determinism tests prove a generator is
+repeatable. They say nothing about whether it is right, and every assertion we
+had was about repeatability.
+
+It only surfaced because `prebuilt-layout` returned no tables for a document
+that has one, and that was worth not explaining away. The fix is one argument
+per call; after it every PDF keeps 100%+ of its source and the manual comes back
+with a title and five section headings. A fixture assertion now pins the
+character count, so a silent return to 699 fails as a renderer regression rather
+than passing as a parser that found less.
+
+**Subscription Owner grants no data-plane access.** `upload_corpus.py` has said
+so in its docstring since it was written, and the developer principal still had
+only `Owner` — so `just corpus-upload --apply` would have 403ed too, and nobody
+had run it. The Bicep now takes a `developerPrincipalId` and grants Cognitive
+Services User and Storage Blob Data Contributor, with `principalType` as a
+parameter so a team can point it at a group instead. A docstring that predicts a
+failure is not a mitigation.
+
+**In Markdown mode the service still emits tables as HTML.** `<table><tr><th>`,
+not pipe rows — while the Markdown parser emits pipes, straight from the source.
+So the two parsers agree on everything except the one construct ADR 0006 gives
+its own chunk type. Recorded as a test rather than patched over, because plan 2
+has to normalise it or the strategy comparison stops being like-for-like.
+
+Smaller corrections, all from the plan being written before the code ran:
+
+- **`azure.identity.aio` needs an async transport.** The module imports fine
+  without `aiohttp` and fails at construction, so nothing caught it until the
+  credential was built. `azure-core[aio]` is a main dependency, not a dev one:
+  `get_async_credential()` is part of the package surface.
+- **`what-if` reports a role assignment as *unsupported*, not as a create** — its
+  id depends on a runtime `reference()`. The ten modifies it lists are
+  pre-existing noise about undeclared read-only properties. Verified by running
+  what-if against the unmodified template and diffing the counts, which is the
+  only way to read that output honestly.
+- **`git stash` corrupts `deploy.sh` on Windows.** It holds one intentional bare
+  CR in `tr -d`, and the round-trip normalises it to LF, which would collapse
+  eleven deployment outputs onto one line. `pathlib.write_text` translating `
+`
+  to `
+` is how it got there.
+
+Open: the PDF renderer writes a table as space-separated text rather than a
+grid, so `prebuilt-layout` finds tables only in the DOCX. Chunking and embedding
+are planned but not built.
+
 ## 2026-09-16 — The operational half: registry, states and telemetry
 
 Forty machines across the corpus's nine sites, ninety days, 2.34M telemetry
@@ -272,66 +408,3 @@ checked before pushing.
 Open: `retrieval`, `agents` and `evals` are empty. `just eval` runs a harness
 that discovers zero suites — wired up so the first eval has somewhere to land
 rather than arriving with its own bespoke runner.
-
-## 2026-09-18 — parsing, and three things the corpus was hiding
-
-Added Azure AI Document Intelligence and the layout cache in front of it:
-Markdown parsed natively, PDF and DOCX through `prebuilt-layout`, all three
-producing the same `ParsedDocument` so a chunker cannot tell which route a
-document took. ADR 0005 and ADR 0006 carry the decisions.
-
-Three things turned up that had nothing to do with the feature.
-
-**The PDFs had been shredded since story 1.1, and every test passed.** fpdf2
-defaults `multi_cell`'s `new_x` to `XPos.RIGHT`, and the renderer assumed the
-cursor returned to the left margin. Every other line started at the right
-margin and ran off the page. The service manual reached the service as 699
-characters of fragments — `- The emer` / `isolator is h` where the safety
-bullet should be — and the two manuals kept 32% and 35% of their text. The
-corpus suite was green throughout, because the output was still a valid PDF and
-still byte-identical between runs. Determinism tests prove a generator is
-repeatable. They say nothing about whether it is right, and every assertion we
-had was about repeatability.
-
-It only surfaced because `prebuilt-layout` returned no tables for a document
-that has one, and that was worth not explaining away. The fix is one argument
-per call; after it every PDF keeps 100%+ of its source and the manual comes back
-with a title and five section headings. A fixture assertion now pins the
-character count, so a silent return to 699 fails as a renderer regression rather
-than passing as a parser that found less.
-
-**Subscription Owner grants no data-plane access.** `upload_corpus.py` has said
-so in its docstring since it was written, and the developer principal still had
-only `Owner` — so `just corpus-upload --apply` would have 403ed too, and nobody
-had run it. The Bicep now takes a `developerPrincipalId` and grants Cognitive
-Services User and Storage Blob Data Contributor, with `principalType` as a
-parameter so a team can point it at a group instead. A docstring that predicts a
-failure is not a mitigation.
-
-**In Markdown mode the service still emits tables as HTML.** `<table><tr><th>`,
-not pipe rows — while the Markdown parser emits pipes, straight from the source.
-So the two parsers agree on everything except the one construct ADR 0006 gives
-its own chunk type. Recorded as a test rather than patched over, because plan 2
-has to normalise it or the strategy comparison stops being like-for-like.
-
-Smaller corrections, all from the plan being written before the code ran:
-
-- **`azure.identity.aio` needs an async transport.** The module imports fine
-  without `aiohttp` and fails at construction, so nothing caught it until the
-  credential was built. `azure-core[aio]` is a main dependency, not a dev one:
-  `get_async_credential()` is part of the package surface.
-- **`what-if` reports a role assignment as *unsupported*, not as a create** — its
-  id depends on a runtime `reference()`. The ten modifies it lists are
-  pre-existing noise about undeclared read-only properties. Verified by running
-  what-if against the unmodified template and diffing the counts, which is the
-  only way to read that output honestly.
-- **`git stash` corrupts `deploy.sh` on Windows.** It holds one intentional bare
-  CR in `tr -d`, and the round-trip normalises it to LF, which would collapse
-  eleven deployment outputs onto one line. `pathlib.write_text` translating `
-`
-  to `
-` is how it got there.
-
-Open: the PDF renderer writes a table as space-separated text rather than a
-grid, so `prebuilt-layout` finds tables only in the DOCX. Chunking and embedding
-are planned but not built.

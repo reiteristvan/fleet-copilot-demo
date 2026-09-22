@@ -25,12 +25,28 @@ param developerPrincipalId string = ''
 @description('What developerPrincipalId is: User, Group or ServicePrincipal.')
 param developerPrincipalType string = 'User'
 
+@description('Salt for the Document Intelligence account name. Bump it to retire a disclosed endpoint; r1 was the unsalted original.')
+param documentIntelligenceNameSalt string = 'r2'
+
 var workload = 'fleet-copilot'
 
 // Storage, Key Vault, OpenAI and Search names must be globally unique. Deriving
 // the suffix from the subscription id keeps a redeploy idempotent while still
 // avoiding collisions with anyone else's deployment of this template.
 var suffix = uniqueString(subscription().id, environmentName)
+
+// Document Intelligence alone carries a salt. Its endpoint hostname was
+// committed to a public repository, and a hostname that has been published
+// cannot be unpublished -- only retired. Every other name here is derived
+// from the subscription and the environment, so a redeploy would hand the
+// account the same name straight back. Bump the salt to retire an endpoint
+// without renaming the whole environment; the name stays deterministic, so a
+// redeploy at the same salt is still a no-op.
+var documentIntelligenceSuffix = uniqueString(
+  subscription().id,
+  environmentName,
+  documentIntelligenceNameSalt
+)
 
 var tags = {
   workload: workload
@@ -102,7 +118,7 @@ module documentIntelligence 'modules/docintel.bicep' = {
   scope: rg
   name: 'docintel'
   params: {
-    name: 'di-${workload}-${environmentName}-${suffix}'
+    name: 'di-${workload}-${environmentName}-${documentIntelligenceSuffix}'
     location: location
     tags: tags
   }
