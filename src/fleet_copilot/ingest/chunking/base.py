@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Protocol, runtime_checkable
 
 from fleet_copilot.ingest.chunking.context import DocumentContext
-from fleet_copilot.ingest.models import Chunk
+from fleet_copilot.ingest.models import Chunk, StrategyId
 from fleet_copilot.ingest.parse import ParsedDocument
 
 
@@ -22,3 +23,19 @@ class Chunker(Protocol):
     def strategy(self) -> str: ...
 
     def chunk(self, document: ParsedDocument, context: DocumentContext) -> tuple[Chunk, ...]: ...
+
+
+def chunkers() -> Mapping[StrategyId, Chunker]:
+    """One instance per strategy, with the defaults the stats table was built on.
+
+    A function rather than a module-level dict so the imports stay one-way:
+    base defines the Protocol, and the strategies import it.
+    """
+    from fleet_copilot.ingest.chunking.fixed import FixedWindowChunker
+    from fleet_copilot.ingest.chunking.structural import ContextualChunker, StructuralChunker
+
+    return {
+        StrategyId.FIXED: FixedWindowChunker(),
+        StrategyId.STRUCTURAL: StructuralChunker(),
+        StrategyId.CONTEXTUAL: ContextualChunker(),
+    }

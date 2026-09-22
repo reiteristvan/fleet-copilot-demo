@@ -15,7 +15,11 @@ import re
 from typing import Final
 
 from fleet_copilot.corpus.models import Language
-from fleet_copilot.ingest.chunking.context import DocumentContext, section_path_at
+from fleet_copilot.ingest.chunking.context import (
+    DocumentContext,
+    contextual_header,
+    section_path_at,
+)
 from fleet_copilot.ingest.chunking.tokens import HeuristicCounter, TokenCounter
 from fleet_copilot.ingest.models import Chunk, StrategyId
 from fleet_copilot.ingest.parse import HEADING_ROLES, BlockRole, ParsedBlock, ParsedDocument
@@ -124,3 +128,37 @@ class StructuralChunker:
 
         flush()
         return tuple(chunks)
+
+
+class ContextualChunker:
+    """The structural strategy plus a header. Implements Chunker.
+
+    A wrapper rather than a copy, so the two strategies cannot drift apart. They
+    must cut in exactly the same places: if they did not, story 3.3 could not
+    tell whether a difference came from the header or from the boundaries, and
+    the experiment would have two variables instead of one.
+    """
+
+    def __init__(self, structural: StructuralChunker | None = None) -> None:
+        self._structural = StructuralChunker() if structural is None else structural
+
+    @property
+    def strategy(self) -> str:
+        return StrategyId.CONTEXTUAL.value
+
+    def chunk(self, document: ParsedDocument, context: DocumentContext) -> tuple[Chunk, ...]:
+        """Re-emit the structural chunks, each carrying its breadcrumb."""
+        return tuple(
+            base.model_copy(
+                update={
+                    "strategy": StrategyId.CONTEXTUAL,
+                    # A chunk before the first heading in a document with no
+                    # machine types leaves the header empty, and Chunk rejects a
+                    # blank prefix. The doc_id is the weakest useful header
+                    # rather than a crash.
+                    "context_prefix": contextual_header(context, base.section_path)
+                    or context.doc_id,
+                }
+            )
+            for base in self._structural.chunk(document, context)
+        )
