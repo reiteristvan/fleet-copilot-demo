@@ -9,6 +9,9 @@ authors = [{ name = "reiteristvan", email = "reiteristvan@gmail.com" }]
 dependencies = [
     "azure-core[aio]>=1.30",
     "azure-identity>=1.19",
+    # Main, not dev: the retrieval story queries the index inside the request
+    # path, so the API image installed with --no-dev needs it.
+    "azure-search-documents>=11.5",
     "fastapi>=0.141.1",
     "httpx2>=2.13.0",
     # A main dependency, unlike the Document Intelligence SDK next to it in

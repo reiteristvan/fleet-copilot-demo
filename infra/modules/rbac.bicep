@@ -22,6 +22,12 @@ param developerPrincipalType string = 'User'
 // they are stable across tenants, unlike role display names.
 var cognitiveServicesOpenAiUser = '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
 var searchIndexDataContributor = '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
+// Creating an index and writing documents are different roles. Service
+// Contributor manages index definitions and grants no document access;
+// Index Data Contributor reads and writes documents and cannot create an
+// index. A developer who hand-designs the index in code needs both, and the
+// runtime identity deliberately gets only the second.
+var searchServiceContributor = '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
 var storageBlobDataReader = '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
 var monitoringMetricsPublisher = '3913510d-42f4-4e42-8a64-420c390055eb'
 // Cognitive Services User, not Cognitive Services OpenAI User: the
@@ -149,6 +155,34 @@ resource developerOpenAi 'Microsoft.Authorization/roleAssignments@2022-04-01' =
       roleDefinitionId: subscriptionResourceId(
         'Microsoft.Authorization/roleDefinitions',
         cognitiveServicesOpenAiUser
+      )
+      principalId: developerPrincipalId
+      principalType: developerPrincipalType
+    }
+  }
+
+resource developerSearchService 'Microsoft.Authorization/roleAssignments@2022-04-01' =
+  if (!empty(developerPrincipalId)) {
+    scope: search
+    name: guid(search.id, developerPrincipalId, searchServiceContributor)
+    properties: {
+      roleDefinitionId: subscriptionResourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        searchServiceContributor
+      )
+      principalId: developerPrincipalId
+      principalType: developerPrincipalType
+    }
+  }
+
+resource developerSearchData 'Microsoft.Authorization/roleAssignments@2022-04-01' =
+  if (!empty(developerPrincipalId)) {
+    scope: search
+    name: guid(search.id, developerPrincipalId, searchIndexDataContributor)
+    properties: {
+      roleDefinitionId: subscriptionResourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        searchIndexDataContributor
       )
       principalId: developerPrincipalId
       principalType: developerPrincipalType

@@ -26,12 +26,20 @@ read like a broken token rather than an assignment nobody made.
 
 **Resolved by** adding `developerOpenAi` to `rbac.bicep` and redeploying.
 
-**Open.** Every new Azure data plane needs its own developer assignment, and we
-find out by hitting a 401 mid-task. Options: a preflight check that asserts the
-signed-in principal holds each role the pipeline needs and names the missing one;
-a single group holding all developer data-plane roles that `deploy.sh` points at;
-or accept the pattern and document the roles in `infra/README.md`. Worth deciding
-before the retrieval story adds Search to the list.
+**Resolved, 2026-09-23.** `just preflight` now probes every data plane with a
+real read-only call and names the role a failure needs. The two Search roles the
+retrieval story needs were added to `rbac.bicep` at the same time.
+
+Deliberately a live call rather than a role listing: when the OpenAI assignment
+was finally made, the call kept failing for minutes while it propagated, and a
+listing would have reported success throughout.
+
+Writing it immediately caught a fifth gap nobody had named. Listing Search index
+definitions passes under Subscription Owner, because Owner carries
+`Microsoft.Search/*` — but document read and write are *data* actions and are
+not covered. A single Search check would have reported the plane reachable right
+up until the first `upload_documents` 403, so Search is checked twice, once per
+grant.
 
 ---
 

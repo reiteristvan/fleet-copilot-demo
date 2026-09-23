@@ -55,6 +55,10 @@ corpus-check:
 corpus-upload *args:
     uv run python scripts/upload_corpus.py {{args}}
 
+# Check this machine can reach every Azure data plane the pipeline needs.
+preflight:
+    uv run python scripts/preflight.py
+
 # Dry-run the corpus parse: `just corpus-parse --apply` calls the service.
 corpus-parse *args:
     uv run python scripts/parse_corpus.py {{args}}

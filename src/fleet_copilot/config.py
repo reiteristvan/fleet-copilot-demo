@@ -54,6 +54,11 @@ class Settings(BaseSettings):
     embedding_max_retries: int = 6
 
     azure_search_endpoint: str | None = None
+
+    # The index the retrieval story builds. Named here rather than in that
+    # module so preflight can probe the document data plane, which is a
+    # different grant from managing index definitions.
+    azure_search_index: str = "fleet-chunks"
     azure_storage_blob_endpoint: str | None = None
     azure_storage_container: str = "raw-docs"
     azure_layout_cache_container: str = "layout-cache"
