@@ -24,9 +24,10 @@ own docstring had predicted it. Neither error message names a role. The first
 said the principal lacks a data action; the second just said "no access". Both
 read like a broken token rather than an assignment nobody made.
 
-**Resolved by** adding `developerOpenAi` to `rbac.bicep` and redeploying.
+**Fixed at the time** by adding `developerOpenAi` to `rbac.bicep` and
+redeploying. That closed the instance, not the pattern.
 
-**Resolved, 2026-09-23.** `just preflight` now probes every data plane with a
+**Decided 2026-09-23 (preflight check).** `just preflight` now probes every data plane with a
 real read-only call and names the role a failure needs. The two Search roles the
 retrieval story needs were added to `rbac.bicep` at the same time.
 
