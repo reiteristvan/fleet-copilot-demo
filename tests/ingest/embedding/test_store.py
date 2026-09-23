@@ -9,8 +9,18 @@ from fleet_copilot.ingest.embedding.models import EmbeddingRecord
 from fleet_copilot.ingest.embedding.store import EmbeddingStore
 
 MODEL = "test-embeddings"
-"""Deliberately not the real deployment name. These rows are committed, so a
-test using the live model id leaves fakes in the cache the corpus run reads."""
+"""Deliberately not the real deployment name.
+
+put_many commits -- the store owns its own transaction so an interrupted run
+keeps what it paid for (ADR 0007) -- so these rows outlive the test and share a
+table with a real corpus run. The cache key is (content_hash, model_id), so a
+model id no deployment will ever have cannot collide by construction.
+
+Isolating by key rather than by a teardown is the point: a delete runs only if
+the test got that far, while a key that cannot match is safe even when the test
+dies halfway. Written against the live name once, this left four fake vectors
+next to 1,476 real ones, found only because a row count failed to add up.
+"""
 DIMENSIONS = 3072
 
 

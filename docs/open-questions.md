@@ -96,11 +96,22 @@ enough to make a cache lookup hit a fake.
 **Resolved by** moving the tests to a `test-embeddings` model id, which cannot
 collide with a real run, and deleting the four rows.
 
-**Open.** The isolation is by naming convention, which holds only as long as
-everyone follows it. The alternatives are a transactional fixture that rolls the
-writes back (the store would have to accept an injected connection), or a
-dedicated test database. The same question applies to every future test that
-writes through a store rather than through the `connection` fixture.
+**Decided 2026-09-23 (keep the convention, write down why).** The rule is now in
+`CLAUDE.md` under Conventions and in the test module's own docstring: a test that
+commits isolates itself by key, not by cleanup.
+
+The alternatives were both worse here. A transactional fixture would invert who
+owns the commit, which ADR 0007 decided deliberately so that an interrupted run
+keeps what it paid for — restructuring a real decision to solve a problem that
+has cost four junk rows. A dedicated test database isolates by making the tests
+less true: they would stop touching the database the application uses, which is
+the only reason they are worth having. A guard test asserting no strays cannot
+tell rows this suite wrote from rows a real `just embed-corpus` wrote, so it
+would be either vacuous or red on any populated machine.
+
+Isolation by key beats isolation by teardown for the same reason throughout: a
+delete runs only if the test got that far, while a key that can never match a
+real run is safe even when the test dies halfway.
 
 ---
 

@@ -68,6 +68,18 @@ These are the same recipes CI runs.
   New behaviour ships with its tests in the same commit.
 - **Test invalid input through `model_validate`,** not by lying to the type
   checker with a cast or an ignore on the constructor.
+- **A test that commits isolates itself by key, not by cleanup.** Most database
+  tests roll back through the `connection` fixture. A store that owns its own
+  commit cannot be rolled back by its caller — the embedding cache writes per
+  batch on purpose, so an interrupted run keeps what it paid for — so its tests
+  share a table with real data. Give them a namespace that cannot collide
+  (`model_id="test-embeddings"`) rather than a teardown that deletes: a delete
+  runs only if the test got that far, while a key that can never match a real
+  run is safe even when the test dies halfway. Isolation by naming is a
+  convention and is only as good as review; it is chosen here because the cost
+  of it failing is a few junk rows in a developer's cache, and the alternatives
+  either invert a deliberate design decision about who owns the commit or stop
+  the tests touching the database the application actually uses.
 - **Comment only what the code cannot say itself.** Names and structure carry
   the *what*; a comment earns its place when it records *why* — a constraint, a
   rejected alternative, a non-obvious failure it prevents, or an external fact
