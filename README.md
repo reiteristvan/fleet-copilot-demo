@@ -42,6 +42,7 @@ docs/data-model.md  ERD and the reasoning behind the schema
 docs/chunking.md    the three chunking strategies and their size distribution
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
+docs/open-questions.md  answered for now, not agreed -- things owed a decision
 ```
 
 ## The document corpus
