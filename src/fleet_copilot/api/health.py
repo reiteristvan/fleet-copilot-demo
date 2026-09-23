@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from typing import Literal
 
 import httpx2
@@ -31,6 +32,22 @@ class HealthReport(BaseModel):
     checks: dict[str, DependencyStatus]
 
 
+def _vector_extension_version(url: str, connect_timeout: int) -> str | None:
+    """The installed pgvector version, or None. Blocking; use to_thread.
+
+    The synchronous driver rather than psycopg's async one, matching the
+    embedding store and ingest/cache.py. AsyncConnection refuses to run on
+    Windows' default ProactorEventLoop, and because the handler below is
+    deliberately broad, that refusal used to be reported as a failed database --
+    so /healthz was red on every Windows host whether the database was up or not.
+    """
+    with psycopg.connect(url, connect_timeout=connect_timeout) as connection:
+        row = connection.execute(
+            "select extversion from pg_extension where extname = 'vector'"
+        ).fetchone()
+    return None if row is None else str(row[0])
+
+
 async def check_database(settings: Settings) -> DependencyStatus:
     """Confirm the database is reachable and has the pgvector extension.
 
@@ -39,22 +56,26 @@ async def check_database(settings: Settings) -> DependencyStatus:
     confusing failure than a red health check.
     """
     try:
-        async with await psycopg.AsyncConnection.connect(
+        version = await asyncio.to_thread(
+            _vector_extension_version,
             settings.database_url,
-            connect_timeout=int(settings.healthz_timeout_seconds),
-        ) as connection:
-            row = await (
-                await connection.execute(
-                    "select extversion from pg_extension where extname = 'vector'"
-                )
-            ).fetchone()
+            int(settings.healthz_timeout_seconds),
+        )
+    except psycopg.OperationalError as error:
+        # The database itself did not answer: down, unreachable, or refusing us.
+        return DependencyStatus(status="error", detail=f"unreachable: {error}".strip())
     except Exception as error:
-        # Broad by design: a health endpoint must report a failure, never become one.
-        return DependencyStatus(status="error", detail=f"{type(error).__name__}: {error}")
+        # Broad by design: a health endpoint must report a failure, never become
+        # one. Reported separately from the above because "the database is down"
+        # and "the check could not run" are different operational problems, and
+        # for a year they rendered identically.
+        return DependencyStatus(
+            status="error", detail=f"check failed: {type(error).__name__}: {error}"
+        )
 
-    if row is None:
+    if version is None:
         return DependencyStatus(status="error", detail="pgvector extension is not installed")
-    return DependencyStatus(status="ok", detail=f"pgvector {row[0]}")
+    return DependencyStatus(status="ok", detail=f"pgvector {version}")
 
 
 async def check_azure_openai(settings: Settings) -> DependencyStatus:

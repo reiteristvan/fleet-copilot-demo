@@ -66,10 +66,22 @@ the database is perfectly healthy** — the InterfaceError is caught and rendere
 as a dependency error. In the Linux container it works correctly, and the test
 only ever asserts the *unreachable* case, so nothing catches this.
 
-**Open.** Pick one story for async Postgres and apply it everywhere: sync +
-`to_thread` throughout, or `AsyncConnection` plus a Windows event-loop policy set
-once at process start. Also worth a test that distinguishes "database is down"
-from "the driver could not run at all" — today they are the same red.
+**Decided 2026-09-23 (sync + `to_thread` everywhere).** `health.py` now uses the
+synchronous driver in a thread, matching `ingest/cache.py` and the embedding
+store. One pattern for blocking I/O in a coroutine, working on both platforms,
+with no global event-loop policy — which was the alternative, and which would
+have traded a local bug for a process-wide constraint (`SelectorEventLoop`
+cannot run subprocesses on Windows) to benefit a connection pool that does not
+exist yet.
+
+`check_database` now reports `unreachable:` and `check failed:` separately,
+because "the database is down" and "the check could not run" are different
+operational problems that rendered identically.
+
+Verified against the live database: the old path raised `InterfaceError` and the
+new one returns `pgvector 0.8.6`. A test now covers the green path, which
+nothing did — every database assertion in that module was about a failure, so a
+check that could never succeed would have passed the suite.
 
 ---
 
