@@ -134,9 +134,20 @@ ways that only surface when you execute them:
 
 **Resolved by** fixing each as it was hit; the details are in the commit bodies.
 
-**Open.** These plans are detailed enough to look executable, which is what makes
-the defects expensive — they are trusted. Either the plan writing step should
-stop including literal test bodies and specify behaviour instead, or plans should
-be treated explicitly as drafts whose code is a sketch. Worth deciding before the
-next plan is written, because the current convention implies a precision the
-documents do not have.
+**Decided 2026-09-24 (specify behaviour, not code).** Written up in
+`docs/superpowers/plans/README.md`. Plans keep the task breakdown, the
+interfaces, the verified facts and the reasoning — which is the most valuable
+thing in this process — and stop supplying literal test bodies.
+
+The argument is not the minutes each defect cost. It is `section_path_at`: the
+plan supplied an implementation *and* a test that agreed with it, and both were
+wrong. A wrong snippet wastes a debug cycle; a wrong specified test steers the
+implementation toward the wrong behaviour and then confirms it. A behavioural
+line states the requirement rather than the mechanism and cannot do that.
+
+Signatures, types and constants stay exact — they are the contract between
+tasks, and a mistake in them is caught by the type checker as soon as anything
+is written. It is executable behaviour that must not be asserted in advance.
+
+The three executed plans are left as written, defects included: they are the
+record of what was planned, not a template.

@@ -43,6 +43,7 @@ docs/chunking.md    the three chunking strategies and their size distribution
 docs/adr/      architecture decision records
 docs/journal.md  engineering journal, newest first
 docs/open-questions.md  answered for now, not agreed -- things owed a decision
+docs/superpowers/plans/  implementation plans, and how they are written
 ```
 
 ## The document corpus
