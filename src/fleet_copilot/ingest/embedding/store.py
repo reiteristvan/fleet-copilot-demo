@@ -1,14 +1,15 @@
 """The embedding cache, over Postgres.
 
-The synchronous driver, called through :func:`asyncio.to_thread`, which is the
+The synchronous driver, called through :func:`asyncio.to_thread`. That is the
 pattern `ingest/cache.py` already uses for blob and disk I/O.
 
-Not psycopg's async connection: it refuses to run on Windows' default
-ProactorEventLoop and raises an InterfaceError naming the loop, so every local
-run would need a global event-loop policy change to use one query. The usual
-argument for the async driver -- not holding a pool slot for a round trip --
-does not apply here, because this opens a connection per call and there is no
-pool to hold.
+Not psycopg's async connection. It refuses to run on Windows' default
+ProactorEventLoop and raises an InterfaceError naming the loop. Every local run
+would need a global event-loop policy change to make one query.
+
+The usual argument for the async driver is that it does not hold a pool slot
+across a round trip. That does not apply here. This opens a connection per call,
+so there is no pool to hold.
 """
 
 from __future__ import annotations
@@ -54,9 +55,8 @@ class EmbeddingStore:
     async def known(self, hashes: Collection[str], model_id: str) -> set[str]:
         """Return the subset of ``hashes`` already embedded by ``model_id``.
 
-        One round trip for the whole batch rather than one per chunk: at a few
-        hundred chunks the per-query latency dominates everything else the run
-        does.
+        One round trip for the whole batch, not one per chunk. At a few hundred
+        chunks, the per-query latency dominates everything else the run does.
         """
         if not hashes:
             return set()
@@ -65,9 +65,9 @@ class EmbeddingStore:
     async def put_many(self, records: Sequence[EmbeddingRecord]) -> int:
         """Write ``records``, ignoring any whose key is already present.
 
-        ON CONFLICT DO NOTHING rather than DO UPDATE: the same key under the
-        same model is by definition the same vector, so a second write is a
-        restart or a duplicate chunk, not a correction.
+        ON CONFLICT DO NOTHING rather than DO UPDATE. The same key under the same
+        model is the same vector by definition. A second write is a restart or a
+        duplicate chunk, not a correction.
         """
         if not records:
             return 0

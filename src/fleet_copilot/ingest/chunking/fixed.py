@@ -1,13 +1,13 @@
 """The baseline strategy: a sliding window over content, structure ignored.
 
 Deliberately blind. It splits tables and step lists, and it carries no section
-path, because story 3.3 has to be able to attribute a retrieval failure to
-exactly those things. A baseline that quietly respected structure would make the
-comparison flattering and useless.
+path. Story 3.3 must be able to attribute a retrieval failure to exactly those
+things. A baseline that quietly respected structure would make the comparison
+flattering and useless.
 
-One concession: windows snap to whitespace. A window ending mid-word embeds a
-token sequence no query produces, and the comparison would then be measuring
-tokenisation damage rather than boundary placement.
+One concession: windows snap to whitespace. A window that ends mid-word embeds a
+token sequence no query produces. The comparison would then measure tokenisation
+damage rather than boundary placement.
 """
 
 from __future__ import annotations
@@ -22,21 +22,22 @@ from fleet_copilot.ingest.parse import ParsedDocument
 DEFAULT_TARGET_TOKENS: Final = 220
 """The same target the structural chunker uses.
 
-Held equal on purpose. If the two strategies used different sizes the comparison
-would confound size with boundary placement, and the result would say nothing
-about structure at all.
+Held equal on purpose. Different sizes would confound size with boundary
+placement, and the result would say nothing about structure.
 """
 
 DEFAULT_OVERLAP_TOKENS: Final = 40
-"""Roughly 18% of the window. Enough that a sentence straddling a boundary
-survives in one of the two windows; small enough that the corpus does not
-inflate by a fifth."""
+"""About 18% of the window.
+
+A sentence that straddles a boundary survives whole in one of the two windows.
+The corpus does not inflate by a fifth.
+"""
 
 SNAP_WINDOW: Final = 60
 """How far back to look for whitespace before giving up and cutting mid-word.
 
-Bounded so a run of 200 characters without a space -- a long table row -- cannot
-collapse a window to nothing.
+Bounded, so that a run of 200 characters without a space cannot collapse a
+window to nothing. A long table row is such a run.
 """
 
 

@@ -1,12 +1,14 @@
 """What turns text into vectors.
 
-Two implementations behind one Protocol, the same shape as the parsers and the
-caches: :class:`StubEmbedder` is deterministic, offline and counts its calls, so
-the whole suite -- including the "zero calls on a re-run" criterion -- runs
-without an Azure account; :class:`AzureEmbedder` is what a real run uses.
+Two implementations behind one Protocol, in the same shape as the parsers and
+the caches.
 
-The SDK is imported inside the method that needs it, so constructing an
-AzureEmbedder costs nothing until it is actually asked for vectors.
+:class:`StubEmbedder` is deterministic and offline, and it counts its calls. The
+whole suite runs without an Azure account, including the "zero calls on a re-run"
+criterion. :class:`AzureEmbedder` is what a real run uses.
+
+The SDK is imported inside the method that needs it. Constructing an
+AzureEmbedder costs nothing until it is asked for vectors.
 """
 
 from __future__ import annotations
@@ -34,9 +36,9 @@ class Embedder(Protocol):
 class StubEmbedder:
     """Deterministic fake vectors derived from the text. Implements Embedder.
 
-    Derived from a hash rather than random so the same text gives the same
-    vector across processes: a cache test whose "hit" returned a different
-    vector from its "miss" would pass for the wrong reason.
+    Derived from a hash rather than at random, so the same text gives the same
+    vector across processes. A cache test whose "hit" returned a different vector
+    from its "miss" would pass for the wrong reason.
     """
 
     def __init__(self, dimensions: int = 8, model_id: str = "stub") -> None:
@@ -66,15 +68,16 @@ class StubEmbedder:
 class AzureEmbedder:
     """Calls the deployed text-embedding-3-large. Implements Embedder.
 
-    Authentication is an Entra token provider and nothing else: ADR 0002
-    disables local auth on the account, so a key here would not fail in review,
-    it would fail at runtime.
+    Authentication is an Entra token provider and nothing else. ADR 0002 disables
+    local auth on the account, so a key here would fail at runtime rather than in
+    review.
 
-    Retry is the SDK's. It already backs off on 408, 409, 429 and 5xx and reads
-    the Retry-After header Azure sends, which a hand-rolled exponential backoff
-    ignores -- retrying early and making the throttle worse. What this class
-    owns is `max_retries`; what the caller owns is the batch size, which is what
-    decides whether a 429 happens at all (ADR 0007).
+    Retry belongs to the SDK. It backs off on 408, 409, 429 and 5xx, and it reads
+    the Retry-After header Azure sends. A hand-rolled exponential backoff ignores
+    that header, retries early, and makes the throttle worse.
+
+    This class owns `max_retries`. The caller owns the batch size, which decides
+    whether a 429 happens at all (ADR 0007).
     """
 
     SCOPE = "https://cognitiveservices.azure.com/.default"
@@ -92,9 +95,9 @@ class AzureEmbedder:
     def model_id(self) -> str:
         """The deployment, which is what the cache key records.
 
-        Deliberately the deployment name and not the model name: two deployments
-        of the same model can differ in version, and a cache that could not tell
-        them apart would serve one's vectors for the other.
+        The deployment name, not the model name. Two deployments of one model can
+        differ in version. A cache that could not tell them apart would serve one
+        deployment's vectors for the other.
         """
         return self._settings.azure_openai_embedding_deployment
 
@@ -121,9 +124,9 @@ class AzureEmbedder:
                     model=settings.azure_openai_embedding_deployment,
                 )
 
-        # The API documents the order as matching the input, but it also returns
-        # an explicit index; sorting on it costs nothing and removes a class of
-        # bug where every vector is attributed to the wrong chunk and nothing
-        # looks broken until a citation is read.
+        # The API documents the order as matching the input. It also returns an
+        # explicit index. Sorting on that index costs nothing and removes a class
+        # of bug: every vector attributed to the wrong chunk, with nothing
+        # looking broken until a citation is read.
         ordered = sorted(response.data, key=lambda item: item.index)
         return tuple(tuple(item.embedding) for item in ordered)

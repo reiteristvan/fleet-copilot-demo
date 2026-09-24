@@ -1,9 +1,12 @@
 """Chunk on the structure the parser recovered.
 
-Two rules override the size target, both from ADR 0006. A table is its own
-chunk, because an interval table answers a different question from the prose
-around it and a row separated from its column headers is noise. An ordered step
-list is never split, because half a procedure reads exactly like a whole one.
+Two rules override the size target. Both come from ADR 0006.
+
+A table is its own chunk. An interval table answers a different question from
+the prose around it, and a row separated from its column headers is noise.
+
+An ordered step list is never split. Half a procedure reads exactly like a whole
+one.
 
 Both rules make the size distribution bimodal on purpose. A stats table that
 shows otherwise means they are not being applied.
@@ -27,22 +30,28 @@ from fleet_copilot.ingest.parse import HEADING_ROLES, BlockRole, ParsedBlock, Pa
 DEFAULT_TARGET_TOKENS: Final = 220
 """Chosen against the corpus, not from convention.
 
-The median document is 184 tokens, so the usual 512 would leave 108 of 120
-documents as a single chunk and the three-way comparison would be measuring
-nothing. 220 sits just above the median document and just below the p75, which
-splits the long documents and leaves the short ones whole.
+The median document is 183 tokens. The usual 512 would leave 108 of 120
+documents as one chunk, and the three-way comparison would measure nothing. 220
+sits above the median document and below the p75. It splits the long documents
+and leaves the short ones whole.
 """
 
 STEP_LINE = re.compile(r"^\s*\d+\.\s")
-"""An ordered-list line. Bullets are deliberately not matched: a bullet list is
-a set of independent statements and splitting it costs a little context, while
-a procedure is a sequence and half of one is actively dangerous."""
+"""An ordered-list line.
+
+Bullets are not matched. A bullet list is a set of independent statements, so
+splitting one costs a little context. A procedure is a sequence, and half of one
+is dangerous.
+"""
 
 SKIPPED_ROLES: Final = frozenset(
     {BlockRole.PAGE_HEADER, BlockRole.PAGE_FOOTER, BlockRole.PAGE_NUMBER}
 )
-"""Page furniture. Kept in content by the parser so offsets stay stable, skipped
-here because a chunk of a page number retrieves nothing and costs an embedding."""
+"""Page furniture.
+
+The parser keeps it in content so offsets stay stable. This module skips it,
+because a chunk of a page number retrieves nothing and costs an embedding.
+"""
 
 
 def is_step_line(line: str) -> bool:
@@ -133,10 +142,11 @@ class StructuralChunker:
 class ContextualChunker:
     """The structural strategy plus a header. Implements Chunker.
 
-    A wrapper rather than a copy, so the two strategies cannot drift apart. They
-    must cut in exactly the same places: if they did not, story 3.3 could not
-    tell whether a difference came from the header or from the boundaries, and
-    the experiment would have two variables instead of one.
+    A wrapper rather than a copy, so the two strategies cannot drift apart.
+
+    They must cut in exactly the same places. If they did not, story 3.3 could
+    not tell a header effect from a boundary effect, and the experiment would
+    have two variables instead of one.
     """
 
     def __init__(self, structural: StructuralChunker | None = None) -> None:

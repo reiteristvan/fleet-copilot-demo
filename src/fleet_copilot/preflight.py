@@ -1,20 +1,19 @@
 """Check that this machine can actually reach every Azure data plane it needs.
 
-Three times now a task has died partway through on a 401 or 403 whose message
-named a data action, or nothing at all, but never a role: Document Intelligence
-in story 1.2, blob upload in the same story, Azure OpenAI in the embedding pass.
-Each time the fix was one role assignment nobody had made, and each time it was
-found by spending a run to discover it.
+Three times a task has died partway through on a 401 or 403. Each message named
+a data action, or nothing at all, but never a role. The three were Document
+Intelligence in story 1.2, blob upload in the same story, and Azure OpenAI in the
+embedding pass. Each fix was one role assignment nobody had made, and each was
+found by spending the run that discovered it.
 
-**Every check makes a real data-plane call.** Reading role assignments instead
-would be cheaper and would lie: when the OpenAI role was finally assigned, the
-call kept failing for several minutes while the assignment propagated, and a
-listing would have reported success throughout. What matters is whether the
-request works now, so that is what is asked.
+**Every check makes a real data-plane call.** Reading role assignments would be
+cheaper and would lie. When the OpenAI role was finally assigned, the call kept
+failing for several minutes while the assignment propagated. A listing would have
+reported success throughout. What matters is whether the request works now.
 
-The calls are chosen to be free and read-only. The one exception is the
-embedding probe, which sends a single word -- there is no read-only operation on
-that data plane, and a token costs about a hundred-thousandth of a cent.
+The calls are free and read-only, with one exception. The embedding probe sends
+a single word, because that data plane has no read-only operation. One token
+costs about a hundred-thousandth of a cent.
 """
 
 from __future__ import annotations
@@ -42,7 +41,7 @@ class CheckResult(BaseModel):
     role: str
     """The role that grants this call, named so a failure is actionable.
 
-    The point of the whole module: Azure's own message does not include it.
+    This is the point of the module. Azure's own message never includes it.
     """
 
     detail: str = ""
@@ -104,8 +103,8 @@ async def _probe_document_intelligence(settings: Settings) -> None:
 async def _probe_openai(settings: Settings) -> None:
     """Embed one word.
 
-    The only data-plane operation this deployment exposes is embedding, so there
-    is no read-only probe to make. One token is about $0.00000001.
+    This deployment exposes only one data-plane operation, so there is no
+    read-only probe to make. One token costs about $0.00000001.
     """
     from fleet_copilot.ingest.embedding.client import AzureEmbedder
 
@@ -119,10 +118,10 @@ class IndexNotBuiltYetError(RuntimeError):
 async def _probe_search_service(settings: Settings) -> None:
     """List index names.
 
-    Passes under Subscription Owner, which is the trap: Owner carries
-    `Microsoft.Search/*` and that covers index *definitions*. It does not carry
-    data actions, so this proves nothing about reading or writing documents --
-    that is what the next probe is for.
+    Passes under Subscription Owner, which is the trap. Owner carries
+    `Microsoft.Search/*`, and that covers index *definitions*. It does not carry
+    data actions. So this proves nothing about reading or writing documents. The
+    next probe covers that.
     """
     from azure.search.documents.indexes.aio import SearchIndexClient
 
@@ -139,10 +138,10 @@ async def _probe_search_service(settings: Settings) -> None:
 async def _probe_search_documents(settings: Settings) -> None:
     """Count documents in the project index. A data action, unlike the above.
 
-    Raises IndexNotBuiltYetError when the index is absent, which is reported as
-    skipped rather than denied: not yet built and not allowed are different
-    facts, and conflating them would make this check either cry wolf before the
-    index exists or stay silent after it does.
+    Raises IndexNotBuiltYetError when the index is absent. That is reported as
+    skipped rather than denied. Not yet built and not allowed are different
+    facts. Conflating them would make this check cry wolf before the index
+    exists, or stay silent after it does.
     """
     from azure.core.exceptions import ResourceNotFoundError
     from azure.search.documents.aio import SearchClient
@@ -196,9 +195,9 @@ CHECKS: Final[tuple[Check, ...]] = (
 )
 """Every data plane this project touches from a laptop.
 
-A new one belongs here in the same commit that first calls it. That is the whole
-mitigation: the list is what turns the next missing assignment into a named role
-instead of a 401 three layers down a traceback.
+A new one belongs here in the same commit that first calls it. The list is the
+whole mitigation. It turns the next missing assignment into a named role instead
+of a 401 three layers down a traceback.
 """
 
 
@@ -229,8 +228,8 @@ async def run_checks(
 ) -> tuple[CheckResult, ...]:
     """Run every check concurrently and report what each found.
 
-    Concurrent because they are independent and each is a network round trip;
-    serially this is the slowest possible way to learn four facts.
+    Concurrent, because they are independent and each is a network round trip.
+    Run in sequence, this would be the slowest way to learn five facts.
     """
     return tuple(await asyncio.gather(*(_run(check, settings) for check in checks)))
 
@@ -238,7 +237,7 @@ async def run_checks(
 def failed(results: Sequence[CheckResult]) -> tuple[CheckResult, ...]:
     """The checks that could not reach their data plane.
 
-    A skipped check is not a failure: an unset endpoint means the stage is not
-    configured on this machine, which is a different thing from being denied.
+    A skipped check is not a failure. An unset endpoint means the stage is not
+    configured on this machine. That differs from being denied.
     """
     return tuple(result for result in results if result.status == FAILED)

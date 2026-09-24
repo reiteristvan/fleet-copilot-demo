@@ -5,10 +5,10 @@
     python scripts/chunk_stats.py --exact        report sizes with tiktoken
     python scripts/chunk_stats.py --calibrate    re-measure characters per token
 
-Boundaries are always chosen by the offline heuristic so they are identical on
+The offline heuristic always chooses the boundaries, so they are identical on
 every machine. --exact only changes how the resulting chunks are *measured*.
 
-Thin on purpose: mypy covers src and tests, not scripts.
+Thin on purpose. mypy covers src and tests, not scripts.
 """
 
 from __future__ import annotations
@@ -59,11 +59,11 @@ def main() -> int:
     print(as_markdown_table(rows), end="")
 
     if args.calibrate:
-        # A cross-check, not a regeneration: these are ratios over chunks, while
-        # the committed constants are medians over whole documents from
-        # scripts/capture_token_counts.py. Different populations, so they should
-        # land in the same neighbourhood rather than match. A ratio that has
-        # drifted by more than a few percent means re-running that script.
+        # A cross-check, not a regeneration. These are ratios over chunks. The
+        # committed constants are medians over whole documents, from
+        # scripts/capture_token_counts.py. Different populations, so they land
+        # near each other rather than matching. A ratio that has drifted by more
+        # than a few percent means re-running that script.
         print()
         print("chunk-level ratios; the constants are per-document (capture_token_counts.py)")
         for language in sorted(

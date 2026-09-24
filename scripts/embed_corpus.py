@@ -7,7 +7,7 @@ Needs the local database up (`just up && just db-migrate`), the layout cache
 populated (`just corpus-parse --apply`), and Cognitive Services OpenAI User on
 your own principal.
 
-Thin on purpose: mypy covers src and tests, not scripts.
+Thin on purpose. mypy covers src and tests, not scripts.
 """
 
 from __future__ import annotations

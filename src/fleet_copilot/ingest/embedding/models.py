@@ -21,9 +21,9 @@ class EmbeddingRecord(BaseModel):
     def _length_matches_dimensions(self) -> Self:
         """Catch a short vector here rather than in the database.
 
-        Postgres rejects it with a message about the column's declared width,
-        three layers away from the code that built the row and with no mention
-        of which chunk it came from.
+        Postgres rejects a short vector with a message about the column's declared
+        width. That message is three layers from the code that built the row, and
+        it does not name the chunk.
         """
         if len(self.embedding) != self.dimensions:
             msg = (

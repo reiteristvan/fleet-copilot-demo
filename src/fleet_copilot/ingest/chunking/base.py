@@ -14,9 +14,9 @@ from fleet_copilot.ingest.parse import ParsedDocument
 class Chunker(Protocol):
     """Splits one parsed document into chunks.
 
-    Synchronous and pure: a strategy that reached for anything outside its two
-    arguments could not be compared against another one run on the same input,
-    which is the only thing story 3.3 does with these.
+    Synchronous and pure. A strategy that reached outside its two arguments could
+    not be compared against another one run on the same input. That comparison is
+    the only thing story 3.3 does with these.
     """
 
     @property

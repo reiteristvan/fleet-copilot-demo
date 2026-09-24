@@ -1,9 +1,9 @@
 """Group chunks into embedding requests.
 
-By tokens, not by count. The Azure throttle is tokens per minute, and this
-corpus holds chunks from 40 tokens to over a thousand -- so a batch of a fixed
-number of inputs sends an unpredictable number of tokens, and the request that
-finally trips the limit has nothing to do with anything a reader can see.
+By tokens, not by count. The Azure throttle is tokens per minute. This corpus
+holds chunks from 40 tokens to over a thousand, so a batch of a fixed number of
+inputs sends an unpredictable number of tokens. The request that finally trips
+the limit then has no visible cause.
 """
 
 from __future__ import annotations
@@ -34,17 +34,17 @@ def batch_by_tokens(
 ) -> tuple[tuple[Chunk, ...], ...]:
     """Split ``chunks`` into requests, preserving order.
 
-    Sized on ``embed_text`` rather than ``text``: the header is part of what is
-    sent, so counting the slice alone would under-report every contextual chunk
-    by its breadcrumb -- on the one strategy whose requests are largest.
+    Sized on ``embed_text`` rather than ``text``. The header is part of what is
+    sent. Counting the slice alone would under-report every contextual chunk by
+    its breadcrumb, on the one strategy whose requests are largest.
 
     A chunk larger than ``budget_tokens`` gets a batch of its own rather than
-    being dropped: it is usually the table or the procedure that mattered, and
+    being dropped. It is usually the table or the procedure that mattered, and
     losing it silently is worse than one oversized request.
 
     A chunk over the model's own cap raises. Truncating it here would embed a
-    prefix and store the vector under a hash of the whole text -- a wrong answer
-    that every later run would reuse without ever calling the model again.
+    prefix and store the vector under a hash of the whole text. Every later run
+    would reuse that wrong answer without calling the model again.
     """
     counter = HeuristicCounter() if counter is None else counter
 

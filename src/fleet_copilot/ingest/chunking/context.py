@@ -1,9 +1,8 @@
 """The metadata a chunk carries, and the breadcrumb strategy 3 prepends.
 
-Metadata comes from the manifest rather than from the parsed document: the PDF
-and DOCX renderers drop the front matter, so for the 25 converted documents the
-manifest is the only place machine types, revision and effective date survive
-(ADR 0006).
+Metadata comes from the manifest, not from the parsed document. The PDF and DOCX
+renderers drop the front matter. For the 25 converted documents, the manifest is
+the only place machine types, revision and effective date survive (ADR 0006).
 """
 
 from __future__ import annotations
@@ -24,8 +23,8 @@ FIELD_SEPARATOR: Final = " | "
 def heading_text(text: str) -> str:
     """Strip the ATX markers from a heading block.
 
-    Block text is a verbatim slice of content, so a heading arrives as '##
-    Safety'. Left alone, every breadcrumb would carry hash marks into the
+    Block text is a verbatim slice of content, so a heading arrives as
+    '## Safety'. Left alone, every breadcrumb would carry hash marks into the
     embedding along with the words.
     """
     return text.lstrip("#").strip()
@@ -40,14 +39,14 @@ def _heading_level(text: str) -> int:
 def section_path_at(document: ParsedDocument, offset: int) -> tuple[str, ...]:
     """The headings in force at ``offset``, outermost first.
 
-    Levels replace rather than accumulate: two sibling sections at the same
-    depth are alternatives, and a chunk inside the second one that still claimed
-    the first would be retrieved for queries about a section it is not in.
+    Levels replace rather than accumulate. Two sibling sections at the same depth
+    are alternatives. A chunk inside the second that still claimed the first
+    would be retrieved for queries about a section it is not in.
 
     A heading starting exactly at ``offset`` counts. The structural chunker
-    flushes on a heading, so every chunk it emits begins at one; excluding it
-    would hand each chunk the breadcrumb of the section above the one it is
-    actually in, and the text would contradict its own metadata.
+    flushes on a heading, so every chunk it emits begins at one. Excluding it
+    would hand each chunk the breadcrumb of the section above its own text, and
+    the chunk would contradict its own metadata.
     """
     path: dict[int, str] = {}
     for block in document.blocks:
@@ -104,10 +103,9 @@ class DocumentContext(BaseModel):
 def contextual_header(context: DocumentContext, section_path: tuple[str, ...]) -> str:
     """Build the header strategy 3 prepends before embedding.
 
-    ``<section path> | <machine types> | <item numbers>``, with empty parts
-    dropped rather than left as dangling separators -- a handover note has no
-    item numbers, and a trailing ' | ' would be embedded along with everything
-    else.
+    ``<section path> | <machine types> | <item numbers>``. Empty parts are
+    dropped rather than left as dangling separators. A handover note has no item
+    numbers, and a trailing ' | ' would be embedded with everything else.
     """
     parts = [
         PATH_SEPARATOR.join(section_path),

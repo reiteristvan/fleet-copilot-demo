@@ -62,9 +62,9 @@ class Document(BaseModel):
 class StrategyId(StrEnum):
     """Which chunking strategy produced a chunk.
 
-    Part of chunk_id rather than only of the surrounding run: all three
-    strategies chunk the same documents and share one embedding cache, so two
-    of their chunks would otherwise collide on a key and the last write wins.
+    Part of chunk_id, not only of the surrounding run. All three strategies chunk
+    the same documents and share one embedding cache. Two of their chunks would
+    otherwise collide on a key, and the last write would win.
     """
 
     FIXED = "fixed"
@@ -88,8 +88,8 @@ class Chunk(BaseModel):
     section_path: tuple[str, ...] = ()
     """Headings above this chunk, outermost first, with their '#' markers removed.
 
-    Empty for the fixed-size baseline, which does not read headings -- that
-    difference is one of the things the comparison is measuring.
+    Empty for the fixed-size baseline, which does not read headings. That
+    difference is one of the things the comparison measures.
     """
 
     chunk_index: Annotated[int, Field(ge=0)]
@@ -102,8 +102,8 @@ class Chunk(BaseModel):
     context_prefix: NonEmptyStr | None = None
     """The contextual header, outside the span on purpose.
 
-    A chunk's subject often appears only in the heading above it, which is not
-    in its own text; embedding the breadcrumb recovers that without moving
+    A chunk's subject often appears only in the heading above it, which is not in
+    its own text. Embedding the breadcrumb recovers that without moving
     start/end, so a citation still highlights the source exactly.
     """
 
@@ -112,9 +112,9 @@ class Chunk(BaseModel):
     def _reject_a_blank_prefix(cls, value: str | None) -> str | None:
         """Treat a whitespace-only prefix as the error it is, not as no prefix.
 
-        A blank prefix produces embed_text with two leading newlines, embedding
-        one chunk slightly differently from its unprefixed neighbours -- the kind
-        of skew that makes a strategy A/B measure the wrong thing.
+        A blank prefix produces embed_text with two leading newlines. That embeds
+        one chunk slightly differently from its unprefixed neighbours, and such a
+        skew makes a strategy A/B measure the wrong thing.
         """
         if value is not None and not value.strip():
             msg = "context_prefix must not be blank; omit it instead"
@@ -145,8 +145,8 @@ class Chunk(BaseModel):
         """Tie the header to the strategy named after it.
 
         A contextual chunk without a prefix is byte-identical to its structural
-        twin and would duplicate it in the index under a different id; a fixed
-        chunk with one would quietly stop being a baseline.
+        twin. It would duplicate that chunk in the index under a different id. A
+        fixed chunk with a prefix would quietly stop being a baseline.
         """
         wants_prefix = self.strategy is StrategyId.CONTEXTUAL
         if wants_prefix and self.context_prefix is None:
@@ -176,8 +176,8 @@ class Chunk(BaseModel):
     def content_hash(self) -> str:
         """SHA-256 of what is actually embedded. The embedding cache key.
 
-        Deliberately over embed_text and not over text: see ADR 0006. Two
-        strategies can produce the same slice with different headers, and
-        hashing text would hand them one cached vector between them.
+        Over embed_text and not over text, by ADR 0006. Two strategies can
+        produce the same slice with different headers. Hashing text would hand
+        them one cached vector between them.
         """
         return hashlib.sha256(self.embed_text.encode("utf-8")).hexdigest()

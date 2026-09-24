@@ -2,11 +2,11 @@
 
     python scripts/preflight.py
 
-Each check makes a real read-only call rather than listing role assignments: an
-assignment can exist and still be minutes from propagating, and a listing would
+Each check makes a real read-only call rather than listing role assignments. An
+assignment can exist and still be minutes from propagating. A listing would
 report success the whole time.
 
-Thin on purpose: mypy covers src and tests, not scripts.
+Thin on purpose. mypy covers src and tests, not scripts.
 """
 
 from __future__ import annotations

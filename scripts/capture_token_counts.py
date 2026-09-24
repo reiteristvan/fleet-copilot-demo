@@ -4,9 +4,9 @@ Run deliberately, on a machine with network access:
 
     uv run python scripts/capture_token_counts.py
 
-tiktoken downloads its BPE table over HTTPS on first use, which is why it is
-never on a path `just check` executes. The counts it produces are committed so
-the heuristic can be held to them offline, forever.
+tiktoken downloads its BPE table over HTTPS on first use. That is why no path
+`just check` executes ever reaches it. The counts are committed, so the
+heuristic can be held to them offline.
 """
 
 from __future__ import annotations

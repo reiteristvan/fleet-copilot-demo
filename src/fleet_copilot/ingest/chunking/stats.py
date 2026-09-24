@@ -1,8 +1,8 @@
 """Measure what each strategy produced.
 
-A mean would hide the thing these strategies are built around: table and
-step-list chunks are as long as they need to be, so the distribution is bimodal
-by construction. Percentiles show that; an average conceals it.
+A mean would hide what these strategies are built around. Table and step-list
+chunks are as long as they need to be, so the distribution is bimodal by
+construction. Percentiles show that. An average conceals it.
 """
 
 from __future__ import annotations
@@ -37,11 +37,11 @@ class StrategyStats(BaseModel):
 TABLE_OPENERS: tuple[str, ...] = ("|", "<table")
 """How a table chunk begins, in either dialect the corpus produces.
 
-The Markdown parser emits pipe rows straight from the source; Document
+The Markdown parser emits pipe rows straight from the source. Document
 Intelligence emits HTML even in Markdown mode. Counting only pipes would report
-the converted documents as having no tables at all, which is the one construct
-ADR 0006 gives its own chunk type. The chunkers themselves split on the block
-role and never look at this.
+the converted documents as having no tables. That is the one construct ADR 0006
+gives its own chunk type. The chunkers split on the block role and never read
+this.
 """
 
 
@@ -55,8 +55,8 @@ def summarise(
     """Reduce a strategy's chunks to the row that describes them.
 
     ``split_step_lists`` counts chunks that begin or end partway through an
-    ordered list -- the metric that shows the atomicity rule either working or
-    not. It must be zero for the structural strategies and non-zero for the
+    ordered list. It is the metric that shows the atomicity rule working or not
+    working. It must be zero for the structural strategies and non-zero for the
     baseline, or the comparison has no contrast to find.
     """
     counter = HeuristicCounter() if counter is None else counter

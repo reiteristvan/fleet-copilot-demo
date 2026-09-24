@@ -1,8 +1,8 @@
 """Embed a set of chunks, skipping everything already cached.
 
-Deduplicated before anything is sent: three strategies produce chunks over the
+Deduplicated before anything is sent. Three strategies produce chunks over the
 same documents, and two of them can produce byte-identical embed_text. Paying
-twice for one vector is the small cost; writing two rows that must stay in step
+twice for one vector is the small cost. Writing two rows that must stay in step
 is the larger one.
 """
 
@@ -46,9 +46,8 @@ async def embed_chunks(
 ) -> EmbedReport:
     """Embed whatever is not cached, and report what happened.
 
-    ``dry_run`` reports the work without calling the model or writing a row,
-    which is what makes the first line of a run inspectable before it spends
-    anything.
+    ``dry_run`` reports the work without calling the model or writing a row. That
+    makes a run inspectable before it spends anything.
     """
     by_hash: dict[str, Chunk] = {}
     for chunk in chunks:

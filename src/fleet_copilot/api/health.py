@@ -35,11 +35,13 @@ class HealthReport(BaseModel):
 def _vector_extension_version(url: str, connect_timeout: int) -> str | None:
     """The installed pgvector version, or None. Blocking; use to_thread.
 
-    The synchronous driver rather than psycopg's async one, matching the
-    embedding store and ingest/cache.py. AsyncConnection refuses to run on
-    Windows' default ProactorEventLoop, and because the handler below is
-    deliberately broad, that refusal used to be reported as a failed database --
-    so /healthz was red on every Windows host whether the database was up or not.
+    The synchronous driver, not psycopg's async one. This matches the embedding
+    store and ingest/cache.py.
+
+    AsyncConnection refuses to run on Windows' default ProactorEventLoop. The
+    handler below is deliberately broad, so that refusal used to be reported as a
+    failed database. /healthz was red on every Windows host, whether the database
+    was up or not.
     """
     with psycopg.connect(url, connect_timeout=connect_timeout) as connection:
         row = connection.execute(
@@ -65,10 +67,10 @@ async def check_database(settings: Settings) -> DependencyStatus:
         # The database itself did not answer: down, unreachable, or refusing us.
         return DependencyStatus(status="error", detail=f"unreachable: {error}".strip())
     except Exception as error:
-        # Broad by design: a health endpoint must report a failure, never become
-        # one. Reported separately from the above because "the database is down"
-        # and "the check could not run" are different operational problems, and
-        # for a year they rendered identically.
+        # Broad by design. A health endpoint must report a failure, never become
+        # one. Reported separately from the case above, because "the database is
+        # down" and "the check could not run" are different operational problems
+        # that used to render identically.
         return DependencyStatus(
             status="error", detail=f"check failed: {type(error).__name__}: {error}"
         )
