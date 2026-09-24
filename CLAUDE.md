@@ -96,6 +96,34 @@ These are the same recipes CI runs.
 - **Commits are atomic and semantic** (`feat(ingest): …`, `build: …`, `ci: …`).
   One concern per commit. The body says *why*, since the diff already says what.
 
+## Writing
+
+Use simplified technical English everywhere: commit messages, ADRs, the journal,
+plans, code comments, docstrings, and replies during a working session.
+
+- **One idea per sentence.** Keep sentences under about 20 words. Split a long
+  sentence. Do not join two short ones with a dash.
+- **Active voice.** Write "the cache keys on `content_hash`". Do not write
+  "`content_hash` is used as the key".
+- **One word per concept.** A chunk is always a chunk. A synonym makes the
+  reader stop and check whether you meant something else.
+- **Plain words.** Use "use", not "leverage". Use "so", not "hence". Use
+  "about", not "with respect to".
+- **Conclusion first, then the reason.** State what is true. Then say why.
+- **No rhetorical shapes.** Avoid "not X, but Y". Avoid "it is worth noting".
+  Avoid three-part lists written for rhythm. They cost the reader time and say
+  nothing a plain sentence does not.
+- **Numbers, not adjectives.** Write "68 of 120 documents". Do not write "many
+  documents".
+
+Keep the reasoning. This rule shortens sentences, not documents. An ADR exists
+to record why a decision was made, so record it. Say it plainly and completely.
+
+The corpus this project indexes uses ASD-STE100, the controlled English of
+maintenance manuals. That word list serves procedures a technician follows under
+time pressure. These documents record design reasoning instead, so the
+principles above apply and the approved word list does not.
+
 ## How to verify your own work before handing it back
 
 1. `just check` — the mechanical floor. All three stages, not just the one you
