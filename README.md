@@ -118,15 +118,15 @@ index. They exist to be compared, so everything they do not vary is held equal.
 | `structural` | Blocks packed under their heading; tables stand alone, step lists never split | none |
 | `contextual` | Identical to `structural` -- it wraps it | breadcrumb, prepended for embedding only |
 
-220 tokens rather than the conventional 512 because the median document is 183:
-at 512, 108 of 120 documents would be a single chunk and the comparison would
-measure nothing. The window is the same size for `fixed` and `structural`, or
+The window is 220 tokens, not the conventional 512. The median document is
+183 tokens. At 512, 108 of 120 documents would be one chunk and the comparison
+would measure nothing. `fixed` and `structural` use the same window size, or
 the result would confound size with boundary placement.
 
-Token budgets go through a per-language ratio measured against `cl100k_base` --
-4.17 characters per token in English against **2.21** in Hungarian. `tiktoken`
-never decides a boundary: it downloads its BPE table over HTTPS on first use,
-and a boundary that depends on whether a download succeeded is not a boundary.
+Token budgets use a per-language ratio measured against `cl100k_base`: 4.17
+characters per token in English, **2.21** in Hungarian. `tiktoken` never
+decides a boundary. It downloads its BPE table over HTTPS on first use, and a
+boundary that depends on a download is not a boundary.
 
 ```console
 $ just chunk-stats          # 95 Markdown documents, offline
@@ -138,15 +138,15 @@ with the chunk contract in [ADR 0006](docs/adr/0006-the-chunk-contract.md).
 
 ## Embedding
 
-Every chunk goes to `text-embedding-3-large` at its native 3072 dimensions and
-lands in a Postgres cache keyed by `content_hash` — the SHA-256 of what is
-actually sent, not of the chunk text (ADR 0007).
+Every chunk goes to `text-embedding-3-large` at its native 3072 dimensions. The
+vector lands in a Postgres cache keyed by `content_hash`, the SHA-256 of what
+is actually sent rather than of the chunk text (ADR 0007).
 
 | | |
 | --- | --- |
 | Distinct vectors, all three strategies | 1,476 over 127,333 tokens, about $0.017 |
 | Requests | 17, batched by a token budget rather than a count |
-| A second run | **0 calls** — the acceptance criterion, and a statement about determinism |
+| A second run | **0 calls**. The acceptance criterion, and a statement about determinism |
 
 ```console
 $ just embed-corpus          # report what would be sent

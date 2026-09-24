@@ -3,78 +3,210 @@
 Newest first. Short entries: what changed, what surprised us, what is still
 open. Decisions that outlive a session graduate to an ADR in `docs/adr/`.
 
+## 2026-09-24 — Embeddings, revision precedence, and four decisions
+
+Plan 3 is done. Every chunk now has a vector from `text-embedding-3-large` at
+3072 dimensions, cached in Postgres by `content_hash`. The acceptance criterion
+holds: a second run embeds nothing.
+
+```
+fixed        227 chunks, 227 distinct, 227 already cached, embedded 0 in 0 requests
+structural   692 chunks, 560 distinct, 560 already cached, embedded 0 in 0 requests
+contextual   692 chunks, 689 distinct, 689 already cached, embedded 0 in 0 requests
+```
+
+1,476 distinct vectors over 127,333 tokens. That cost $0.017.
+
+Two numbers are worth reading. `structural` collapses 692 chunks into 560
+vectors, because 132 chunks repeat text across documents. The three strategies
+share nothing: 227 + 560 + 689 is exactly the row count. `fixed` cuts elsewhere,
+and `contextual` prepends a header to every chunk, so no hash appears twice.
+That is the design working. Story 3.3 scores each strategy on its own vectors.
+
+**A 401 from Azure OpenAI stopped the run.** The developer principal held
+Cognitive Services User. That role covers Document Intelligence. The OpenAI data
+plane gates on Cognitive Services OpenAI User, and only the managed identity had
+it. This is the third time the same shape has cost a run. Story 1.2 hit it twice.
+Neither error names a role. The first said the principal lacks a data action. The
+second said only "no access".
+
+**psycopg's async driver cannot run on Windows.** It refuses the default
+ProactorEventLoop and raises `InterfaceError`. The embedding store now uses the
+synchronous driver through `asyncio.to_thread`, which is what `ingest/cache.py`
+already does.
+
+Then the same driver turned up a live bug. `api/health.py` still used
+`AsyncConnection`, and its `except Exception` is deliberately broad so that a
+health endpoint reports a failure instead of becoming one. So `/healthz`
+reported the database as down on every Windows host, healthy or not. The Linux
+container was fine, which is why nobody saw it.
+
+Worse, every database assertion in `test_health.py` was about a failure. A check
+that could never succeed passed the suite. That is the same shape as the PDF
+renderer in the entry below: the tests proved one property and said nothing about
+correctness. Verified against the live database before and after:
+
+```
+OLD AsyncConnection: InterfaceError
+NEW sync+to_thread: ok, pgvector 0.8.6
+```
+
+**`is_current` cannot be derived from document metadata.** The index needs to
+know which documents are superseded, so the planted conflict resolves to revision
+4 rather than revision 3. The manifest gives every document a revision integer
+and nothing that groups documents into a series.
+
+Grouping by `(type, machine_types, item_numbers)` looked right and was measured
+instead of assumed. It forms 29 groups and marks 68 of 120 documents superseded.
+One group holds eight handover notes for the same machine and part: separate
+shift events, written on different days at different sites, every one revision 1.
+It used document topic as evidence of document lineage.
+
+The rule now reads the `-rev<N>` suffix on the doc_id and nothing else. That
+demotes exactly one document, which is the one the planted case is about. ADR
+0009 records it.
+
+### Four decisions
+
+Four things had working resolutions but no agreement. All four are now decided.
+
+**Data-plane roles.** `just preflight` probes all five planes and names the role
+a failure needs. Every probe makes a real call. A role listing would have lied:
+when the OpenAI assignment was finally made, the call kept failing for minutes
+while it propagated.
+
+Writing it caught a fifth gap. Listing Search index definitions passes under
+Subscription Owner, because Owner carries `Microsoft.Search/*`. Reading and
+writing documents are data actions that Owner does not carry. One check would
+have reported Search reachable until the first `upload_documents` 403. Search is
+now probed twice, once per grant.
+
+**Async Postgres.** Sync plus `to_thread` everywhere. The alternative was
+`AsyncConnection` plus a Windows event-loop policy. That trades a local bug for a
+process-wide constraint, because `SelectorEventLoop` cannot run subprocesses on
+Windows, and it buys nothing until a connection pool exists.
+
+**Tests that commit.** They isolate by key, not by cleanup. The store tests use a
+`test-embeddings` model id. A teardown delete runs only if the test got that far.
+A key that cannot match a real run is safe even when the test dies halfway.
+Written against the live name once, this left four fake vectors beside 1,476 real
+ones. A row count that failed to add up was the only sign.
+
+A transactional fixture was rejected. It would invert who owns the commit, which
+ADR 0007 decided on purpose. A separate test database was rejected too. It
+isolates by making the tests stop touching the database the application uses.
+
+**Plan documents.** Plans specify behaviour, not literal test code. Five
+specified tests across plans 2 and 3 could not run at all. The one that cost real
+time was `section_path_at`: the plan supplied an implementation and a test that
+agreed with it, and both were wrong. Every structural chunk reported the
+breadcrumb of the section above its own text. The test used offset 0 of a
+document that starts with its title, where "before any heading" and "at the first
+heading" are the same position, so it asserted the bug.
+
+A wrong snippet costs a debug cycle. A wrong specified test steers the
+implementation and then confirms it.
+
+### Also
+
+An endpoint hostname had been committed to this public repository as an example
+value. History was rewritten and force-pushed, which stops it spreading and
+retracts nothing. So the account was rotated and deleted, and the hostname no
+longer resolves. ADR 0008 records the naming salt that made rotation possible
+without renaming the whole environment.
+
+The layout cache survived that swap untouched. It keys on
+`(source_sha256, model_id, api_version)` and not on the endpoint, so all 25
+cached layouts stayed valid. Keyed by endpoint, a rotation would have cost a full
+re-analysis.
+
+Open: chunks are still not persisted anywhere. The two table dialects are still
+unnormalised. Docker Desktop stopped by itself twice during this session, which
+turns 473 passing tests into 438 passed and 35 skipped. A green run with skips
+looks much like a green run.
+
 ## 2026-09-22 — Three chunking strategies, and an endpoint that had to be retired
 
-Chunking, under three strategies over the same 120 documents: a fixed window as
-the baseline, a heading-aware structural chunker, and a contextual one that is a
-*wrapper* around the structural chunker rather than a copy, so the two cannot
-drift and the A/B has one variable instead of two. Numbers and reasoning in
-`docs/chunking.md`; the contract is ADR 0006.
+Three strategies now chunk the same 120 documents. A fixed window is the
+baseline. A structural chunker reads headings. A contextual chunker wraps the
+structural one and adds a header.
 
-The parameters came from the corpus rather than from convention. The median
-document is 183 tokens, so the usual 512-token window would have left 108 of 120
-documents as a single chunk and the three-way comparison would have measured
-nothing. 220 splits the long documents and leaves the short ones whole. The
-characters-per-token ratio is per language because the measurement demanded it:
-4.17 in English against **2.21** in Hungarian, and a single global ratio would
-have let every Hungarian chunk run to nearly twice its intended budget.
+`contextual` wraps rather than copies. The two must cut in the same places. If
+they did not, story 3.3 could not tell a header effect from a boundary effect.
+`docs/chunking.md` has the numbers. ADR 0006 has the contract.
 
-**Every structural chunk was reporting the wrong section, and the test said so
-was correct.** `section_path_at` stopped at the first block at or *after* the
-offset, so a heading sitting exactly on it was excluded — and the structural
-chunker flushes on a heading, which means every chunk it emits begins at one.
-Each was handed the breadcrumb of the section above the one its own text was in.
-A chunk opening `## Safety` reported `Parts and consumables`. The module's own
-test had asserted the off-by-one rather than catching it, because it used offset
-0 of a document that starts with its title, where "before any heading" and "at
-the first heading" are the same position. It took a different module's test to
-see it. A test whose fixture cannot distinguish the two cases it is arbitrating
-is not evidence about either.
+The parameters came from the corpus, not from convention. The median document is
+183 tokens. A 512-token window would leave 108 of 120 documents as one chunk, and
+the comparison would measure nothing. 220 splits the long documents and leaves
+the short ones whole.
 
-Two smaller ones, both in tests. `zip(chunks, chunks[1:], strict=True)` always
-raises — the slice is one shorter, which is the entire point of the idiom, and
-`strict=True` was added to satisfy a lint rule rather than to say anything true.
-`itertools.pairwise` says it properly. And the `--calibrate` flag printed the
-aggregate characters-per-token while the constant it claimed to regenerate is a
-per-document median; following its own instructions would have moved the constant
-from 4.17 to 4.29. It now names which statistic it is reporting and which one the
-constant is.
+The characters-per-token ratio is per language because the measurement required
+it. English is 4.17. Hungarian is 2.21. One global ratio would let every
+Hungarian chunk run to nearly twice its budget.
 
-**The HTML-versus-pipe table disagreement came back, as a metric.** The previous
-entry recorded that Document Intelligence emits `<table>` where the Markdown
-parser emits pipe rows. The chunkers were never affected — they split on the
-block role and never read the text shape — but the stats column counted chunks
-beginning with `|`, so it reported the 25 converted documents as containing no
-tables at all, on the one construct ADR 0006 gives its own chunk type. Counting
-both dialects fixes the number. Normalising them is still undecided and still
-blocks a like-for-like table comparison across the two routes; exactly one
-document is affected, because the PDF renderer writes tables as spaced text and
-only the DOCX route produces a table at all.
+**Every structural chunk reported the wrong section, and its test agreed.**
+`section_path_at` stopped at the first block at or after the offset. A heading
+sitting exactly on the offset was excluded. The structural chunker flushes on a
+heading, so every chunk it emits begins at one. Each chunk got the breadcrumb of
+the section above its own text. A chunk opening `## Safety` reported `Parts and
+consumables`.
 
-**A planning document had been carrying the real Document Intelligence endpoint
-as an "e.g." value, in a public repository.** Not a credential — every data plane
-here is keyless — but it names one specific deployment, and the privacy pass in
-September removed the subscription and tenant ids on exactly that reasoning while
-walking past this. History was rewritten and force-pushed, which stops it
-spreading and retracts nothing: the old commits stay reachable by SHA until
-GitHub collects them. So the account was rotated and deleted, and the hostname no
-longer resolves. Every name in `main.bicep` is derived from the subscription id
-and the environment name, which is what keeps a redeploy idempotent and also what
-would have handed the account its old name straight back, so Document
-Intelligence now carries its own rotation salt. ADR 0008.
+The module's own test asserted the off-by-one. It used offset 0 of a document
+that starts with its title. At that position "before any heading" and "at the
+first heading" are the same thing. A different module's test found the bug. A
+test whose fixture cannot separate the two cases it arbitrates is evidence about
+neither.
 
-The cache made that nearly free, by an accident worth keeping. Layouts are keyed
-by `(source_sha256, model_id, api_version)` and not by the endpoint, so all 25
-survived the account swap — `just corpus-parse` still reports *"would analyse 0,
-25 already cached"*. Keyed by endpoint, rotating one would have cost a full
-re-analysis, which is an argument for that key nobody made when it was chosen.
+Two smaller defects, both in tests. `zip(chunks, chunks[1:], strict=True)` always
+raises, because the slice is one shorter. That is the point of the idiom.
+`strict=True` had been added to satisfy a lint rule. `itertools.pairwise` says it
+properly.
+
+The `--calibrate` flag printed the aggregate characters-per-token. The constant
+it claimed to regenerate is a per-document median. Following its own instructions
+would have moved the constant from 4.17 to 4.29. It now names both statistics.
+
+**The HTML-versus-pipe table disagreement returned as a metric.** The entry below
+records that Document Intelligence emits `<table>` where the Markdown parser
+emits pipe rows. The chunkers were never affected, because they split on the
+block role and never read the text shape. The stats column counted chunks
+starting with `|`, so it reported the 25 converted documents as having no tables.
+That is the one construct ADR 0006 gives its own chunk type.
+
+Counting both dialects fixes the number. Normalising them is still undecided, and
+it still blocks a like-for-like table comparison across the two routes. One
+document is affected. The PDF renderer writes tables as spaced text, so only the
+DOCX route produces a table at all.
+
+**A planning document carried the real Document Intelligence endpoint as an
+"e.g." value, in a public repository.** It is not a credential, because every
+data plane here is keyless. It names one specific deployment. The privacy pass in
+September removed the subscription and tenant ids for that reason and walked past
+this.
+
+History was rewritten and force-pushed. That stops the value spreading and
+retracts nothing: the old commits stay reachable by SHA until GitHub collects
+them. So the account was rotated and deleted, and the hostname no longer
+resolves.
+
+Every name in `main.bicep` derives from the subscription id and the environment
+name. That keeps a redeploy idempotent. It also would have handed the account its
+old name straight back after a delete. Document Intelligence now carries its own
+rotation salt. ADR 0008 records it.
+
+The cache made the rotation nearly free, by an accident worth keeping. Layouts
+key on `(source_sha256, model_id, api_version)` and not on the endpoint. All 25
+survived the swap, and `just corpus-parse` still reports "would analyse 0, 25
+already cached". Keyed by endpoint, a rotation would have cost a full
+re-analysis. Nobody made that argument when the key was chosen.
 
 Open: the two table dialects are still unnormalised. Chunks are produced,
-measured and discarded — where they live is a retrieval-story decision. The
-unreachable commits are still on GitHub until support collects them. And the
-value got in as an illustrative example in prose, where nothing treats it as
-sensitive and no reviewer is looking for it; example endpoints should be written
-as placeholders from the start.
+measured and discarded, because where they live is a retrieval-story decision.
+The unreachable commits stay on GitHub until support collects them.
+
+The value got into the repository as an example in prose. Nothing treats prose as
+sensitive and no reviewer looks for it there. Write example endpoints as
+placeholders from the start.
 
 ## 2026-09-18 — parsing, and three things the corpus was hiding
 
